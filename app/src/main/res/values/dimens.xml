@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="margin_large">12.0dp</dimen>
+    <dimen name="margin_medium">10.0dp</dimen>
+    <dimen name="margin_small">8.0dp</dimen>
+    <dimen name="margin_tiny">5.0dp</dimen>
+    <dimen name="margin_xlarge">16.0dp</dimen>
+    <dimen name="margin_xxlarge">20.0dp</dimen>
+    <dimen name="margin_xxxlarge">40.0dp</dimen>
+
+    <dimen name="btn_card_height">@dimen/abc_action_bar_default_height_material</dimen>
+</resources>

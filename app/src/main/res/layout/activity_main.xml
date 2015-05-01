@@ -1,0 +1,47 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<include
+    android:id="@+id/toolbar"
+    layout="@layout/toolbar" />
+
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/dl_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ptr_layout">
+
+        <!-- 【android:fillViewport="true"】
+        的意义在于让 ScorllView中的子View 的 match_parent 有效 -->
+        <ScrollView
+            android:id="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true" >
+
+        </ScrollView>
+
+    </uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_nav"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white">
+
+        <include layout="@layout/nav_layout" />
+
+    </FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>
+
+</LinearLayout>

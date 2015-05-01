@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_guide_fifth_01"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xxxlarge">
+
+        <ImageView
+            android:id="@+id/iv_guide_fifth_02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_guide_fifth_02"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fifth_03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:src="@drawable/ic_guide_fifth_03"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fifth_04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:src="@drawable/ic_guide_fifth_04"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_guide_fifth_05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xlarge"
+        android:src="@drawable/ic_guide_fifth_05"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xxxlarge">
+
+        <ImageView
+            android:id="@+id/iv_guide_fifth_06"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_guide_fifth_06"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fifth_07"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:src="@drawable/ic_guide_fifth_07"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fifth_08"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:src="@drawable/ic_guide_fifth_08"/>
+
+    </LinearLayout>
+
+</LinearLayout><!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/layout/fragment_guide_fifth.xml -->

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values-v14/values.xml -->
+    <eat-comment/>
+    <style name="Base.TextAppearance.AppCompat.Button">
+        <item name="android:textSize">@dimen/abc_text_size_button_material</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+    <style name="Base.Theme.AppCompat" parent="Base.V14.Theme.AppCompat">
+        <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
+        <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
+        <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
+        <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
+        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
+    </style>
+    <style name="Base.Theme.AppCompat.Dialog" parent="Base.V14.Theme.AppCompat.Dialog">
+        <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
+        <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
+        <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
+        <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
+        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
+    </style>
+    <style name="Base.Theme.AppCompat.Light" parent="Base.V14.Theme.AppCompat.Light">
+        <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
+        <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
+        <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
+        <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
+        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
+    </style>
+    <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V14.Theme.AppCompat.Light.Dialog">
+        <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
+        <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
+        <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
+        <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
+        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
+    </style>
+    <style name="Base.V14.Theme.AppCompat" parent="Base.V11.Theme.AppCompat"/>
+    <style name="Base.V14.Theme.AppCompat.Dialog" parent="Base.V11.Theme.AppCompat.Dialog"/>
+    <style name="Base.V14.Theme.AppCompat.Light" parent="Base.V11.Theme.AppCompat.Light"/>
+    <style name="Base.V14.Theme.AppCompat.Light.Dialog" parent="Base.V11.Theme.AppCompat.Light.Dialog"/>
+    <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library/0.4.0/res/values-v14/values.xml -->
+    <eat-comment/>
+    <style name="SmoothProgressBar" parent="android:Widget.Holo.ProgressBar.Horizontal">
+        <item name="spb_color">@color/spb_default_color</item>
+        <item name="spb_sections_count">@integer/spb_default_sections_count</item>
+        <item name="spb_speed">@string/spb_default_speed</item>
+        <item name="spb_stroke_width">@dimen/spb_default_stroke_width</item>
+        <item name="spb_stroke_separator_length">@dimen/spb_default_stroke_separator_length</item>
+        <item name="spb_reversed">@bool/spb_default_reversed</item>
+        <item name="spb_mirror_mode">@bool/spb_default_mirror_mode</item>
+    </style>
+</resources>

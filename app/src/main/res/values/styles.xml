@@ -1,0 +1,22 @@
+<resources>
+
+
+    <style name="AppTheme" parent="@style/AppBaseTheme">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- ToolBar 颜色 -->
+        <item name="colorPrimary">#4876FF</item>
+        <!-- 状态栏 颜色 -->
+        <item name="colorPrimaryDark">#3A5FCD</item>
+        <!-- 窗口背景颜色 -->
+        <item name="android:windowBackground">@android:color/white</item>
+        <!-- ToolBar 字体颜色 -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!-- 菜单项文字颜色 -->
+        <item name="actionMenuTextColor">@android:color/white</item>
+    </style>
+
+</resources>

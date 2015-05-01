@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:background="#ff092a5b">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_guide_first_01" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xxxlarge">
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:src="@drawable/ic_guide_first_02" />
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_08"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_guide_fist_02"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_guide_first_08" />
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_09"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_guide_fist_08"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_guide_first_09" />
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_07"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_guide_fist_02"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_guide_first_07"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_guide_fist_07"
+            android:layout_toRightOf="@id/iv_guide_fist_02"
+            android:layout_marginTop="@dimen/margin_xxxlarge"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:src="@drawable/ic_guide_first_05"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_guide_fist_05"
+            android:layout_toRightOf="@id/iv_guide_fist_09"
+            android:layout_marginTop="@dimen/margin_xxlarge"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:src="@drawable/ic_guide_first_11"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_06"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_guide_fist_07"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_guide_first_06"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xxlarge"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:layout_toRightOf="@id/iv_guide_fist_05"
+            android:layout_below="@id/iv_guide_fist_06"
+            android:src="@drawable/ic_guide_first_04"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xxlarge"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:layout_toRightOf="@id/iv_guide_fist_05"
+            android:layout_below="@id/iv_guide_fist_04"
+            android:src="@drawable/ic_guide_first_13"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:layout_toRightOf="@id/iv_guide_fist_04"
+            android:layout_below="@id/iv_guide_fist_06"
+            android:src="@drawable/ic_guide_first_03"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_marginLeft="@dimen/margin_xlarge"
+            android:layout_toRightOf="@id/iv_guide_fist_04"
+            android:layout_below="@id/iv_guide_fist_03"
+            android:src="@drawable/ic_guide_first_12"/>
+
+        <ImageView
+            android:id="@+id/iv_guide_fist_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_xlarge"
+            android:layout_marginLeft="@dimen/margin_xxxlarge"
+            android:layout_toRightOf="@id/iv_guide_fist_11"
+            android:layout_below="@id/iv_guide_fist_12"
+            android:src="@drawable/ic_guide_first_10"/>
+
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/layout/fragment_guide_first.xml -->

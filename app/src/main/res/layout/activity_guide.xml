@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_guide_start">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="100dp"/>
+
+    <LinearLayout
+        android:id="@+id/ll_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="15dp"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/btn_card_height"
+            android:layout_weight="1"
+            android:background="#ff0099fe"
+            android:text="@string/general_login"/>
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/btn_card_height"
+            android:layout_weight="1"
+            android:layout_marginLeft="30dp"
+            android:background="#fffdfdfe"
+            android:textColor="#ff878787"
+            android:text="@string/general_register" />
+
+    </LinearLayout>
+
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/cpi_guide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ll_buttons"
+        app:fillColor="#ffffffff"
+        app:pageColor="#88ffffff"
+        app:strokeWidth="0dp" />
+
+    <TextSwitcher
+        android:id="@+id/ts_guide_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/cpi_guide"
+        android:layout_centerHorizontal="true"
+        android:inAnimation="@anim/slide_in_down"
+        android:outAnimation="@anim/slide_out_up"
+        android:padding="10dp">
+
+    </TextSwitcher>
+
+</RelativeLayout>
