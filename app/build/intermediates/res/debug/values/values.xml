@@ -406,8 +406,12 @@
     <string name="error_invalid_password">This password is too short</string>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="general_cancel">取消</string>
+    <string name="general_confirm">确定</string>
+    <string name="general_email">邮箱</string>
     <string name="general_login">登录</string>
     <string name="general_null">""</string>
+    <string name="general_password">密码</string>
     <string name="general_register">注册</string>
     <string name="guide_tip_fifth">答而得——知乎漫游指南</string>
     <string name="guide_tip_first">观而思——知乎漫游指南</string>

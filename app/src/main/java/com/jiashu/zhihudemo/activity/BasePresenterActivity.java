@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 import com.jiashu.zhihudemo.vu.Vu;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by Jiashu on 2015/4/23.
  */
@@ -15,11 +17,13 @@ public abstract class BasePresenterActivity<V extends Vu> extends ActionBarActiv
 
     V mVu;
     FragmentManager mFm;
+    EventBus mBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFm = getSupportFragmentManager();
+        mBus = EventBus.getDefault();
         try {
             mVu = getVuClass().newInstance();
             mVu.initView(getLayoutInflater(), null);

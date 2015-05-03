@@ -18,6 +18,8 @@
     <string name="general_login">登录</string>
     <string name="general_register">注册</string>
     <string name="general_null">""</string>
+    <string name="general_confirm">确定</string>
+    <string name="general_cancel">取消</string>
     
     <string name="guide_tip_first">观而思——知乎漫游指南</string>
     <string name="guide_tip_second">思而动——知乎漫游指南</string>
@@ -26,4 +28,6 @@
     <string name="guide_tip_fifth">答而得——知乎漫游指南</string>
     <string name="guide_tip_sixth">与世界分享\n你的知识、经验和见解</string>
     <string name="action_logout">登出</string>
+    <string name="general_email">邮箱</string>
+    <string name="general_password">密码</string>
 </resources>

@@ -8,8 +8,8 @@ import butterknife.ButterKnife.Injector;
 public class GuideSixthVu$$ViewInjector<T extends com.jiashu.zhihudemo.vu.GuideSixthVu> implements Injector<T> {
   @Override public void inject(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131361921, "field 'mLogoLayout'");
-    target.mLogoLayout = finder.castView(view, 2131361921, "field 'mLogoLayout'");
+    view = finder.findRequiredView(source, 2131361923, "field 'mLogoLayout'");
+    target.mLogoLayout = finder.castView(view, 2131361923, "field 'mLogoLayout'");
   }
 
   @Override public void reset(T target) {

@@ -2,9 +2,11 @@ package com.jiashu.zhihudemo.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -32,6 +34,8 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
 
     private static final String TAG = "MainActivity<MainVu>";
 
+    private SharedPreferences mPref;
+
     private ActionBarDrawerToggle mToggle;
     private NavListAdapter mAdapter;
 
@@ -46,6 +50,8 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
 
     @Override
     protected void onBindVu() {
+
+        mPref = getSharedPreferences("loginMessage", MODE_PRIVATE);
 
         mFragmentCollector = new SparseArray<>();
 
@@ -74,6 +80,10 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
     @Override
     protected void onBindMenu(int menuItem) {
         if (menuItem == R.id.action_logout) {
+            SharedPreferences.Editor editor = mPref.edit();
+            editor.putBoolean("isLogined", false);
+            editor.putString("password", null);
+            editor.commit();
             LoginActivity.startBy(MainActivity.this);
             finish();
         }

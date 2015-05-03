@@ -2,9 +2,14 @@ package com.jiashu.zhihudemo.activity;
 
 
 import android.animation.ArgbEvaluator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -18,6 +23,8 @@ import android.widget.ViewSwitcher;
 import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.adapter.MyFragmentPagerAdapter;
 import com.jiashu.zhihudemo.data.StringContants;
+import com.jiashu.zhihudemo.event.LoginEvent;
+import com.jiashu.zhihudemo.fragment.dialog.LoginDialogFragment;
 import com.jiashu.zhihudemo.fragment.guide.FifthGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.FirstGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.FourthGuideFragment;
@@ -40,6 +47,8 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
     private static final float ORIGIN_PARALLAX_COEFFICIENT = 1.2f;
     private static final float DECLINE_PARALLAX_COEFFICIENT = 0.5f;
 
+    private SharedPreferences mPref;
+
     MyFragmentPagerAdapter mAdapter;
     List<Fragment> mFragments;
 
@@ -57,6 +66,16 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
 
     @Override
     protected void onBindVu() {
+
+        mBus.register(this);
+
+        mPref = getSharedPreferences("loginMessage", MODE_PRIVATE);
+        boolean isLogined = mPref.getBoolean("isLogined", false);
+        if (isLogined) {
+            MainActivity.startBy(LoginActivity.this);
+            finish();
+        }
+
         initData();
         mAdapter = new MyFragmentPagerAdapter(mFm, mFragments, null);
         mVu.setPageAdapter(mAdapter);
@@ -91,8 +110,11 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
         mVu.setLoginCallback(new VuCallback<Void>() {
             @Override
             public void execute(Void result) {
-                MainActivity.startBy(LoginActivity.this);
-                finish();
+                LoginDialogFragment dialog = new LoginDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("email", mPref.getString("email", null));
+                dialog.setArguments(args);
+                dialog.show(mFm, null);
             }
         });
 
@@ -126,7 +148,8 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
 
     @Override
     protected void onDestroyVu() {
-
+        mBus.unregister(this);
+        Log.d("LoginDiaogFragment", "onDestroyVu");
     }
 
     @Override
@@ -140,6 +163,19 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
     public static void startBy(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
+    }
+
+    public void onEvent(LoginEvent event) {
+        Log.d("LoginDiaogFragment", "Activity-OnEvent");
+        if (event.isLogined()) {
+            SharedPreferences.Editor editor = mPref.edit();
+            editor.putBoolean("isLogined", true);
+            editor.putString("email", event.getEmail());
+            editor.putString("password", event.getPassword());
+            editor.commit();
+            MainActivity.startBy(LoginActivity.this);
+            finish();
+        }
     }
 
     /**
