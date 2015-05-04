@@ -2669,7 +2669,14 @@ containing a value of this type.
         public static final int title_activity_home=0x7f0c0056;
         public static final int title_activity_login=0x7f0c0057;
         public static final int title_activity_quiz=0x7f0c0058;
-        public static final int wallet_buy_button_place_holder=0x7f0c0059;
+        public static final int toast_check_network=0x7f0c0059;
+        public static final int toast_login_error_captcha=0x7f0c005a;
+        public static final int toast_login_error_default=0x7f0c005b;
+        public static final int toast_login_error_email=0x7f0c005c;
+        public static final int toast_login_error_pwd=0x7f0c005d;
+        public static final int toast_login_fail=0x7f0c005e;
+        public static final int toast_login_success=0x7f0c005f;
+        public static final int wallet_buy_button_place_holder=0x7f0c0060;
     }
     public static final class style {
         public static final int Animation_AppCompat_DropDownUp=0x7f0d0000;

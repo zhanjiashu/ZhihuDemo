@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.activity.LoginActivity;
 import com.jiashu.zhihudemo.event.LoginEvent;
 
 import butterknife.ButterKnife;
@@ -43,9 +44,10 @@ public class LoginDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_login_layout, null);
         ButterKnife.inject(this, view);
 
-        mEmailEdit.clearFocus();
-        mPasswordEdit.clearFocus();
-        mEmailEdit.setText(getArguments().getString("email", ""));
+        Bundle args = getArguments();
+        if (args != null) {
+            mEmailEdit.setText(args.getString(LoginActivity.PREF_KEY_EMAIL));
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.general_login);
@@ -79,8 +81,6 @@ public class LoginDialogFragment extends DialogFragment {
     }
 
     public void onEvent(LoginEvent event) {
-        //mEmailEdit.setText(event.getEmail());
-        mEmailEdit.setText("777777@qq.com");
-        Log.d(TAG, "Fragment - onEvent");
+
     }
 }

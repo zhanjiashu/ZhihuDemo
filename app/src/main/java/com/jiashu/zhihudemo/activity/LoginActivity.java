@@ -2,9 +2,8 @@ package com.jiashu.zhihudemo.activity;
 
 
 import android.animation.ArgbEvaluator;
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,16 +12,17 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.ZhiHuApp;
 import com.jiashu.zhihudemo.adapter.MyFragmentPagerAdapter;
-import com.jiashu.zhihudemo.data.StringContants;
+import com.jiashu.zhihudemo.cmd.FetchXRSFNetCmd;
+import com.jiashu.zhihudemo.cmd.LoginNetCmd;
+import com.jiashu.zhihudemo.data.StringConstants;
 import com.jiashu.zhihudemo.event.LoginEvent;
 import com.jiashu.zhihudemo.fragment.dialog.LoginDialogFragment;
 import com.jiashu.zhihudemo.fragment.guide.FifthGuideFragment;
@@ -31,6 +31,9 @@ import com.jiashu.zhihudemo.fragment.guide.FourthGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.SecondGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.SixthGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.ThirdGuideFragment;
+import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
+import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.utils.NetUtil;
 import com.jiashu.zhihudemo.vu.GuidePageVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
 
@@ -46,6 +49,8 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
 
     private static final float ORIGIN_PARALLAX_COEFFICIENT = 1.2f;
     private static final float DECLINE_PARALLAX_COEFFICIENT = 0.5f;
+
+    public static final String PREF_KEY_EMAIL = "login_email";
 
     private SharedPreferences mPref;
 
@@ -69,11 +74,14 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
 
         mBus.register(this);
 
-        mPref = getSharedPreferences("loginMessage", MODE_PRIVATE);
-        boolean isLogined = mPref.getBoolean("isLogined", false);
+        mPref = PreferenceManager.getDefaultSharedPreferences(ZhiHuApp.getContext());
+
+        boolean isLogined = ZhiHuCookieManager.hasCookie("z_c0");
+
         if (isLogined) {
             MainActivity.startBy(LoginActivity.this);
             finish();
+            return;
         }
 
         initData();
@@ -81,7 +89,7 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
         mVu.setPageAdapter(mAdapter);
 
         mVu.setTextSwitchFactory(this);
-        mVu.setTip(getString(StringContants.TIPS[0]));
+        mVu.setTip(getString(StringConstants.TIPS[0]));
 
         initBackground();
 
@@ -95,7 +103,7 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
 
             @Override
             public void onPageSelected(int position) {
-                String tip = getString(StringContants.TIPS[position]);
+                String tip = getString(StringConstants.TIPS[position]);
                 mVu.setTip(tip);
             }
 
@@ -112,9 +120,20 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
             public void execute(Void result) {
                 LoginDialogFragment dialog = new LoginDialogFragment();
                 Bundle args = new Bundle();
-                args.putString("email", mPref.getString("email", null));
+                args.putString(PREF_KEY_EMAIL, mPref.getString(PREF_KEY_EMAIL, ""));
                 dialog.setArguments(args);
                 dialog.show(mFm, null);
+
+                FetchXRSFNetCmd netCmd = new FetchXRSFNetCmd();
+                netCmd.setOnNetCmdCallback(new FetchXRSFNetCmd.CallbackListener() {
+                    @Override
+                    public void callback(String xsrf) {
+                        LogUtil.d(TAG, "_xsrf = " + xsrf);
+                        //login(null);
+                    }
+                });
+
+                NetUtil.execNetCmd(netCmd);
             }
         });
 
@@ -166,16 +185,29 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu> implements
     }
 
     public void onEvent(LoginEvent event) {
-        Log.d("LoginDiaogFragment", "Activity-OnEvent");
-        if (event.isLogined()) {
-            SharedPreferences.Editor editor = mPref.edit();
-            editor.putBoolean("isLogined", true);
-            editor.putString("email", event.getEmail());
-            editor.putString("password", event.getPassword());
-            editor.commit();
-            MainActivity.startBy(LoginActivity.this);
-            finish();
-        }
+        mPref.edit()
+                .putString(PREF_KEY_EMAIL, event.getEmail())
+                .commit();
+        login(event);
+    }
+
+    private void login(LoginEvent event) {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        LoginNetCmd netCmd = new LoginNetCmd(event);
+        netCmd.setOnNetCmdCallback(new LoginNetCmd.CallbackListener() {
+            @Override
+            public void callback(int status) {
+                if (status == LoginNetCmd.LOGIN_SUCCESS) {
+                    progressDialog.dismiss();
+                    MainActivity.startBy(LoginActivity.this);
+                    finish();
+                }
+            }
+        });
+        NetUtil.execNetCmd(netCmd);
     }
 
     /**

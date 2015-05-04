@@ -921,7 +921,14 @@ int string store_picture_title 0x7f0c0055
 int string title_activity_home 0x7f0c0056
 int string title_activity_login 0x7f0c0057
 int string title_activity_quiz 0x7f0c0058
-int string wallet_buy_button_place_holder 0x7f0c0059
+int string toast_check_network 0x7f0c0059
+int string toast_login_error_captcha 0x7f0c005a
+int string toast_login_error_default 0x7f0c005b
+int string toast_login_error_email 0x7f0c005c
+int string toast_login_error_pwd 0x7f0c005d
+int string toast_login_fail 0x7f0c005e
+int string toast_login_success 0x7f0c005f
+int string wallet_buy_button_place_holder 0x7f0c0060
 int style Animation_AppCompat_DropDownUp 0x7f0d0000
 int style AppBaseTheme 0x7f0d0001
 int style AppTheme 0x7f0d0002

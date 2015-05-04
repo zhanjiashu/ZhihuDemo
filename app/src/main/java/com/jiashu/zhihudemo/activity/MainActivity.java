@@ -22,6 +22,7 @@ import com.jiashu.zhihudemo.fragment.DiscoveryFragment;
 import com.jiashu.zhihudemo.fragment.DraftFragment;
 import com.jiashu.zhihudemo.fragment.FollowFragment;
 import com.jiashu.zhihudemo.fragment.HomeFragment;
+import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 import com.jiashu.zhihudemo.other.CustomisedHeaderTransformer;
 import com.jiashu.zhihudemo.vu.MainVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
@@ -80,12 +81,10 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
     @Override
     protected void onBindMenu(int menuItem) {
         if (menuItem == R.id.action_logout) {
-            SharedPreferences.Editor editor = mPref.edit();
-            editor.putBoolean("isLogined", false);
-            editor.putString("password", null);
-            editor.commit();
+            ZhiHuCookieManager.clearCookies();
             LoginActivity.startBy(MainActivity.this);
             finish();
+            return;
         }
     }
 
