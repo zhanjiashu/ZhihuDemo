@@ -4,9 +4,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.NetConstants;
+import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.utils.NetUtil;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,8 +29,10 @@ public class FetchHomePageNetCmd extends NetCmd {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        //mListener.callback(response);
                         LogUtil.d(TAG, response);
-                        mListener.callback(response);
+                        //mListener.callback(NetUtil.getFeedList(response));
+                        mBus.post(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -61,6 +66,6 @@ public class FetchHomePageNetCmd extends NetCmd {
     }
 
     public interface CallbackListener extends NetCmdCallback {
-        void callback(String response);
+        void callback(List<ZhiHuFeed> feedList);
     }
 }

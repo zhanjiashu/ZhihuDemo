@@ -2,6 +2,7 @@ package com.jiashu.zhihudemo.cmd;
 
 import android.text.TextUtils;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.NetConstants;
@@ -11,6 +12,9 @@ import com.jiashu.zhihudemo.utils.NetUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Jiashu on 2015/5/3.

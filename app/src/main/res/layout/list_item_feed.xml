@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/padding_medium"
+    android:paddingTop="@dimen/padding_small"
+    android:paddingRight="@dimen/padding_medium"
+    android:paddingBottom="@dimen/padding_small">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_tiny"
+            tools:text="来自"/>
+
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_left"
+            android:layout_centerVertical="true"
+            tools:text="历史"/>
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_launcher"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        tools:text="在历史上，堪称有主角光环的人有哪些？"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_voteups"
+            android:layout_width="30dp"
+            android:layout_height="18dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginTop="3.5dp"
+            android:gravity="center"
+            android:background="@android:color/holo_blue_light"
+            android:textSize="12sp"
+            tools:text="2.9K"/>
+
+        <TextView
+            android:id="@+id/tv_summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_voteups"
+            android:layout_alignParentTop="true"
+            android:textColor="@android:color/darker_gray"
+            android:lines="3"
+            android:ellipsize="end"
+            tools:text="怒答！没错！堪比龙傲天！位面之子刘秀与穿越者王莽的基情。注:此文转自网络。有人问出处，原作者是某个论坛的，id是——海上钢琴师"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

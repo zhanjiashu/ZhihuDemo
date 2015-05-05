@@ -11,4 +11,6 @@
     <dimen name="margin_xxxlarge">40.0dp</dimen>
 
     <dimen name="btn_card_height">@dimen/abc_action_bar_default_height_material</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
 </resources>

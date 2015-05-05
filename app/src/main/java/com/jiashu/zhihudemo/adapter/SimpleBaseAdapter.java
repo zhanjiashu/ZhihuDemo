@@ -71,4 +71,15 @@ public abstract class SimpleBaseAdapter<V extends Vu, E> extends BaseAdapter {
 
 
     protected abstract Class<V> getVuClass();
+
+    public void addAll(List<E> data) {
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void replace(List<E> data) {
+        mData.clear();
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
 }

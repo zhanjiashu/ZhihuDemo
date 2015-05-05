@@ -281,6 +281,8 @@
     <dimen name="margin_xlarge">16.0dp</dimen>
     <dimen name="margin_xxlarge">20.0dp</dimen>
     <dimen name="margin_xxxlarge">40.0dp</dimen>
+    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/build/intermediates/exploded-aar/com.github.chrisbanes.actionbarpulltorefresh/library/0.9.9/res/values/values.xml -->
     <eat-comment/>
     <dimen name="ptr_progress_bar_stroke_width">4dp</dimen>

@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.data.StringConstants;
 import com.jiashu.zhihudemo.net.ZhiHuCookieStore;
 
@@ -30,6 +31,7 @@ public class VolleyUtil {
     private ConnectivityManager mCM;
 
     private RequestQueue mQueue;
+    private ImageLoader mImageLoader;
 
     private VolleyUtil(Context context) {
         mContext = context;
@@ -46,6 +48,8 @@ public class VolleyUtil {
 
         mQueue = new RequestQueue(new DiskBasedCache(cacheDir), network, DEFAULT_THREAD_POOL_SIZE);
         mQueue.start();
+
+        mImageLoader = new ImageLoader(mQueue, new LruImageCache(context));
     }
 
     public static VolleyUtil getInstance(Context context) {
@@ -69,6 +73,10 @@ public class VolleyUtil {
 
     public RequestQueue getQueue() {
         return mQueue;
+    }
+
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
     }
 
 }

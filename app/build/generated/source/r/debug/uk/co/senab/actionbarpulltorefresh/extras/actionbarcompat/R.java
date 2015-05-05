@@ -176,9 +176,9 @@ public final class R {
 		public static final int dialog_fixed_height_minor = 0x7f09003b;
 		public static final int dialog_fixed_width_major = 0x7f09003c;
 		public static final int dialog_fixed_width_minor = 0x7f09003d;
-		public static final int ptr_progress_bar_stroke_width = 0x7f090047;
-		public static final int spb_default_stroke_separator_length = 0x7f090048;
-		public static final int spb_default_stroke_width = 0x7f090049;
+		public static final int ptr_progress_bar_stroke_width = 0x7f090049;
+		public static final int spb_default_stroke_separator_length = 0x7f09004a;
+		public static final int spb_default_stroke_width = 0x7f09004b;
 	}
 	public static final class drawable {
 		public static final int abc_item_background_holo_dark = 0x7f02001c;
@@ -285,7 +285,7 @@ public final class R {
 		public static final int abc_search_dropdown_item_icons_2line = 0x7f040013;
 		public static final int abc_search_view = 0x7f040014;
 		public static final int default_header = 0x7f040019;
-		public static final int support_simple_spinner_dropdown_item = 0x7f040027;
+		public static final int support_simple_spinner_dropdown_item = 0x7f040028;
 	}
 	public static final class string {
 		public static final int abc_action_bar_home_description = 0x7f0c0000;

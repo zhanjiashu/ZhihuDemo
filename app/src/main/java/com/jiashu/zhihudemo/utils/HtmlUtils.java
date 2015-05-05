@@ -23,40 +23,14 @@ public class HtmlUtils {
 
     private static final String TAG = "HtmlUtils";
 
-    public static void parseContentItem(String html) {
+    public static void parseFeedList(String html) {
         Document doc = Jsoup.parse(html);
         Elements elements = doc.select("div[id=js-home-feed-list]>div[id^=feed]");
         for (Element element : elements) {
-            LogUtil.d(TAG, "contentItem = " + element.toString());
-            saveToFile("response.html", html);
+            LogUtil.d(TAG, "feed = " + element.toString());
+            //saveToFile("response.html", html);
         }
     }
 
-    private static void saveToFile(final String fileName, final String content) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OutputStream out = null;
-                BufferedWriter writer = null;
 
-                try {
-                    out = ZhiHuApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
-                    writer = new BufferedWriter(new OutputStreamWriter(out));
-                    writer.write(content);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (writer != null) {
-                            writer.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
 }

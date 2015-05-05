@@ -12,12 +12,21 @@ import android.view.ViewGroup;
 
 import com.jiashu.zhihudemo.vu.Vu;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public abstract class BasePresenterFragment<V extends Vu> extends Fragment {
 
     protected V mVu;
+    protected EventBus mBus;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBus = EventBus.getDefault();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

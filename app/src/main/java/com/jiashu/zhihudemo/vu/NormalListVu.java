@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.vu.Vu;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,8 +28,10 @@ public class NormalListVu implements Vu {
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
-        mView = inflater.inflate(R.layout.list_layout_normal, container, false);
+        mView = inflater.inflate(R.layout.list_normal, container, false);
         ButterKnife.inject(this, mView);
+
+        mTextView.setVisibility(View.GONE);
     }
 
     @Override
