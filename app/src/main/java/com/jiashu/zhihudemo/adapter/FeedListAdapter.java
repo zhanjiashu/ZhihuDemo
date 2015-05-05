@@ -1,12 +1,11 @@
 package com.jiashu.zhihudemo.adapter;
 
-import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.ZhiHuApp;
-import com.jiashu.zhihudemo.data.NetConstants;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.utils.VolleyUtil;
 import com.jiashu.zhihudemo.vu.item.FeedItemVu;
@@ -25,18 +24,29 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
     @Override
     protected void onBindListItemVu(int position) {
         ZhiHuFeed feed = mData.get(position);
-        mVu.setLeftText("来自");
-        mVu.setRightText(feed.getAuthor());
-        mVu.setRightTextColor(Color.BLUE);
-        mVu.setTitle(feed.getTitle());
-        mVu.setSummary(feed.getSummary());
 
-        String feedType = feed.getFeedType();
-        if (feedType.equals(NetConstants.QUESTION_TOPIC) ||
-                feedType.equals(NetConstants.QUESTION_MEMBER_FOLLOW) ||
-                feedType.equals(NetConstants.COLUMN_MEMBER_FOLLOW)) {
+        if (feed.getSuppSide() == ZhiHuFeed.SUPP_LEFT) {
+            mVu.setLeftText(feed.getSourceSupp());
+            mVu.setRightText(feed.getSource());
+
+            mVu.setLeftTextColor(Color.GRAY);
+            mVu.setRightTextColor(Color.BLUE);
+
+        } else if (feed.getSuppSide() == ZhiHuFeed.SUPP_RIGHT){
+            mVu.setLeftText(feed.getSource());
+            mVu.setRightText(feed.getSourceSupp());
+
+            mVu.setLeftTextColor(Color.BLUE);
+            mVu.setRightTextColor(Color.GRAY);
+        }
+
+        mVu.setTitle(feed.getTitle());
+        String summary = feed.getSummary();
+        if (TextUtils.isEmpty(summary)) {
             mVu.setContentVisibility(View.GONE);
         } else {
+            mVu.setContentVisibility(View.VISIBLE);
+            mVu.setSummary(summary);
             mVu.setVoteups(feed.getVoteups());
         }
 

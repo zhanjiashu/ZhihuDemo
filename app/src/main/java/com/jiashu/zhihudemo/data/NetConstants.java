@@ -30,12 +30,12 @@ public class NetConstants {
 
     // [热门问答]
     public static final String ANSWER_PROMOTION = "promotion_answer";
-    // 来自某个话题的问答
+    // 来自某个话题的回答
     public static final String ANSWER_TOPIC = "topic_acknowledged_answer";
-    // 某个被关注者 赞同的问答
+    // 某个被关注者 赞同的回答
     public static final String ANSWER_MEMBER_VOTEUP = "member_voteup_answer";
-    // 某个被关注者 的问答
-    public static final String ANSWER_MEMBER_QUESTION = "member_answer_question";
+    // 某个被关注者 的回答
+    public static final String ANSWER_MEMBER = "member_answer_question";
 
     // 来自某个话题的热门问题
     public static final String QUESTION_TOPIC = "topic_popular_question";

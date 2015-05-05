@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_tiny"
+            android:textSize="15sp"
             tools:text="来自"/>
 
         <TextView
@@ -27,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tv_left"
             android:layout_centerVertical="true"
+            android:textSize="15sp"
             tools:text="历史"/>
 
         <com.android.volley.toolbox.NetworkImageView
@@ -61,7 +63,7 @@
             android:layout_marginRight="@dimen/margin_small"
             android:layout_marginTop="3.5dp"
             android:gravity="center"
-            android:background="@android:color/holo_blue_light"
+            android:background="@drawable/bg_voteups"
             android:textSize="12sp"
             tools:text="2.9K"/>
 
@@ -71,9 +73,10 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tv_voteups"
             android:layout_alignParentTop="true"
-            android:textColor="@android:color/darker_gray"
-            android:lines="3"
+            android:maxLines="3"
             android:ellipsize="end"
+            android:lineSpacingMultiplier="1.2"
+            android:textSize="15sp"
             tools:text="怒答！没错！堪比龙傲天！位面之子刘秀与穿越者王莽的基情。注:此文转自网络。有人问出处，原作者是某个论坛的，id是——海上钢琴师"/>
 
     </RelativeLayout>

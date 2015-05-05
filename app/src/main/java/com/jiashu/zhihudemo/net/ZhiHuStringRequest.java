@@ -47,19 +47,29 @@ public class ZhiHuStringRequest extends StringRequest {
         return headers;
     }
 
-
+    /**
+     * 重写 parseNetworkResponse()
+     * 当返回的 Response 的 Content-Encoding 为 gzip 时，利用 GZIPInputStream 进行 gzip 解码
+     * @param response
+     * @return
+     */
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
-        boolean isGzipResponse = checkContentEncoding(response.data);
-        if (isGzipResponse) {
-            String str = decodeGzip(response.data);
+        boolean isGZIP = checkGZIP(response.data);
+        if (isGZIP) {
+            String str = decodeGZIP(response.data);
             return Response.success(str, HttpHeaderParser.parseCacheHeaders(response));
         } else {
             return super.parseNetworkResponse(response);
         }
     }
 
-    private String decodeGzip(byte[] data) {
+    /**
+     * 对 gzip 格式的 response 数据进行解码
+     * @param data
+     * @return
+     */
+    private String decodeGZIP(byte[] data) {
         InputStream is;
         StringBuilder sb = new StringBuilder();
 
@@ -76,7 +86,12 @@ public class ZhiHuStringRequest extends StringRequest {
         return sb.toString();
     }
 
-    private boolean checkContentEncoding(byte[] data) {
+    /**
+     * 判断当前 response 是否为 gzip 格式的
+     * @param data
+     * @return
+     */
+    private boolean checkGZIP(byte[] data) {
         byte[] header = new byte[2];
         header[0] = data[0];
         header[1] = data[1];
@@ -86,6 +101,11 @@ public class ZhiHuStringRequest extends StringRequest {
         return false;
     }
 
+    /**
+     * 将 byte[] 转换成 字符
+     * @param bytes
+     * @return
+     */
     private int getShort(byte[] bytes) {
         return (int) ((bytes[0] << 8) | bytes[1] & 0xFF);
     }

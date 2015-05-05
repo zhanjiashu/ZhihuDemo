@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.jiashu.zhihudemo.ZhiHuApp;
-import com.jiashu.zhihudemo.builder.ZhiHuFeedBuilder;
 import com.jiashu.zhihudemo.cmd.NetCmd;
-import com.jiashu.zhihudemo.data.NetConstants;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 
@@ -59,17 +57,20 @@ public class NetUtil {
         netCmd.cancel();
     }
 
+    /**
+     * 获取 [首页] 的 Feed 信息流，并进行封装
+     * @param html
+     * @return
+     */
     public static List<ZhiHuFeed> getFeedList(String html) {
         List<ZhiHuFeed> feedList = new ArrayList<>();
         saveToFile("response.html", html);
         Document doc = Jsoup.parse(html);
+        // 遍历返回数据中 包含着 Feed 的 div
         Elements elements = doc.select("div[id=js-home-feed-list]>div[id^=feed]");
         for (Element element : elements) {
-            ZhiHuFeedBuilder builder = new ZhiHuFeedBuilder(element);
-            ZhiHuFeed feed = builder.setAvatar()
-                    .setSource()
-                    .setContent()
-                    .builde();
+            ZhiHuFeed.Builder builder = new ZhiHuFeed.Builder(element);
+            ZhiHuFeed feed = builder.build();
             feedList.add(feed);
         }
         LogUtil.d(TAG, "feedList's size " + feedList.size());
