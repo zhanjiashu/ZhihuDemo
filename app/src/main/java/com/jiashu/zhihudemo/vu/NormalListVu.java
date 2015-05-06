@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.other.ZHListView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,7 +22,7 @@ public class NormalListVu implements Vu {
     View mView;
 
     @InjectView(R.id.lv_normal)
-    ListView mListView;
+    ZHListView mListView;
 
     @InjectView(R.id.tv_normal)
     TextView mTextView;
@@ -54,5 +55,13 @@ public class NormalListVu implements Vu {
 
     public void setItemClickable(boolean clickable) {
         mListView.setClickable(clickable);
+    }
+
+    public void setOnLoadingListener(ZHListView.OnLoadingListener listener) {
+        mListView.setOnLoadingListener(listener);
+    }
+
+    public void setLoadCompleted() {
+        mListView.setLoadCompleted();
     }
 }

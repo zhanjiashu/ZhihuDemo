@@ -18,22 +18,28 @@ import android.widget.ListView;
  *     刷新事件，同时 ListView 是无法滑动回顶端的。
  * Created by Jiashu on 2015/5/5.
  */
-public class CustomListView extends ListView implements AbsListView.OnScrollListener {
+public class ZHListView extends ListView implements AbsListView.OnScrollListener {
 
     private static final String TAG = "CustomListView";
     private int mFirstVisibleItem;      // 当前屏幕ListView第一个可见子项的位置
+    private int mLastVisibleItem;
+    private int mTotalItemCount;
 
-    public CustomListView(Context context) {
+    private boolean isLoading;
+
+    private OnLoadingListener mListener;
+
+    public ZHListView(Context context) {
         super(context);
         this.setOnScrollListener(this);
     }
 
-    public CustomListView(Context context, AttributeSet attrs) {
+    public ZHListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setOnScrollListener(this);
     }
 
-    public CustomListView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ZHListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.setOnScrollListener(this);
     }
@@ -41,12 +47,19 @@ public class CustomListView extends ListView implements AbsListView.OnScrollList
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        if (mLastVisibleItem == mTotalItemCount && scrollState == SCROLL_STATE_IDLE) {
+            if (!isLoading) {
+                isLoading = true;
+                mListener.onLoading();
+            }
+        }
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         mFirstVisibleItem = firstVisibleItem;
+        mLastVisibleItem = firstVisibleItem + visibleItemCount;
+        mTotalItemCount = totalItemCount;
     }
 
     @Override
@@ -77,6 +90,19 @@ public class CustomListView extends ListView implements AbsListView.OnScrollList
     // 设置父控件是否可以获取到触摸处理权限
     private void setParentScrollAble(boolean flag) {
         getParent().requestDisallowInterceptTouchEvent(!flag);
+    }
+
+
+    public void setOnLoadingListener(OnLoadingListener listener) {
+        this.mListener = listener;
+    }
+
+    public void setLoadCompleted() {
+        isLoading = false;
+    }
+
+    public interface OnLoadingListener {
+        void onLoading();
     }
 
 }

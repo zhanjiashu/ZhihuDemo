@@ -1,14 +1,18 @@
 package com.jiashu.zhihudemo.fragment;
 
 
+import android.os.Handler;
+
 import com.jiashu.zhihudemo.adapter.FeedListAdapter;
 import com.jiashu.zhihudemo.cmd.FetchHomePageNetCmd;
 import com.jiashu.zhihudemo.event.FetchCompletedEvent;
 import com.jiashu.zhihudemo.event.FetchFailEvent;
 import com.jiashu.zhihudemo.event.RefreshEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
+import com.jiashu.zhihudemo.other.ZHListView;
 import com.jiashu.zhihudemo.utils.LogUtil;
 import com.jiashu.zhihudemo.utils.NetUtil;
+import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.NormalListVu;
 
 import java.util.ArrayList;
@@ -42,6 +46,13 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         mVu.setAdapter(mAdapter);
 
         fetchHomePage();
+
+        mVu.setOnLoadingListener(new ZHListView.OnLoadingListener() {
+            @Override
+            public void onLoading() {
+                ToastUtils.show("Loading...");
+            }
+        });
     }
 
     @Override
