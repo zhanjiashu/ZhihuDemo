@@ -5,13 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/padding_medium"
-    android:paddingTop="@dimen/padding_small"
-    android:paddingRight="@dimen/padding_medium"
-    android:paddingBottom="@dimen/padding_small">
+
+    android:paddingRight="@dimen/padding_medium">
 
     <RelativeLayout
+        android:id="@+id/rl_source"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_tiny"
+        android:paddingBottom="@dimen/padding_tiny"
+        android:clickable="true"
+        android:background="@drawable/bg_item_inner">
 
         <TextView
             android:id="@+id/tv_left"
@@ -44,16 +48,20 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginBottom="@dimen/margin_small"
+        android:paddingTop="@dimen/padding_tiny"
+        android:paddingBottom="@dimen/padding_tiny"
         android:textSize="18sp"
         android:textColor="@android:color/black"
+        android:background="@drawable/bg_item_inner"
         tools:text="在历史上，堪称有主角光环的人有哪些？"/>
 
     <RelativeLayout
         android:id="@+id/rl_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_tiny"
+        android:paddingBottom="@dimen/padding_tiny"
+        android:background="@drawable/bg_item_inner">
 
         <TextView
             android:id="@+id/tv_voteups"

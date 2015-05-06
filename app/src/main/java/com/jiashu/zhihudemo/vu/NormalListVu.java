@@ -51,4 +51,8 @@ public class NormalListVu implements Vu {
     public void setAdapter(BaseAdapter adapter) {
         mListView.setAdapter(adapter);
     }
+
+    public void setItemClickable(boolean clickable) {
+        mListView.setClickable(clickable);
+    }
 }

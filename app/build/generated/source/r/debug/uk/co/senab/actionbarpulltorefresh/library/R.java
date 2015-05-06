@@ -42,13 +42,13 @@ public final class R {
 		public static final int spb_default_reversed = 0x7f07000d;
 	}
 	public static final class color {
-		public static final int default_progress_bar_color = 0x7f080025;
-		public static final int spb_default_color = 0x7f080047;
+		public static final int default_progress_bar_color = 0x7f080026;
+		public static final int spb_default_color = 0x7f080048;
 	}
 	public static final class dimen {
-		public static final int ptr_progress_bar_stroke_width = 0x7f090049;
-		public static final int spb_default_stroke_separator_length = 0x7f09004a;
-		public static final int spb_default_stroke_width = 0x7f09004b;
+		public static final int ptr_progress_bar_stroke_width = 0x7f09004a;
+		public static final int spb_default_stroke_separator_length = 0x7f09004b;
+		public static final int spb_default_stroke_width = 0x7f09004c;
 	}
 	public static final class id {
 		public static final int inside = 0x7f0a0023;

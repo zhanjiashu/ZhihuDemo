@@ -17,6 +17,9 @@ import android.view.View;
 import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.adapter.NavListAdapter;
 import com.jiashu.zhihudemo.data.Constants;
+import com.jiashu.zhihudemo.event.FetchCompletedEvent;
+import com.jiashu.zhihudemo.event.FetchFailEvent;
+import com.jiashu.zhihudemo.event.RefreshEvent;
 import com.jiashu.zhihudemo.fragment.CollectionFragment;
 import com.jiashu.zhihudemo.fragment.DiscoveryFragment;
 import com.jiashu.zhihudemo.fragment.DraftFragment;
@@ -24,6 +27,9 @@ import com.jiashu.zhihudemo.fragment.FollowFragment;
 import com.jiashu.zhihudemo.fragment.HomeFragment;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 import com.jiashu.zhihudemo.other.CustomisedHeaderTransformer;
+import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.utils.NetUtil;
+import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.MainVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
 
@@ -34,8 +40,6 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 public class MainActivity extends BasePresenterActivity<MainVu> implements OnRefreshListener {
 
     private static final String TAG = "MainActivity<MainVu>";
-
-    private SharedPreferences mPref;
 
     private ActionBarDrawerToggle mToggle;
     private NavListAdapter mAdapter;
@@ -51,8 +55,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
 
     @Override
     protected void onBindVu() {
-
-        mPref = getSharedPreferences("loginMessage", MODE_PRIVATE);
+        mBus.register(this);
 
         mFragmentCollector = new SparseArray<>();
 
@@ -89,17 +92,14 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
     }
 
     @Override
-    protected void onDestroyVu() {}
+    protected void onDestroyVu() {
+        mBus.unregister(this);
+    }
 
     @Override
     public void onRefreshStarted(View view) {
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        mVu.getRefreshLayout().setRefreshComplete();
-                    }
-                }, 5000);
+        LogUtil.d(TAG, "refresh start...");
+        mBus.post(new RefreshEvent());
     }
 
     private void initActionBar() {
@@ -199,5 +199,16 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
     public static void startBy(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
+    }
+
+    public void onEventMainThread(FetchCompletedEvent event) {
+        LogUtil.d(TAG, "refresh success");
+        mVu.getRefreshLayout().setRefreshComplete();
+    }
+
+    public void onEventMainThread(FetchFailEvent event) {
+        LogUtil.d(TAG, "refresh fail");
+        mVu.getRefreshLayout().setRefreshComplete();
+        LogUtil.d(TAG, "refresh complete");
     }
 }

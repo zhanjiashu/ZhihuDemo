@@ -1,22 +1,20 @@
 package com.jiashu.zhihudemo.fragment;
 
-import android.util.Log;
 
 import com.jiashu.zhihudemo.adapter.FeedListAdapter;
 import com.jiashu.zhihudemo.cmd.FetchHomePageNetCmd;
+import com.jiashu.zhihudemo.event.FetchCompletedEvent;
+import com.jiashu.zhihudemo.event.FetchFailEvent;
+import com.jiashu.zhihudemo.event.RefreshEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
-import com.jiashu.zhihudemo.utils.HtmlUtils;
 import com.jiashu.zhihudemo.utils.LogUtil;
 import com.jiashu.zhihudemo.utils.NetUtil;
 import com.jiashu.zhihudemo.vu.NormalListVu;
-import com.jiashu.zhihudemo.data.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-/**
+/** [主页]
  * A simple {@link BasePresenterFragment} subclass.
  */
 public class HomeFragment extends BasePresenterFragment<NormalListVu> {
@@ -28,30 +26,29 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
     private FeedListAdapter mAdapter;
 
+    private String mResponse;
+
     @Override
     protected void onBindVu() {
         //mVu.setText(Constants.NAV_NAMES[INDEX]);
 
         mBus.register(this);
 
+        // 设置 ListView 的item 为不可点击
+        mVu.setItemClickable(false);
+
         mFeedList = new ArrayList<>();
         mAdapter = new FeedListAdapter(mFeedList);
         mVu.setAdapter(mAdapter);
 
-        LogUtil.d(TAG, "HomeFragment");
-        LogUtil.d(TAG, "HomeFragment's thread" + Thread.currentThread());
-        FetchHomePageNetCmd netCmd = new FetchHomePageNetCmd();
-/*        netCmd.setOnNetCmdCallback(new FetchHomePageNetCmd.CallbackListener() {
+        fetchHomePage();
+    }
 
-            @Override
-            public void callback(List<ZhiHuFeed> feedList) {
-                LogUtil.d(TAG, "Fetch home page success!");
-                LogUtil.d(TAG, "FeedList'size " + feedList.size());
-                mAdapter.addAll(feedList);
-            }
-        });*/
-        NetUtil.execNetCmd(netCmd);
-
+    @Override
+    protected void beforePause() {
+        // 持久化 【首页】html
+        NetUtil.saveToFile(TAG, mResponse);
+        LogUtil.d(TAG, "pause");
     }
 
     @Override
@@ -59,10 +56,41 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         mBus.unregister(this);
     }
 
-    public void onEventMainThread(String response) {
-        LogUtil.d(TAG, response);
-        mFeedList = NetUtil.getFeedList(response);
+    /**
+     * 获取 [首页] 内容
+     */
+    private void fetchHomePage() {
+        FetchHomePageNetCmd netCmd = new FetchHomePageNetCmd();
+        NetUtil.execNetCmd(netCmd);
+    }
+
+    /**
+     * 当前无网络连接时触发：读取持久化的 Feed 流信息（最新的 【首页】html）
+     * @param event
+     */
+    public void onEventMainThread(FetchFailEvent event) {
+        mResponse = NetUtil.readFromFile(TAG);
+        onEventMainThread(new FetchCompletedEvent(mResponse));
+        //mBus.post(new FetchCompletedEvent(mResponse));
+    }
+
+    /**
+     * 获取 [首页] 内容成功时触发，通知 ListView 显示
+     * @param event
+     */
+    public void onEventMainThread(FetchCompletedEvent event) {
+        //LogUtil.d(TAG, event.response);
+        mResponse = event.response;
+        mFeedList = NetUtil.getFeedList(event.response);
         mAdapter.replace(mFeedList);
+    }
+
+    /**
+     * 下拉刷新时触发
+     * @param event
+     */
+    public void onEvent(RefreshEvent event) {
+        fetchHomePage();
     }
 
     @Override

@@ -4,4 +4,6 @@
 
     <color name="bg_guide_start">#ff092a5b</color>
     <color name="bg_guide_end">#ff0095fe</color>
+
+    <color name="bg_voteups">#ff73c5fe</color>
 </resources>

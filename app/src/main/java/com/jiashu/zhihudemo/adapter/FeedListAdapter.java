@@ -7,6 +7,7 @@ import android.view.View;
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.ZhiHuApp;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
+import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.utils.VolleyUtil;
 import com.jiashu.zhihudemo.vu.item.FeedItemVu;
 
@@ -23,7 +24,7 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
 
     @Override
     protected void onBindListItemVu(int position) {
-        ZhiHuFeed feed = mData.get(position);
+        final ZhiHuFeed feed = mData.get(position);
 
         if (feed.getSuppSide() == ZhiHuFeed.SUPP_LEFT) {
             mVu.setLeftText(feed.getSourceSupp());
@@ -52,6 +53,20 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
 
         ImageLoader loader = VolleyUtil.getInstance(ZhiHuApp.getContext()).getImageLoader();
         mVu.setAvatar(feed.getAvatarImgUrl(), loader);
+
+        mVu.setOnTitleClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.show(feed.getTitle());
+            }
+        });
+
+        mVu.setOnContentClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.show(feed.getContentUrl());
+            }
+        });
     }
 
     @Override

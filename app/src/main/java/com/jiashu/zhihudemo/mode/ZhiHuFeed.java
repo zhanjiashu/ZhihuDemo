@@ -1,5 +1,7 @@
 package com.jiashu.zhihudemo.mode;
 
+import android.text.TextUtils;
+
 import com.jiashu.zhihudemo.data.NetConstants;
 import com.jiashu.zhihudemo.utils.LogUtil;
 
@@ -7,6 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** 封装 知乎内容 的bean
  * Created by Jiashu on 2015/5/4.
@@ -207,12 +212,17 @@ public class ZhiHuFeed {
                     suppSide = SUPP_RIGHT;
                     break;
                 case NetConstants.ARTICLE_MEMBER_CREATE:
+                case NetConstants.ARTICLE_COLUMN_CREATE:
                     suppMsg = "发表了文章";
                     suppSide = SUPP_RIGHT;
                     break;
                 case NetConstants.ARTICLE_MEMBER_VOTEUP:
                     suppMsg = "赞同了文章";
                     break;
+                case NetConstants.ROUNDTABLE_MEMBER_FOLLOW:
+                    suppMsg = "关注了圆桌";
+                    break;
+
                 case NetConstants.ANSWER_PROMOTION:
                     suppMsg = "热门回答";
                     source = "";
@@ -232,8 +242,29 @@ public class ZhiHuFeed {
             String title = contentElts.select("h2>a").text();
             String titleUrl = contentElts.select("h2>a").attr("href");
 
-            String summary = contentElts.select("div[class=zh-summary summary clearfix]").text();
+            Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
+            String summary = summaryElts.text();
 
+            // 当 内容摘要 summary 为纯图片的时，指定summary的显示内容为：[图片]
+            if (summary.equals("显示全部") && (summaryElts.select("img") != null)) {
+                summary = "[图片]";
+            }
+
+            String contentUrl = contentElts.select("div[class=zh-summary summary clearfix]>a").attr("href");
+
+            if (TextUtils.isEmpty(contentUrl)) {
+                // Jsoup 无法解析这段 html, 通过 正则表达式去匹配所需要的 内容详情url
+                contentUrl = contentElts.select("textarea[class=content hidden]").text();
+                Pattern pattern = Pattern.compile("href=\".*\"");
+                Matcher matcher = pattern.matcher(contentUrl);
+                if (matcher.find()) {
+                    contentUrl = matcher.group(0);
+                }
+
+                contentUrl = contentUrl.replace("href=\"","").replace("\"","").trim();
+            }
+
+            LogUtil.d(TAG, "contentUrl = " + contentUrl);
             mFeed.setFeedType(feedType);
             mFeed.setVoteups(voteups);
             mFeed.setComments(comments);
@@ -245,7 +276,8 @@ public class ZhiHuFeed {
             mFeed.setTitle(title);
             mFeed.setTitleUrl(fixURL(titleUrl));
             mFeed.setSummary(summary);
-            LogUtil.d(TAG, mFeed.toString());
+            mFeed.setContentUrl(fixURL(contentUrl));
+            //LogUtil.d(TAG, mFeed.toString());
             return mFeed;
         }
 

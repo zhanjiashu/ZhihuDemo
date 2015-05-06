@@ -158,8 +158,8 @@ public final class R {
 		public static final int abc_search_url_text_normal = 0x7f080001;
 		public static final int abc_search_url_text_pressed = 0x7f080002;
 		public static final int abc_search_url_text_selected = 0x7f080003;
-		public static final int default_progress_bar_color = 0x7f080025;
-		public static final int spb_default_color = 0x7f080047;
+		public static final int default_progress_bar_color = 0x7f080026;
+		public static final int spb_default_color = 0x7f080048;
 	}
 	public static final class dimen {
 		public static final int abc_action_bar_progress_bar_size = 0x7f090003;
@@ -176,9 +176,9 @@ public final class R {
 		public static final int dialog_fixed_height_minor = 0x7f09003b;
 		public static final int dialog_fixed_width_major = 0x7f09003c;
 		public static final int dialog_fixed_width_minor = 0x7f09003d;
-		public static final int ptr_progress_bar_stroke_width = 0x7f090049;
-		public static final int spb_default_stroke_separator_length = 0x7f09004a;
-		public static final int spb_default_stroke_width = 0x7f09004b;
+		public static final int ptr_progress_bar_stroke_width = 0x7f09004a;
+		public static final int spb_default_stroke_separator_length = 0x7f09004b;
+		public static final int spb_default_stroke_width = 0x7f09004c;
 	}
 	public static final class drawable {
 		public static final int abc_item_background_holo_dark = 0x7f02001c;

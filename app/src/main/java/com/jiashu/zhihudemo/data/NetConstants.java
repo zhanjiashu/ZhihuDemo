@@ -49,6 +49,11 @@ public class NetConstants {
     public static final String ARTICLE_MEMBER_CREATE = "member_create_article";
     // 某个被关注者 赞同的专栏文章
     public static final String ARTICLE_MEMBER_VOTEUP = "member_voteup_article";
+    // 某个专栏 发表的文章
+    public static final String ARTICLE_COLUMN_CREATE = "column_new_article";
+
+    // 关注了圆桌
+    public static final String ROUNDTABLE_MEMBER_FOLLOW = "member_follow_roundtable";
 
 
     public static String getString(int resId) {

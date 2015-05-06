@@ -4,6 +4,8 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.NetConstants;
+import com.jiashu.zhihudemo.event.FetchCompletedEvent;
+import com.jiashu.zhihudemo.event.FetchFailEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtil;
@@ -31,13 +33,13 @@ public class FetchHomePageNetCmd extends NetCmd {
                     public void onResponse(String response) {
                         //mListener.callback(response);
                         LogUtil.d(TAG, response);
-                        //mListener.callback(NetUtil.getFeedList(response));
-                        mBus.post(response);
+                        mBus.post(new FetchCompletedEvent(response));
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
+                        mBus.post(new FetchFailEvent());
                         LogUtil.d(TAG, volleyError.toString());
                     }
                 }

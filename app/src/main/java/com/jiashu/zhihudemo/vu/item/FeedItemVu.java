@@ -43,6 +43,9 @@ public class FeedItemVu implements Vu {
     @InjectView(R.id.rl_content)
     RelativeLayout mContentLayout;
 
+    @InjectView(R.id.rl_source)
+    RelativeLayout mSourceLayout;
+
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
         mView = inflater.inflate(R.layout.list_item_feed, container, false);
@@ -100,6 +103,18 @@ public class FeedItemVu implements Vu {
     public void setAvatar(String imgUrl, ImageLoader loader) {
         mAvatarView.setDefaultImageResId(R.mipmap.ic_launcher);
         mAvatarView.setErrorImageResId(R.mipmap.ic_launcher);
-        mAvatarView.setImageUrl(imgUrl,loader);
+        mAvatarView.setImageUrl(imgUrl, loader);
+    }
+
+    public void setOnTitleClickListener (View.OnClickListener listener){
+        mTitleView.setOnClickListener(listener);
+    }
+
+    public void setOnContentClickListener(View.OnClickListener listener) {
+        mContentLayout.setOnClickListener(listener);
+    }
+
+    public void setOnSourceClickListener(View.OnClickListener listener) {
+        mSourceLayout.setOnClickListener(listener);
     }
 }

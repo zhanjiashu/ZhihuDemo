@@ -2,8 +2,11 @@ package com.jiashu.zhihudemo.fragment;
 
 
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
 import com.jiashu.zhihudemo.adapter.MyFragmentPagerAdapter;
+import com.jiashu.zhihudemo.event.RefreshEvent;
+import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.ViewPagerVu;
 import com.jiashu.zhihudemo.data.Constants;
 import com.jiashu.zhihudemo.fragment.inner.DiscCollectFragment;
@@ -26,6 +29,8 @@ public class DiscoveryFragment extends BasePresenterFragment<ViewPagerVu> {
 
     @Override
     protected void onBindVu() {
+        mBus.register(this);
+
         // 允许Fragment添加菜单项
         setHasOptionsMenu(true);
 
@@ -42,7 +47,7 @@ public class DiscoveryFragment extends BasePresenterFragment<ViewPagerVu> {
 
     @Override
     protected void onDestroyVu() {
-
+        mBus.unregister(this);
     }
 
     @Override
@@ -56,5 +61,9 @@ public class DiscoveryFragment extends BasePresenterFragment<ViewPagerVu> {
         mFragments.add(new DiscCollectFragment());
         mFragments.add(new DiscMonthFragment());
         mFragments.add(new DiscTodayFragment());
+    }
+
+    public void onEvent(RefreshEvent event) {
+        ToastUtils.show("refresh .....", Toast.LENGTH_SHORT);
     }
 }

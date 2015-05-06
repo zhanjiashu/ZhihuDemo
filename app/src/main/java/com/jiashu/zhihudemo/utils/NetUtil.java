@@ -2,6 +2,7 @@ package com.jiashu.zhihudemo.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 
 import com.jiashu.zhihudemo.ZhiHuApp;
@@ -14,9 +15,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -30,6 +34,8 @@ public class NetUtil {
     private static final String TAG = "NetUtil";
 
     private static final String XSRF_KEY = "_xsrf";
+
+    private static ConnectivityManager mCM;
 
     private static SharedPreferences mPref;
 
@@ -77,7 +83,7 @@ public class NetUtil {
         return feedList;
     }
 
-    private static void saveToFile(final String fileName, final String content) {
+    public static void saveToFile(final String fileName, final String content) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -103,5 +109,40 @@ public class NetUtil {
                 }
             }
         }).start();
+    }
+
+    public static String readFromFile(String fileName) {
+        FileInputStream is = null;
+        BufferedReader reader = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = ZhiHuApp.getContext().openFileInput(fileName);
+            reader = new BufferedReader(new InputStreamReader(is));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static boolean hasNetwork() {
+        mCM = (ConnectivityManager) ZhiHuApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (mCM.getActiveNetworkInfo() == null) {
+            return false;
+        }
+        return true;
     }
 }
