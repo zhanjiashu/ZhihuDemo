@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jiashu.zhihudemo.ZhiHuApp;
 import com.jiashu.zhihudemo.utils.VolleyUtil;
 import com.jiashu.zhihudemo.vu.Vu;
 
@@ -26,7 +27,7 @@ public abstract class BasePresenterActivity<V extends Vu> extends ActionBarActiv
         super.onCreate(savedInstanceState);
         mFm = getSupportFragmentManager();
         mBus = EventBus.getDefault();
-        mVolleyUtil = VolleyUtil.getInstance(getApplicationContext());
+        mVolleyUtil = VolleyUtil.getInstance(ZhiHuApp.getContext());
         try {
             mVu = getVuClass().newInstance();
             mVu.initView(getLayoutInflater(), null);

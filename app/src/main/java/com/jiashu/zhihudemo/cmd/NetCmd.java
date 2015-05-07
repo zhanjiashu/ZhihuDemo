@@ -1,9 +1,7 @@
 package com.jiashu.zhihudemo.cmd;
 
-import android.content.Context;
-
 import com.jiashu.zhihudemo.ZhiHuApp;
-import com.jiashu.zhihudemo.utils.NetUtil;
+import com.jiashu.zhihudemo.utils.HttpUtil;
 import com.jiashu.zhihudemo.utils.VolleyUtil;
 
 import de.greenrobot.event.EventBus;
@@ -20,7 +18,7 @@ public abstract class NetCmd {
 
     public NetCmd() {
         mVolleyUtil = VolleyUtil.getInstance(ZhiHuApp.getContext());
-        mXSRF = NetUtil.getXSRF();
+        mXSRF = HttpUtil.getXSRF();
 
         mBus = EventBus.getDefault();
     }

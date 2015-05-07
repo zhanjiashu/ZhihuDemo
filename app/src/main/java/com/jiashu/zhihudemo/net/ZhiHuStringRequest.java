@@ -5,6 +5,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
+import com.jiashu.zhihudemo.utils.LogUtil;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -21,6 +22,7 @@ import java.util.zip.GZIPInputStream;
 public class ZhiHuStringRequest extends StringRequest {
 
     public static final String UA = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
+    private final String TAG = getClass().getSimpleName();
 
     private final Response.Listener<String> mListener;
 

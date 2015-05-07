@@ -8,10 +8,10 @@ import butterknife.ButterKnife.Injector;
 public class NormalListVu$$ViewInjector<T extends com.jiashu.zhihudemo.vu.NormalListVu> implements Injector<T> {
   @Override public void inject(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131361935, "field 'mListView'");
-    target.mListView = finder.castView(view, 2131361935, "field 'mListView'");
-    view = finder.findRequiredView(source, 2131361934, "field 'mTextView'");
-    target.mTextView = finder.castView(view, 2131361934, "field 'mTextView'");
+    view = finder.findRequiredView(source, 2131361938, "field 'mListView'");
+    target.mListView = finder.castView(view, 2131361938, "field 'mListView'");
+    view = finder.findRequiredView(source, 2131361937, "field 'mTextView'");
+    target.mTextView = finder.castView(view, 2131361937, "field 'mTextView'");
   }
 
   @Override public void reset(T target) {

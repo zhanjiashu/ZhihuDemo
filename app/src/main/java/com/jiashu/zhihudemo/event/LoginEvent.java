@@ -1,36 +1,21 @@
 package com.jiashu.zhihudemo.event;
 
 /**
- * Created by Jiashu on 2015/5/2.
+ * Created by Jiashu on 2015/5/6.
  */
 public class LoginEvent {
-    private String mEmail;
-    private String mPassword;
 
-    public boolean isLogined() {
-        return mIsLogined;
+    private int mStateCode;
+
+    public LoginEvent(int stateCode) {
+        this.mStateCode = stateCode;
     }
 
-    public void setIsLogined(boolean mIsLogined) {
-        this.mIsLogined = mIsLogined;
+    public int getStateCode() {
+        return mStateCode;
     }
 
-    private boolean mIsLogined;
-
-
-    public String getEmail() {
-        return mEmail;
-    }
-
-    public void setEmail(String email) {
-        this.mEmail = email;
-    }
-
-    public String getPassword() {
-        return mPassword;
-    }
-
-    public void setPassword(String password) {
-        this.mPassword = password;
+    public void setStateCode(int stateCode) {
+        mStateCode = stateCode;
     }
 }

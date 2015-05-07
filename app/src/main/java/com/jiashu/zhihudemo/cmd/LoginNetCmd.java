@@ -1,20 +1,24 @@
 package com.jiashu.zhihudemo.cmd;
 
+import android.text.TextUtils;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.jiashu.zhihudemo.data.NetConstants;
+import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.event.LoginEvent;
+import com.jiashu.zhihudemo.event.UserBean;
 import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtil;
-import com.jiashu.zhihudemo.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Jiashu on 2015/5/3.
@@ -31,52 +35,36 @@ public class LoginNetCmd extends NetCmd {
     private static final String PARAM_PSW = "password";
     private static final String PARAM_REMEMBER_ME = "rememberme";
 
-    public static final int LOGIN_SUCCESS = 0;
-
-    private CallbackListener mListener;
-
     private ZhiHuStringRequest mRequest;
 
     private String mEmail;
     private String mPwd;
+    private String mCode;
 
-
-    public LoginNetCmd(LoginEvent event) {
+    public LoginNetCmd(UserBean event) {
         if (event != null) {
             mEmail = event.getEmail();
             mPwd = event.getPassword();
+            mCode = event.getCode();
         } else {
             mEmail = "";
             mPwd = "";
+            mCode = "";
         }
     }
 
     @Override
     public void execute() {
         LogUtil.d(TAG, "execute");
+        LogUtil.d(TAG, mCode);
+
         mRequest = new ZhiHuStringRequest(
                 Request.Method.POST,
-                NetConstants.LOGIN_URL,
+                HttpConstants.LOGIN_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        LogUtil.d(TAG, "Login response" + response);
-                        try {
-                            JSONObject jsonObj = new JSONObject(response);
-                            int loginStatus = jsonObj.getInt(LOGIN_STATUS_KEY);
-                            switch (loginStatus) {
-                                case NetConstants.LOGIN_SUCCESS:
-                                    mListener.callback(loginStatus);
-                                    break;
-                                case NetConstants.LOGIN_FAIL:
-                                    handleFail(response);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        handleResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -88,17 +76,22 @@ public class LoginNetCmd extends NetCmd {
         ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
+                LogUtil.d(TAG, "getParams()");
+                LogUtil.d(TAG, Thread.currentThread().getName());
                 Map<String, String> params = new HashMap<>();
                 params.put(PARAM_XSRF, mXSRF);
                 params.put(PARAM_EMAIL, mEmail);
                 params.put(PARAM_PSW, mPwd);
                 params.put(PARAM_REMEMBER_ME, "y");
+                if (TextUtils.isEmpty(mCode)) {
+                    params.put("captcha", mCode);
+                }
                 return params;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+                LogUtil.d(TAG, "getHeaders()");
                 Map<String, String> headers = new HashMap<>();
                 headers.put("X-Requested-With", "XMLHttpRequest");
                 headers.put("Referer", "http://www.zhihu.com/#signin");
@@ -107,25 +100,30 @@ public class LoginNetCmd extends NetCmd {
                 return headers;
             }
         };
+        try {
+            LogUtil.d(TAG, mRequest.getHeaders().toString());
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+        }
         mVolleyUtil.addRequest(mRequest);
     }
 
-    private void handleFail(String response) {
+    private void handleResponse(String response) {
+        LogUtil.d(TAG, "Login response" + response);
         try {
             JSONObject jsonObj = new JSONObject(response);
-            int errcode = jsonObj.getInt(LOGIN_ERRCODE_KEY);
-            switch (errcode) {
-                case NetConstants.ERRCODE_PWD_EMAIL_ERROR:
-                    ToastUtils.show(NetConstants.ERRMSG_PWD_EMAIL_ERROR);
+            int loginStatus = jsonObj.getInt(LOGIN_STATUS_KEY);
+            switch (loginStatus) {
+                case HttpConstants.LOGIN_SUCCESS:
+                    EventBus.getDefault().post(new LoginEvent(loginStatus));
                     break;
-                case NetConstants.ERRCODE_EMAIL_FORMAT_ERROR:
-                    ToastUtils.show(NetConstants.ERRMSG_EMAIL_FORMAT_ERROR);
+                case HttpConstants.LOGIN_FAIL:
+
+                    JSONObject obj = new JSONObject(response);
+                    int errcode = obj.getInt(LOGIN_ERRCODE_KEY);
+                    EventBus.getDefault().post(new LoginEvent(errcode));
                     break;
-                case NetConstants.ERRCODE_PWD_LENGTH_ERROR:
-                    ToastUtils.show(NetConstants.ERRMSG_PWD_LENGTH_ERROR);
-                    break;
-                case NetConstants.ERRCODE_INPUT_CAPTCHA:
-                    ToastUtils.show(NetConstants.ERRMSG__INPUT_CAPTCHA);
+                default:
                     break;
             }
         } catch (JSONException e) {
@@ -140,10 +138,7 @@ public class LoginNetCmd extends NetCmd {
 
     @Override
     public <T extends NetCmdCallback> void setOnNetCmdCallback(T callback) {
-        mListener = (CallbackListener) callback;
+
     }
 
-    public interface CallbackListener extends NetCmdCallback {
-        void callback(int status);
-    }
 }

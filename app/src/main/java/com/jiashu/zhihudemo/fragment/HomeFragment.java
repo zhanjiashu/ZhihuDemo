@@ -1,8 +1,6 @@
 package com.jiashu.zhihudemo.fragment;
 
 
-import android.os.Handler;
-
 import com.jiashu.zhihudemo.adapter.FeedListAdapter;
 import com.jiashu.zhihudemo.cmd.FetchHomePageNetCmd;
 import com.jiashu.zhihudemo.event.FetchCompletedEvent;
@@ -11,7 +9,7 @@ import com.jiashu.zhihudemo.event.RefreshEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.other.ZHListView;
 import com.jiashu.zhihudemo.utils.LogUtil;
-import com.jiashu.zhihudemo.utils.NetUtil;
+import com.jiashu.zhihudemo.utils.HttpUtil;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.NormalListVu;
 
@@ -58,7 +56,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     @Override
     protected void beforePause() {
         // 持久化 【首页】html
-        NetUtil.saveToFile(TAG, mResponse);
+        HttpUtil.saveToFile(TAG, mResponse);
         LogUtil.d(TAG, "pause");
     }
 
@@ -72,7 +70,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      */
     private void fetchHomePage() {
         FetchHomePageNetCmd netCmd = new FetchHomePageNetCmd();
-        NetUtil.execNetCmd(netCmd);
+        HttpUtil.execNetCmd(netCmd);
     }
 
     /**
@@ -80,7 +78,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * @param event
      */
     public void onEventMainThread(FetchFailEvent event) {
-        mResponse = NetUtil.readFromFile(TAG);
+        mResponse = HttpUtil.readFromFile(TAG);
         onEventMainThread(new FetchCompletedEvent(mResponse));
         //mBus.post(new FetchCompletedEvent(mResponse));
     }
@@ -92,7 +90,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     public void onEventMainThread(FetchCompletedEvent event) {
         //LogUtil.d(TAG, event.response);
         mResponse = event.response;
-        mFeedList = NetUtil.getFeedList(event.response);
+        mFeedList = HttpUtil.getFeedList(event.response);
         mAdapter.replace(mFeedList);
     }
 

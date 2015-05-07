@@ -2,11 +2,8 @@ package com.jiashu.zhihudemo.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -28,8 +25,6 @@ import com.jiashu.zhihudemo.fragment.HomeFragment;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 import com.jiashu.zhihudemo.other.CustomisedHeaderTransformer;
 import com.jiashu.zhihudemo.utils.LogUtil;
-import com.jiashu.zhihudemo.utils.NetUtil;
-import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.MainVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
 
@@ -87,7 +82,6 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
             ZhiHuCookieManager.clearCookies();
             LoginActivity.startBy(MainActivity.this);
             finish();
-            return;
         }
     }
 

@@ -2,7 +2,7 @@ package com.jiashu.zhihudemo.mode;
 
 import android.text.TextUtils;
 
-import com.jiashu.zhihudemo.data.NetConstants;
+import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.utils.LogUtil;
 
 import org.json.JSONException;
@@ -195,35 +195,35 @@ public class ZhiHuFeed {
             int suppSide;
 
             switch (feedType) {
-                case NetConstants.ANSWER_MEMBER_VOTEUP:
+                case HttpConstants.ANSWER_MEMBER_VOTEUP:
                     suppMsg = "赞同该回答";
                     suppSide = SUPP_RIGHT;
                     break;
-                case NetConstants.ANSWER_MEMBER:
+                case HttpConstants.ANSWER_MEMBER:
                     suppMsg = "回答了该问题";
                     suppSide = SUPP_RIGHT;
                     break;
-                case NetConstants.QUESTION_MEMBER_FOLLOW:
+                case HttpConstants.QUESTION_MEMBER_FOLLOW:
                     suppMsg = "关注了该问题";
                     suppSide = SUPP_RIGHT;
                     break;
-                case NetConstants.COLUMN_MEMBER_FOLLOW:
+                case HttpConstants.COLUMN_MEMBER_FOLLOW:
                     suppMsg = "关注了该专栏";
                     suppSide = SUPP_RIGHT;
                     break;
-                case NetConstants.ARTICLE_MEMBER_CREATE:
-                case NetConstants.ARTICLE_COLUMN_CREATE:
+                case HttpConstants.ARTICLE_MEMBER_CREATE:
+                case HttpConstants.ARTICLE_COLUMN_CREATE:
                     suppMsg = "发表了文章";
                     suppSide = SUPP_RIGHT;
                     break;
-                case NetConstants.ARTICLE_MEMBER_VOTEUP:
+                case HttpConstants.ARTICLE_MEMBER_VOTEUP:
                     suppMsg = "赞同了文章";
                     break;
-                case NetConstants.ROUNDTABLE_MEMBER_FOLLOW:
+                case HttpConstants.ROUNDTABLE_MEMBER_FOLLOW:
                     suppMsg = "关注了圆桌";
                     break;
 
-                case NetConstants.ANSWER_PROMOTION:
+                case HttpConstants.ANSWER_PROMOTION:
                     suppMsg = "热门回答";
                     source = "";
                     break;
@@ -287,10 +287,10 @@ public class ZhiHuFeed {
          * @return
          */
         private String fixURL(String url) {
-            if (url.startsWith(NetConstants.HOST)) {
+            if (url.startsWith(HttpConstants.HOST)) {
                 return url;
             }
-            return NetConstants.HOST + url;
+            return HttpConstants.HOST + url;
         }
     }
 }

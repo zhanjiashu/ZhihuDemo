@@ -1,20 +1,14 @@
 package com.jiashu.zhihudemo.cmd;
 
-import android.text.TextUtils;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.jiashu.zhihudemo.data.NetConstants;
+import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtil;
-import com.jiashu.zhihudemo.utils.NetUtil;
+import com.jiashu.zhihudemo.utils.HttpUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Jiashu on 2015/5/3.
@@ -30,24 +24,15 @@ public class FetchXRSFNetCmd extends NetCmd {
 
     @Override
     public void execute() {
-        if (TextUtils.isEmpty(mXSRF)) {
-            fetchXRSF();
-        } else {
-            mListener.callback(mXSRF);
-        }
-    }
-
-    private void fetchXRSF() {
         mRequest = new ZhiHuStringRequest(
-                NetConstants.HOST,
+                HttpConstants.HOST,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Document doc = Jsoup.parse(response);
                         mXSRF = doc.select("input[name=_xsrf]").attr("value");
                         LogUtil.d(TAG, "_xsrf = " + mXSRF);
-                        NetUtil.setXSRF(mXSRF);
-                        mListener.callback(mXSRF);
+                        HttpUtil.setXSRF(mXSRF);
                     }
                 },
                 new Response.ErrorListener() {

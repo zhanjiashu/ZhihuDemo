@@ -3,13 +3,12 @@ package com.jiashu.zhihudemo.cmd;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.jiashu.zhihudemo.data.NetConstants;
+import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.event.FetchCompletedEvent;
 import com.jiashu.zhihudemo.event.FetchFailEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtil;
-import com.jiashu.zhihudemo.utils.NetUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class FetchHomePageNetCmd extends NetCmd {
     @Override
     public void execute() {
         mRequest = new ZhiHuStringRequest(
-                NetConstants.HOST,
+                HttpConstants.HOST,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

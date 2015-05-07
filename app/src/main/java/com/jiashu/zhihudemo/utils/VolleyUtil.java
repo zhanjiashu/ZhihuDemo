@@ -36,21 +36,16 @@ public class VolleyUtil {
     private RequestQueue mQueue;
     private ImageLoader mImageLoader;
 
+    private CookieStore mCookieStore;
+
     private VolleyUtil(Context context) {
         mContext = context;
 
         mCM = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        CookieStore cookieStore = new ZhiHuCookieStore();
+        mCookieStore = new ZhiHuCookieStore();
 
-        DefaultHttpClient client = new DefaultHttpClient();
-        client.setCookieStore(cookieStore);
-        Network network = new BasicNetwork(new HttpClientStack(client));
-
-        File cacheDir = new File(context.getCacheDir(), DAFAULT_CACHE_DIR);
-
-        mQueue = new RequestQueue(new DiskBasedCache(cacheDir), network, DEFAULT_THREAD_POOL_SIZE);
-        mQueue.start();
+        mQueue = getQueue();
 
         mImageLoader = new ImageLoader(mQueue, new LruImageCache(context));
     }
@@ -81,12 +76,27 @@ public class VolleyUtil {
         }
     }
 
+
     public RequestQueue getQueue() {
+        if (mQueue == null) {
+            DefaultHttpClient client = new DefaultHttpClient();
+            client.setCookieStore(mCookieStore);
+            Network network = new BasicNetwork(new HttpClientStack(client));
+
+            File cacheDir = new File(mContext.getCacheDir(), DAFAULT_CACHE_DIR);
+
+            mQueue = new RequestQueue(new DiskBasedCache(cacheDir), network, DEFAULT_THREAD_POOL_SIZE);
+            mQueue.start();
+        }
         return mQueue;
     }
 
     public ImageLoader getImageLoader() {
         return mImageLoader;
+    }
+
+    public void cancelAll() {
+        mQueue.cancelAll(mContext);
     }
 
 }
