@@ -82,4 +82,5 @@ public abstract class SimpleBaseAdapter<V extends Vu, E> extends BaseAdapter {
         mData.addAll(data);
         notifyDataSetChanged();
     }
+
 }

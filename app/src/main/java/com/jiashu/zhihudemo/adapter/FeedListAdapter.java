@@ -64,7 +64,7 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
         mVu.setOnContentClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.show(feed.getContentUrl());
+                ToastUtils.show(feed.getContent());
             }
         });
     }

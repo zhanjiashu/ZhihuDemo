@@ -1,10 +1,14 @@
 package com.jiashu.zhihudemo.fragment;
 
 
+import android.text.Html;
+
 import com.jiashu.zhihudemo.adapter.FeedListAdapter;
 import com.jiashu.zhihudemo.cmd.FetchHomePageNetCmd;
+import com.jiashu.zhihudemo.cmd.FetchLoading;
 import com.jiashu.zhihudemo.event.FetchCompletedEvent;
 import com.jiashu.zhihudemo.event.FetchFailEvent;
+import com.jiashu.zhihudemo.event.LoadingEvent;
 import com.jiashu.zhihudemo.event.RefreshEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.other.ZHListView;
@@ -12,6 +16,8 @@ import com.jiashu.zhihudemo.utils.LogUtil;
 import com.jiashu.zhihudemo.utils.HttpUtil;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.NormalListVu;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +38,6 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
     @Override
     protected void onBindVu() {
-        //mVu.setText(Constants.NAV_NAMES[INDEX]);
-
         mBus.register(this);
 
         // 设置 ListView 的item 为不可点击
@@ -45,10 +49,18 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
         fetchHomePage();
 
+        // 监听 ZHListView 底部上拉加载事件
         mVu.setOnLoadingListener(new ZHListView.OnLoadingListener() {
             @Override
             public void onLoading() {
-                ToastUtils.show("Loading...");
+                String lastFeedID = mFeedList.get(mFeedList.size() - 1).getFeedID();
+                LogUtil.d(TAG, "The current feedList' size : " + mFeedList.size());
+                LogUtil.d(TAG, "The last feed'id : " + lastFeedID);
+
+                // 向服务器请求加载 Feed 流信息
+                FetchLoading cmd = new FetchLoading(lastFeedID);
+                HttpUtil.execNetCmd(cmd);
+
             }
         });
     }
@@ -88,11 +100,25 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * @param event
      */
     public void onEventMainThread(FetchCompletedEvent event) {
-        //LogUtil.d(TAG, event.response);
+
         mResponse = event.response;
         mFeedList = HttpUtil.getFeedList(event.response);
         mAdapter.replace(mFeedList);
     }
+
+    /**
+     * 向服务器请求 加载Feed流信息成功后触发
+     * @param event
+     */
+    public void onEventMainThread(LoadingEvent event) {
+        List<ZhiHuFeed> loadFeeds = HttpUtil.getFeedList(event.data);
+        if (mFeedList.addAll(loadFeeds)) {
+            mAdapter.addAll(loadFeeds);
+        }
+        // 通知ZHListView 数据已加载完毕
+        mVu.setLoadCompleted();
+    }
+
 
     /**
      * 下拉刷新时触发

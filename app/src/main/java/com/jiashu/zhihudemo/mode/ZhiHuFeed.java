@@ -21,6 +21,8 @@ public class ZhiHuFeed {
     public static final int SUPP_LEFT = 10;
     public static final int SUPP_RIGHT = 11;
 
+    private String feedID;
+
     private String source;  // 专栏作者 或 答题者 或 来源话题
 
     private String sourceSupp; // 附加给 source 的信息
@@ -38,6 +40,8 @@ public class ZhiHuFeed {
 
     private String summary; // 文章内容摘要 或 答案摘要
 
+    private String content;     // 全部内容
+
     private String contentUrl;  // 查看全部 内容 的链接
 
     private String feedType;  // content的类型
@@ -45,6 +49,14 @@ public class ZhiHuFeed {
     private int voteups;    // 点赞数
 
     private int comments;   // 评论数
+
+    public String getFeedID() {
+        return feedID;
+    }
+
+    public void setFeedID(String feedID) {
+        this.feedID = feedID;
+    }
 
     public String getSource() {
         return source;
@@ -110,6 +122,14 @@ public class ZhiHuFeed {
         this.summary = summary;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getContentUrl() {
         return contentUrl;
     }
@@ -172,6 +192,9 @@ public class ZhiHuFeed {
         }
 
         public ZhiHuFeed build(){
+
+            String feedID = mElt.select("div[id^=feed-]").attr("id");
+            feedID = feedID.replace("feed-","");
 
             String reactorStr = mElt.select("meta[itemprop=ZReactor]").attr("data-meta");
 
@@ -242,6 +265,15 @@ public class ZhiHuFeed {
             String title = contentElts.select("h2>a").text();
             String titleUrl = contentElts.select("h2>a").attr("href");
 
+            String content = contentElts.select("textarea[class=content hidden]").text();
+            Pattern cntPattern = Pattern.compile("<span.*</span>");
+            Matcher cntMatcher = cntPattern.matcher(content);
+            if (cntMatcher.find()) {
+                String lastSpan = cntMatcher.group(cntMatcher.groupCount());
+                content = content.replace(lastSpan, "").trim();
+            }
+            LogUtil.d(TAG, content);
+
             Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
             String summary = summaryElts.text();
 
@@ -265,6 +297,7 @@ public class ZhiHuFeed {
             }
 
             LogUtil.d(TAG, "contentUrl = " + contentUrl);
+            mFeed.setFeedID(feedID);
             mFeed.setFeedType(feedType);
             mFeed.setVoteups(voteups);
             mFeed.setComments(comments);
@@ -275,6 +308,7 @@ public class ZhiHuFeed {
             mFeed.setSuppSide(suppSide);
             mFeed.setTitle(title);
             mFeed.setTitleUrl(fixURL(titleUrl));
+            mFeed.setContent(content);
             mFeed.setSummary(summary);
             mFeed.setContentUrl(fixURL(contentUrl));
             //LogUtil.d(TAG, mFeed.toString());

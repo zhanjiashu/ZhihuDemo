@@ -32,6 +32,7 @@ public class FetchHomePageNetCmd extends NetCmd {
                     public void onResponse(String response) {
                         //mListener.callback(response);
                         LogUtil.d(TAG, response);
+                        // 获取首页数据成功发布事件
                         mBus.post(new FetchCompletedEvent(response));
                     }
                 },

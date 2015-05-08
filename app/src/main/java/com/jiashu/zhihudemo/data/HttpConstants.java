@@ -12,6 +12,7 @@ public class HttpConstants {
     public static final String HOST = "http://www.zhihu.com";
     public static final String LOGIN_URL = HOST + "/login";
     public static final String CAPTCHA_URL = HOST + "/captcha.gif";
+    public static final String LOADING_URL = HOST + "/node/HomeFeedListV2";
 
     public static final int LOGIN_SUCCESS = 0;
     public static final int LOGIN_FAIL = 1;
