@@ -282,9 +282,11 @@
     <dimen name="margin_xlarge">16.0dp</dimen>
     <dimen name="margin_xxlarge">20.0dp</dimen>
     <dimen name="margin_xxxlarge">40.0dp</dimen>
-    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="padding_large">12dp</dimen>
+    <dimen name="padding_medium">10dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_tiny">5dp</dimen>
+    <dimen name="padding_xlarge">16dp</dimen>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/build/intermediates/exploded-aar/com.github.chrisbanes.actionbarpulltorefresh/library/0.9.9/res/values/values.xml -->
     <eat-comment/>
     <dimen name="ptr_progress_bar_stroke_width">4dp</dimen>
@@ -424,6 +426,7 @@
     <string name="guide_tip_sixth">与世界分享\n你的知识、经验和见解</string>
     <string name="guide_tip_third">动而问——知乎漫游指南</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_world">Hello world!</string>
     <string name="nav_change_theme">切换主题</string>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/strings_activity_login.xml -->
     <eat-comment/>
@@ -443,6 +446,7 @@
     <string name="store_picture_title">Save image</string>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="title_activity_answer">AnswerActivity</string>
     <string name="title_activity_home">HomeActivity</string>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/strings_activity_login.xml -->
     <eat-comment/>

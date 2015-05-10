@@ -38,4 +38,7 @@
     <string name="toast_login_error_email">无效的邮箱格式</string>
     <string name="toast_login_error_pwd">密码长度错误</string>
     <string name="toast_login_error_captcha">请输入验证码</string>
+    <string name="title_activity_answer">AnswerActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

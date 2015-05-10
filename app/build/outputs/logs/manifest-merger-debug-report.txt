@@ -2,7 +2,7 @@
 manifest
 ADDED from AndroidManifest.xml:2:1
 	package
-		ADDED from AndroidManifest.xml:3:11
+		ADDED from AndroidManifest.xml:3:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:versionName
@@ -26,15 +26,15 @@ ADDED from AndroidManifest.xml:8:5
 	android:name
 		ADDED from AndroidManifest.xml:8:22
 uses-permission#android.permission.INTERNET
+ADDED from AndroidManifest.xml:9:5
+	android:name
+		ADDED from AndroidManifest.xml:9:22
+uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from AndroidManifest.xml:10:5
 	android:name
 		ADDED from AndroidManifest.xml:10:22
-uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from AndroidManifest.xml:11:5
-	android:name
-		ADDED from AndroidManifest.xml:11:22
 application
-ADDED from AndroidManifest.xml:13:5
+ADDED from AndroidManifest.xml:12:5
 MERGED from com.android.support:appcompat-v7:22.0.0:22:5
 MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.astuetz:pagerslidingtabstrip:1.0.1:4:5
@@ -48,43 +48,49 @@ MERGED from com.google.android.gms:play-services:6.5.87:20:5
 MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.android.support:support-v4:22.0.0:22:5
 	android:label
-		ADDED from AndroidManifest.xml:17:9
-	android:allowBackup
-		ADDED from AndroidManifest.xml:15:9
-	android:icon
 		ADDED from AndroidManifest.xml:16:9
-	android:theme
-		ADDED from AndroidManifest.xml:18:9
-	android:name
+	android:allowBackup
 		ADDED from AndroidManifest.xml:14:9
+	android:icon
+		ADDED from AndroidManifest.xml:15:9
+	android:theme
+		ADDED from AndroidManifest.xml:17:9
+	android:name
+		ADDED from AndroidManifest.xml:13:9
 activity#com.jiashu.zhihudemo.activity.MainActivity
-ADDED from AndroidManifest.xml:19:9
+ADDED from AndroidManifest.xml:18:9
 	android:label
-		ADDED from AndroidManifest.xml:21:13
-	android:name
 		ADDED from AndroidManifest.xml:20:13
+	android:name
+		ADDED from AndroidManifest.xml:19:13
 activity#com.jiashu.zhihudemo.activity.QuizActivity
-ADDED from AndroidManifest.xml:23:9
+ADDED from AndroidManifest.xml:22:9
 	android:label
-		ADDED from AndroidManifest.xml:25:13
-	android:name
 		ADDED from AndroidManifest.xml:24:13
+	android:name
+		ADDED from AndroidManifest.xml:23:13
 activity#com.jiashu.zhihudemo.activity.LoginActivity
-ADDED from AndroidManifest.xml:27:9
+ADDED from AndroidManifest.xml:26:9
 	android:label
-		ADDED from AndroidManifest.xml:29:13
-	android:name
 		ADDED from AndroidManifest.xml:28:13
+	android:name
+		ADDED from AndroidManifest.xml:27:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:30:13
+ADDED from AndroidManifest.xml:29:13
 action#android.intent.action.MAIN
-ADDED from AndroidManifest.xml:31:17
+ADDED from AndroidManifest.xml:30:17
 	android:name
-		ADDED from AndroidManifest.xml:31:25
+		ADDED from AndroidManifest.xml:30:25
 category#android.intent.category.LAUNCHER
-ADDED from AndroidManifest.xml:33:17
+ADDED from AndroidManifest.xml:32:17
 	android:name
-		ADDED from AndroidManifest.xml:33:27
+		ADDED from AndroidManifest.xml:32:27
+activity#com.jiashu.zhihudemo.activity.AnswerActivity
+ADDED from AndroidManifest.xml:35:9
+	android:label
+		ADDED from AndroidManifest.xml:37:13
+	android:name
+		ADDED from AndroidManifest.xml:36:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.0.0:20:5

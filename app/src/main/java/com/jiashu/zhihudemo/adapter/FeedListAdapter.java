@@ -18,12 +18,14 @@ import java.util.List;
  */
 public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
 
+    private ZHOnItemClickListener mListener;
+
     public FeedListAdapter(List<ZhiHuFeed> data) {
         super(data);
     }
 
     @Override
-    protected void onBindListItemVu(int position) {
+    protected void onBindListItemVu(final int position) {
         final ZhiHuFeed feed = mData.get(position);
 
         if (feed.getSuppSide() == ZhiHuFeed.SUPP_LEFT) {
@@ -52,19 +54,28 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
         }
 
         ImageLoader loader = VolleyUtil.getInstance(ZhiHuApp.getContext()).getImageLoader();
-        mVu.setAvatar(feed.getAvatarImgUrl(), loader);
+        mVu.setAvatar(feed.getAvatarUrl(), loader);
 
         mVu.setOnTitleClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.show(feed.getTitle());
+
+                mListener.onTitleClick(position);
             }
         });
 
         mVu.setOnContentClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.show(feed.getContent());
+
+                mListener.onContentClick(position);
+            }
+        });
+
+        mVu.setOnSourceClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onSourceClick(position);
             }
         });
     }
@@ -72,5 +83,15 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
     @Override
     protected Class<FeedItemVu> getVuClass() {
         return FeedItemVu.class;
+    }
+
+    public void setZHOnItemClickListener(ZHOnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    public interface ZHOnItemClickListener {
+        void onSourceClick(int position);
+        void onTitleClick(int position);
+        void onContentClick(int position);
     }
 }

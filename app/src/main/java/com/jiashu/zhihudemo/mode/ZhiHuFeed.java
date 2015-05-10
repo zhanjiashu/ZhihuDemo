@@ -23,7 +23,7 @@ public class ZhiHuFeed {
 
     private String feedID;
 
-    private String source;  // 专栏作者 或 答题者 或 来源话题
+    private String source;  // 你所关注的 人、专栏、话题
 
     private String sourceSupp; // 附加给 source 的信息
 
@@ -31,8 +31,11 @@ public class ZhiHuFeed {
 
     private String sourceUrl;   // 专栏主页、个人主页、话题主页
 
+    private String authorName;  // 答题人
 
-    private String avatarImgUrl;    // 头像url
+    private String authorProfile;   // 答题人的简介
+
+    private String avatarUrl;    // 头像url
 
     private String title;   // 专栏文章标题 或 问题
 
@@ -90,12 +93,12 @@ public class ZhiHuFeed {
         this.sourceUrl = sourceUrl;
     }
 
-    public String getAvatarImgUrl() {
-        return avatarImgUrl;
+    public String getAvatarUrl() {
+        return  avatarUrl;
     }
 
-    public void setAvatarImgUrl(String avatarImgUrl) {
-        this.avatarImgUrl = avatarImgUrl;
+    public void setAvatarUrl(String avatarImgUrl) {
+        this. avatarUrl = avatarImgUrl;
     }
 
     public String getTitle() {
@@ -163,12 +166,28 @@ public class ZhiHuFeed {
     }
 
 
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAuthorProfile() {
+        return authorProfile;
+    }
+
+    public void setAuthorProfile(String authorProfile) {
+        this.authorProfile = authorProfile;
+    }
+
     @Override
     public String toString() {
         return "ZhiHuFeed{" +
                 "suppSide=" + suppSide +
                 ", sourceUrl='" + sourceUrl + '\'' +
-                ", avatarImgUrl='" + avatarImgUrl + '\'' +
+                ", avatarImgUrl='" +  avatarUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", titleUrl='" + titleUrl + '\'' +
                 ", summary='" + summary + '\'' +
@@ -214,17 +233,26 @@ public class ZhiHuFeed {
             String source = mElt.select("div[class=avatar]>a").attr("title");
             String sourceUrl = mElt.select("div[class=avatar]>a").attr("href");
 
+            String authorName = mElt.select("div[class=zm-item-answer-detail]>" +
+                    "div[class=zm-item-answer-author-info]>h3>a").text();
+            String authorProfile = mElt.select("div[class=zm-item-answer-detail]>" +
+                    "div[class=zm-item-answer-author-info]>h3>strong").text();
+            if (TextUtils.isEmpty(authorName)) {
+                authorName = source;
+            }
+
             String suppMsg;
             int suppSide;
 
             switch (feedType) {
                 case HttpConstants.ANSWER_MEMBER_VOTEUP:
                     suppMsg = "赞同该回答";
-                    suppSide = SUPP_RIGHT;
                     break;
                 case HttpConstants.ANSWER_MEMBER:
                     suppMsg = "回答了该问题";
-                    suppSide = SUPP_RIGHT;
+                    break;
+                case HttpConstants.QUESTION_MEMBER_ASK:
+                    suppMsg = "提了一个问题";
                     break;
                 case HttpConstants.QUESTION_MEMBER_FOLLOW:
                     suppMsg = "关注了该问题";
@@ -232,12 +260,10 @@ public class ZhiHuFeed {
                     break;
                 case HttpConstants.COLUMN_MEMBER_FOLLOW:
                     suppMsg = "关注了该专栏";
-                    suppSide = SUPP_RIGHT;
                     break;
                 case HttpConstants.ARTICLE_MEMBER_CREATE:
                 case HttpConstants.ARTICLE_COLUMN_CREATE:
                     suppMsg = "发表了文章";
-                    suppSide = SUPP_RIGHT;
                     break;
                 case HttpConstants.ARTICLE_MEMBER_VOTEUP:
                     suppMsg = "赞同了文章";
@@ -265,6 +291,7 @@ public class ZhiHuFeed {
             String title = contentElts.select("h2>a").text();
             String titleUrl = contentElts.select("h2>a").attr("href");
 
+
             String content = contentElts.select("textarea[class=content hidden]").text();
             Pattern cntPattern = Pattern.compile("<span.*</span>");
             Matcher cntMatcher = cntPattern.matcher(content);
@@ -272,8 +299,8 @@ public class ZhiHuFeed {
                 String lastSpan = cntMatcher.group(cntMatcher.groupCount());
                 content = content.replace(lastSpan, "").trim();
             }
-            LogUtil.d(TAG, content);
 
+            LogUtil.d(TAG, content);
             Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
             String summary = summaryElts.text();
 
@@ -301,7 +328,9 @@ public class ZhiHuFeed {
             mFeed.setFeedType(feedType);
             mFeed.setVoteups(voteups);
             mFeed.setComments(comments);
-            mFeed.setAvatarImgUrl(avatarImgUrl);
+            mFeed.setAuthorName(authorName);
+            mFeed.setAuthorProfile(authorProfile);
+            mFeed.setAvatarUrl(avatarImgUrl);
             mFeed.setSource(source);
             mFeed.setSourceUrl(fixURL(sourceUrl));
             mFeed.setSourceSupp(suppMsg);
@@ -321,7 +350,7 @@ public class ZhiHuFeed {
          * @return
          */
         private String fixURL(String url) {
-            if (url.startsWith(HttpConstants.HOST)) {
+            if (url.startsWith("http://")) {
                 return url;
             }
             return HttpConstants.HOST + url;

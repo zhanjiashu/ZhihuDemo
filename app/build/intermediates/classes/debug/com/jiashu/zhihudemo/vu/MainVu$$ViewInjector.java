@@ -8,16 +8,16 @@ import butterknife.ButterKnife.Injector;
 public class MainVu$$ViewInjector<T extends com.jiashu.zhihudemo.vu.MainVu> implements Injector<T> {
   @Override public void inject(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131361894, "field 'mToolbar'");
-    target.mToolbar = finder.castView(view, 2131361894, "field 'mToolbar'");
-    view = finder.findRequiredView(source, 2131361895, "field 'mDrawerLayout'");
-    target.mDrawerLayout = finder.castView(view, 2131361895, "field 'mDrawerLayout'");
-    view = finder.findRequiredView(source, 2131361939, "field 'mNavListView'");
-    target.mNavListView = finder.castView(view, 2131361939, "field 'mNavListView'");
-    view = finder.findRequiredView(source, 2131361897, "field 'mConainerLayout'");
-    target.mConainerLayout = finder.castView(view, 2131361897, "field 'mConainerLayout'");
-    view = finder.findRequiredView(source, 2131361896, "field 'mRefreshLayout'");
-    target.mRefreshLayout = finder.castView(view, 2131361896, "field 'mRefreshLayout'");
+    view = finder.findRequiredView(source, 2131361892, "field 'mToolbar'");
+    target.mToolbar = finder.castView(view, 2131361892, "field 'mToolbar'");
+    view = finder.findRequiredView(source, 2131361905, "field 'mDrawerLayout'");
+    target.mDrawerLayout = finder.castView(view, 2131361905, "field 'mDrawerLayout'");
+    view = finder.findRequiredView(source, 2131361945, "field 'mNavListView'");
+    target.mNavListView = finder.castView(view, 2131361945, "field 'mNavListView'");
+    view = finder.findRequiredView(source, 2131361906, "field 'mConainerLayout'");
+    target.mConainerLayout = finder.castView(view, 2131361906, "field 'mConainerLayout'");
+    view = finder.findRequiredView(source, 2131361888, "field 'mRefreshLayout'");
+    target.mRefreshLayout = finder.castView(view, 2131361888, "field 'mRefreshLayout'");
   }
 
   @Override public void reset(T target) {

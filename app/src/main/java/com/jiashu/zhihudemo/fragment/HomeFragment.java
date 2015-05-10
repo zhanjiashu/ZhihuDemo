@@ -3,6 +3,7 @@ package com.jiashu.zhihudemo.fragment;
 
 import android.text.Html;
 
+import com.jiashu.zhihudemo.activity.AnswerActivity;
 import com.jiashu.zhihudemo.adapter.FeedListAdapter;
 import com.jiashu.zhihudemo.cmd.FetchHomePageNetCmd;
 import com.jiashu.zhihudemo.cmd.FetchLoading;
@@ -15,6 +16,7 @@ import com.jiashu.zhihudemo.other.ZHListView;
 import com.jiashu.zhihudemo.utils.LogUtil;
 import com.jiashu.zhihudemo.utils.HttpUtil;
 import com.jiashu.zhihudemo.utils.ToastUtils;
+import com.jiashu.zhihudemo.vu.AnswerVu;
 import com.jiashu.zhihudemo.vu.NormalListVu;
 
 import org.json.JSONException;
@@ -61,6 +63,25 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
                 FetchLoading cmd = new FetchLoading(lastFeedID);
                 HttpUtil.execNetCmd(cmd);
 
+            }
+        });
+
+        mAdapter.setZHOnItemClickListener(new FeedListAdapter.ZHOnItemClickListener() {
+            @Override
+            public void onSourceClick(int position) {
+                ToastUtils.show(mFeedList.get(position).getSource());
+            }
+
+            @Override
+            public void onTitleClick(int position) {
+                ToastUtils.show(mFeedList.get(position).getTitle());
+            }
+
+            @Override
+            public void onContentClick(int position) {
+                ToastUtils.show(mFeedList.get(position).getSummary());
+                ZhiHuFeed feed = mFeedList.get(position);
+                AnswerActivity.startBy(getActivity(), feed);
             }
         });
     }

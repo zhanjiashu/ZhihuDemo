@@ -6,10 +6,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.event.LoadingEvent;
-import com.jiashu.zhihudemo.net.ZHJsonRequest;
+
 import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
 
-import com.jiashu.zhihudemo.utils.HttpUtil;
 import com.jiashu.zhihudemo.utils.LogUtil;
 
 import org.json.JSONArray;
@@ -18,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 

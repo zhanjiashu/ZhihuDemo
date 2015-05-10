@@ -8,12 +8,12 @@ import butterknife.ButterKnife.Injector;
 public class QuizVu$$ViewInjector<T extends com.jiashu.zhihudemo.vu.QuizVu> implements Injector<T> {
   @Override public void inject(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131361894, "field 'mToolbar'");
-    target.mToolbar = finder.castView(view, 2131361894, "field 'mToolbar'");
-    view = finder.findRequiredView(source, 2131361944, "field 'mTabStrip'");
-    target.mTabStrip = finder.castView(view, 2131361944, "field 'mTabStrip'");
-    view = finder.findRequiredView(source, 2131361945, "field 'mContentPager'");
-    target.mContentPager = finder.castView(view, 2131361945, "field 'mContentPager'");
+    view = finder.findRequiredView(source, 2131361892, "field 'mToolbar'");
+    target.mToolbar = finder.castView(view, 2131361892, "field 'mToolbar'");
+    view = finder.findRequiredView(source, 2131361950, "field 'mTabStrip'");
+    target.mTabStrip = finder.castView(view, 2131361950, "field 'mTabStrip'");
+    view = finder.findRequiredView(source, 2131361951, "field 'mContentPager'");
+    target.mContentPager = finder.castView(view, 2131361951, "field 'mContentPager'");
   }
 
   @Override public void reset(T target) {

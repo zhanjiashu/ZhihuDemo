@@ -33,8 +33,8 @@ public final class R {
 		public static final int spb_default_color = 0x7f080048;
 	}
 	public static final class dimen {
-		public static final int spb_default_stroke_separator_length = 0x7f09004b;
-		public static final int spb_default_stroke_width = 0x7f09004c;
+		public static final int spb_default_stroke_separator_length = 0x7f09004d;
+		public static final int spb_default_stroke_width = 0x7f09004e;
 	}
 	public static final class id {
 		public static final int spb_interpolator_accelerate = 0x7f0a0025;
@@ -47,7 +47,7 @@ public final class R {
 		public static final int spb_default_sections_count = 0x7f0b000a;
 	}
 	public static final class string {
-		public static final int spb_default_speed = 0x7f0c0053;
+		public static final int spb_default_speed = 0x7f0c0054;
 	}
 	public static final class style {
 		public static final int SmoothProgressBar = 0x7f0d007a;

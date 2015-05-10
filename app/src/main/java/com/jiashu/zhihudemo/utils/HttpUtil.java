@@ -71,7 +71,7 @@ public class HttpUtil {
      */
     public static List<ZhiHuFeed> getFeedList(String html) {
         List<ZhiHuFeed> feedList = new ArrayList<>();
-        //saveToFile("response.html", html);
+        saveToFile("response.html", html);
         Document doc = Jsoup.parse(html);
 
         // 遍历返回数据中 包含着 Feed 的 div
@@ -80,9 +80,9 @@ public class HttpUtil {
             ZhiHuFeed.Builder builder = new ZhiHuFeed.Builder(element);
             ZhiHuFeed feed = builder.build();
             feedList.add(feed);
-            LogUtil.d(TAG, "feed'id: " + feed.getFeedID());
+            LogUtil.d(TAG, "feed content url : " + feed.getContentUrl());
+            //LogUtil.d(TAG, "feed'id: " + feed.getFeedID());
         }
-        LogUtil.d(TAG, "feedList's size " + feedList.size());
         return feedList;
     }
 
