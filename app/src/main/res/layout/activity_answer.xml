@@ -39,7 +39,7 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/ll_source"
+        android:id="@+id/ll_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/fl_top"

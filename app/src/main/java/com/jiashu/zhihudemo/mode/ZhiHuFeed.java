@@ -35,6 +35,8 @@ public class ZhiHuFeed {
 
     private String authorProfile;   // 答题人的简介
 
+    private String authorUrl;
+
     private String avatarUrl;    // 头像url
 
     private String title;   // 专栏文章标题 或 问题
@@ -93,12 +95,36 @@ public class ZhiHuFeed {
         this.sourceUrl = sourceUrl;
     }
 
-    public String getAvatarUrl() {
-        return  avatarUrl;
+    public String getAuthorName() {
+        return authorName;
     }
 
-    public void setAvatarUrl(String avatarImgUrl) {
-        this. avatarUrl = avatarImgUrl;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAuthorProfile() {
+        return authorProfile;
+    }
+
+    public void setAuthorProfile(String authorProfile) {
+        this.authorProfile = authorProfile;
+    }
+
+    public String getAuthorUrl() {
+        return authorUrl;
+    }
+
+    public void setAuthorUrl(String authorUrl) {
+        this.authorUrl = authorUrl;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getTitle() {
@@ -166,31 +192,22 @@ public class ZhiHuFeed {
     }
 
 
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getAuthorProfile() {
-        return authorProfile;
-    }
-
-    public void setAuthorProfile(String authorProfile) {
-        this.authorProfile = authorProfile;
-    }
-
     @Override
     public String toString() {
         return "ZhiHuFeed{" +
-                "suppSide=" + suppSide +
+                "feedID='" + feedID + '\'' +
+                ", source='" + source + '\'' +
+                ", sourceSupp='" + sourceSupp + '\'' +
+                ", suppSide=" + suppSide +
                 ", sourceUrl='" + sourceUrl + '\'' +
-                ", avatarImgUrl='" +  avatarUrl + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", authorProfile='" + authorProfile + '\'' +
+                ", authorUrl='" + authorUrl + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
                 ", title='" + title + '\'' +
                 ", titleUrl='" + titleUrl + '\'' +
                 ", summary='" + summary + '\'' +
+                ", content='" + content + '\'' +
                 ", contentUrl='" + contentUrl + '\'' +
                 ", feedType='" + feedType + '\'' +
                 ", voteups=" + voteups +
@@ -233,12 +250,18 @@ public class ZhiHuFeed {
             String source = mElt.select("div[class=avatar]>a").attr("title");
             String sourceUrl = mElt.select("div[class=avatar]>a").attr("href");
 
-            String authorName = mElt.select("div[class=zm-item-answer-detail]>" +
-                    "div[class=zm-item-answer-author-info]>h3>a").text();
-            String authorProfile = mElt.select("div[class=zm-item-answer-detail]>" +
-                    "div[class=zm-item-answer-author-info]>h3>strong").text();
+            Elements authorElts = mElt.select("div[class=zm-item-answer-detail]>" +
+                    "div[class=zm-item-answer-author-info]>h3");
+
+            String authorName = authorElts.select("a").text();
+            String authorUrl = authorElts.select("a").attr("href");
+            String authorProfile = authorElts.select("strong").text();
+
             if (TextUtils.isEmpty(authorName)) {
-                authorName = source;
+                authorName = authorElts.text();
+                if (TextUtils.isEmpty(authorName)) {
+                    authorName = source;
+                }
             }
 
             String suppMsg;
@@ -329,6 +352,7 @@ public class ZhiHuFeed {
             mFeed.setVoteups(voteups);
             mFeed.setComments(comments);
             mFeed.setAuthorName(authorName);
+            mFeed.setAuthorUrl(fixURL(authorUrl));
             mFeed.setAuthorProfile(authorProfile);
             mFeed.setAvatarUrl(avatarImgUrl);
             mFeed.setSource(source);

@@ -1,38 +1,30 @@
 package com.jiashu.zhihudemo.vu;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
-import android.text.Spanned;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.activity.AnswerActivity;
+import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.other.ZHWebView;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 
 /**
  * Created by Jiashu on 2015/5/8.
@@ -63,8 +55,13 @@ public class AnswerVu implements Vu {
     @InjectView(R.id.wv_content)
     ZHWebView mContentView;
 
-    @InjectView(R.id.ll_source)
-    LinearLayout mSourceLayout;
+    @InjectView(R.id.ll_author)
+    LinearLayout mAuthorLayout;
+
+    @InjectView(R.id.ptr_layout)
+    PullToRefreshLayout mRefreshLayout;
+
+    ViewTreeObserver viewTreeObserver;
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
@@ -108,11 +105,14 @@ public class AnswerVu implements Vu {
         mAvatarView.setImageUrl(url, loader);
     }
 
-
-    public void setContent(String html) {
-
+    public void initWebContent(Runnable callback) {
+        mContentView.post(callback);
         mContentView.getSettings().setJavaScriptEnabled(true);
         mContentView.getSettings().setTextZoom(120);
+    }
+
+
+    public void setContent(final String html) {
         mContentView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
     }
 
@@ -129,9 +129,9 @@ public class AnswerVu implements Vu {
         animTitle.setDuration(300);
         animTitle.start();
 
-        ObjectAnimator animSource = ObjectAnimator.ofFloat(mSourceLayout, "translationY", 0, -(mToolbar.getHeight() + mTitleView.getHeight()));
-        animSource.setDuration(300);
-        animSource.start();
+        ObjectAnimator animAuthor = ObjectAnimator.ofFloat(mAuthorLayout, "translationY", 0, -(mToolbar.getHeight() + mTitleView.getHeight()));
+        animAuthor.setDuration(300);
+        animAuthor.start();
     }
 
     public void showTop() {
@@ -144,9 +144,13 @@ public class AnswerVu implements Vu {
         animTitle.setDuration(300);
         animTitle.start();
 
-        ObjectAnimator animSource = ObjectAnimator.ofFloat(mSourceLayout, "translationY", -(mToolbar.getHeight() + mTitleView.getHeight()), 0);
-        animSource.setDuration(350);
-        animSource.start();
+        ObjectAnimator animAuthor = ObjectAnimator.ofFloat(mAuthorLayout, "translationY", -(mToolbar.getHeight() + mTitleView.getHeight()), 0);
+        animAuthor.setDuration(350);
+        animAuthor.start();
+    }
+
+    public int getTopHeight() {
+        return mToolbar.getHeight() + mTitleView.getHeight() + mAuthorLayout.getHeight();
     }
 
 }

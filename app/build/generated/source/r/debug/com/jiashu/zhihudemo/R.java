@@ -2457,13 +2457,13 @@ containing a value of this type.
         public static final int iv_nav=0x7f0a009a;
         public static final int listMode=0x7f0a000c;
         public static final int list_item=0x7f0a0046;
+        public static final int ll_author=0x7f0a0065;
         public static final int ll_autor=0x7f0a0067;
         public static final int ll_bottom=0x7f0a0076;
         public static final int ll_buttons=0x7f0a006c;
         public static final int ll_center=0x7f0a008e;
         public static final int ll_logo=0x7f0a008f;
         public static final int ll_oauth=0x7f0a008d;
-        public static final int ll_source=0x7f0a0065;
         public static final int lv_big=0x7f0a0091;
         public static final int lv_nav=0x7f0a0099;
         public static final int lv_normal=0x7f0a0098;

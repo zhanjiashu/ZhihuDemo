@@ -79,7 +79,6 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
             @Override
             public void onContentClick(int position) {
-                ToastUtils.show(mFeedList.get(position).getSummary());
                 ZhiHuFeed feed = mFeedList.get(position);
                 AnswerActivity.startBy(getActivity(), feed);
             }

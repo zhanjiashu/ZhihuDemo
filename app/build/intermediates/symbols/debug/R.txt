@@ -721,13 +721,13 @@ int id iv_guide_fist_13 0x7f0a0089
 int id iv_nav 0x7f0a009a
 int id listMode 0x7f0a000c
 int id list_item 0x7f0a0046
+int id ll_author 0x7f0a0065
 int id ll_autor 0x7f0a0067
 int id ll_bottom 0x7f0a0076
 int id ll_buttons 0x7f0a006c
 int id ll_center 0x7f0a008e
 int id ll_logo 0x7f0a008f
 int id ll_oauth 0x7f0a008d
-int id ll_source 0x7f0a0065
 int id lv_big 0x7f0a0091
 int id lv_nav 0x7f0a0099
 int id lv_normal 0x7f0a0098
