@@ -3,10 +3,12 @@ package com.jiashu.zhihudemo.mode;
 import android.text.TextUtils;
 
 import com.jiashu.zhihudemo.data.HttpConstants;
-import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -316,14 +318,22 @@ public class ZhiHuFeed {
 
 
             String content = contentElts.select("textarea[class=content hidden]").text();
-            Pattern cntPattern = Pattern.compile("<span.*</span>");
+
+            Document contentDoc = Jsoup.parse(content);
+
+            String time = contentDoc.select("span[class=answer-date-link-wrap]>a").text();
+            LogUtils.d(TAG, time);
+            String timeHtml = "<br><br><span class=\"answer-date-link-wrap\" style=\"float:right\">\n" +
+                    "<a class=\"answer-date-link meta-item\" target=\"_blank\" href=\"/question/30267463/answer/47398187\">"+ time +"</a>\n" +
+                    "</span>";
+            Pattern cntPattern = Pattern.compile("<span class=\"answer-date-link-wrap.*</span>");
             Matcher cntMatcher = cntPattern.matcher(content);
             if (cntMatcher.find()) {
                 String lastSpan = cntMatcher.group(cntMatcher.groupCount());
-                content = content.replace(lastSpan, "").trim();
+                content = content.replace(lastSpan, timeHtml).trim();
             }
 
-            LogUtil.d(TAG, content);
+            //LogUtils.d(TAG, content);
             Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
             String summary = summaryElts.text();
 
@@ -346,7 +356,7 @@ public class ZhiHuFeed {
                 contentUrl = contentUrl.replace("href=\"","").replace("\"","").trim();
             }
 
-            LogUtil.d(TAG, "contentUrl = " + contentUrl);
+            LogUtils.d(TAG, "contentUrl = " + contentUrl);
             mFeed.setFeedID(feedID);
             mFeed.setFeedType(feedType);
             mFeed.setVoteups(voteups);
@@ -364,7 +374,7 @@ public class ZhiHuFeed {
             mFeed.setContent(content);
             mFeed.setSummary(summary);
             mFeed.setContentUrl(fixURL(contentUrl));
-            //LogUtil.d(TAG, mFeed.toString());
+            //LogUtils.d(TAG, mFeed.toString());
             return mFeed;
         }
 

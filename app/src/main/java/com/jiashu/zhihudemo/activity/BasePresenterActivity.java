@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jiashu.zhihudemo.ZhiHuApp;
-import com.jiashu.zhihudemo.utils.VolleyUtil;
+import com.jiashu.zhihudemo.utils.VolleyUtils;
 import com.jiashu.zhihudemo.vu.Vu;
 
 import de.greenrobot.event.EventBus;
@@ -20,14 +20,14 @@ public abstract class BasePresenterActivity<V extends Vu> extends ActionBarActiv
     V mVu;
     FragmentManager mFm;
     EventBus mBus;
-    VolleyUtil mVolleyUtil;
+    VolleyUtils mVolleyUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFm = getSupportFragmentManager();
         mBus = EventBus.getDefault();
-        mVolleyUtil = VolleyUtil.getInstance(ZhiHuApp.getContext());
+        mVolleyUtils = VolleyUtils.getInstance(ZhiHuApp.getContext());
         try {
             mVu = getVuClass().newInstance();
             mVu.initView(getLayoutInflater(), null);

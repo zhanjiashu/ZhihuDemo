@@ -1,8 +1,6 @@
 package com.jiashu.zhihudemo.vu;
 
 import android.animation.ObjectAnimator;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,16 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.activity.AnswerActivity;
-import com.jiashu.zhihudemo.data.HttpConstants;
-import com.jiashu.zhihudemo.other.ZHWebView;
-import com.jiashu.zhihudemo.utils.ToastUtils;
+import com.jiashu.zhihudemo.other.ZHAnswerContentView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,7 +47,7 @@ public class AnswerVu implements Vu {
     NetworkImageView mAvatarView;
 
     @InjectView(R.id.wv_content)
-    ZHWebView mContentView;
+    ZHAnswerContentView mContentView;
 
     @InjectView(R.id.ll_author)
     LinearLayout mAuthorLayout;
@@ -116,7 +110,7 @@ public class AnswerVu implements Vu {
         mContentView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
     }
 
-    public void setWebViewScrollListener(ZHWebView.OnScrollListener listener) {
+    public void setWebViewScrollListener(ZHAnswerContentView.OnScrollListener listener) {
         mContentView.setOnScrollListener(listener);
     }
 

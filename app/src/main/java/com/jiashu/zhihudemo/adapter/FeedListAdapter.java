@@ -7,8 +7,7 @@ import android.view.View;
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.ZhiHuApp;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
-import com.jiashu.zhihudemo.utils.ToastUtils;
-import com.jiashu.zhihudemo.utils.VolleyUtil;
+import com.jiashu.zhihudemo.utils.VolleyUtils;
 import com.jiashu.zhihudemo.vu.item.FeedItemVu;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class FeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZhiHuFeed> {
             mVu.setVoteups(feed.getVoteups());
         }
 
-        ImageLoader loader = VolleyUtil.getInstance(ZhiHuApp.getContext()).getImageLoader();
+        ImageLoader loader = VolleyUtils.getInstance(ZhiHuApp.getContext()).getImageLoader();
         mVu.setAvatar(feed.getAvatarUrl(), loader);
 
         mVu.setOnTitleClickListener(new View.OnClickListener() {

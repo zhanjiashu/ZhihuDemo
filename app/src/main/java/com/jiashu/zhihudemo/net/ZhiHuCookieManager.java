@@ -5,7 +5,7 @@ import org.apache.http.cookie.Cookie;
 import java.util.List;
 
 /**
- * 管理 cookie
+ * Cookie 管理类
  * Created by Jiashu on 2015/5/3.
  */
 public class ZhiHuCookieManager {
@@ -42,6 +42,9 @@ public class ZhiHuCookieManager {
         return null;
     }
 
+    /**
+     * 清除 Cookie
+     */
     public static void clearCookies() {
         new ZhiHuCookieStore().clear();
     }

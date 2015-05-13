@@ -1,25 +1,20 @@
 package com.jiashu.zhihudemo.fragment;
 
 
-import android.text.Html;
-
 import com.jiashu.zhihudemo.activity.AnswerActivity;
 import com.jiashu.zhihudemo.adapter.FeedListAdapter;
-import com.jiashu.zhihudemo.cmd.FetchHomePageNetCmd;
-import com.jiashu.zhihudemo.cmd.FetchLoading;
-import com.jiashu.zhihudemo.event.FetchCompletedEvent;
+import com.jiashu.zhihudemo.cmd.FetchHomePageCmd;
+import com.jiashu.zhihudemo.cmd.FetchLoadingCmd;
+import com.jiashu.zhihudemo.event.FetchHomePageRE;
 import com.jiashu.zhihudemo.event.FetchFailEvent;
-import com.jiashu.zhihudemo.event.LoadingEvent;
-import com.jiashu.zhihudemo.event.RefreshEvent;
+import com.jiashu.zhihudemo.event.FetchLoadingRE;
+import com.jiashu.zhihudemo.event.OnRefreshEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.other.ZHListView;
-import com.jiashu.zhihudemo.utils.LogUtil;
-import com.jiashu.zhihudemo.utils.HttpUtil;
+import com.jiashu.zhihudemo.utils.HttpUtils;
+import com.jiashu.zhihudemo.utils.LogUtils;
 import com.jiashu.zhihudemo.utils.ToastUtils;
-import com.jiashu.zhihudemo.vu.AnswerVu;
 import com.jiashu.zhihudemo.vu.NormalListVu;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +51,12 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
             @Override
             public void onLoading() {
                 String lastFeedID = mFeedList.get(mFeedList.size() - 1).getFeedID();
-                LogUtil.d(TAG, "The current feedList' size : " + mFeedList.size());
-                LogUtil.d(TAG, "The last feed'id : " + lastFeedID);
+                LogUtils.d(TAG, "The current feedList' size : " + mFeedList.size());
+                LogUtils.d(TAG, "The last feed'id : " + lastFeedID);
 
                 // 向服务器请求加载 Feed 流信息
-                FetchLoading cmd = new FetchLoading(lastFeedID);
-                HttpUtil.execNetCmd(cmd);
+                FetchLoadingCmd cmd = new FetchLoadingCmd(lastFeedID);
+                HttpUtils.execNetCmd(cmd);
 
             }
         });
@@ -88,8 +83,8 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     @Override
     protected void beforePause() {
         // 持久化 【首页】html
-        HttpUtil.saveToFile(TAG, mResponse);
-        LogUtil.d(TAG, "pause");
+        HttpUtils.saveToFile(TAG, mResponse);
+        LogUtils.d(TAG, "pause");
     }
 
     @Override
@@ -101,8 +96,8 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * 获取 [首页] 内容
      */
     private void fetchHomePage() {
-        FetchHomePageNetCmd netCmd = new FetchHomePageNetCmd();
-        HttpUtil.execNetCmd(netCmd);
+        FetchHomePageCmd netCmd = new FetchHomePageCmd();
+        HttpUtils.execNetCmd(netCmd);
     }
 
     /**
@@ -110,19 +105,18 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * @param event
      */
     public void onEventMainThread(FetchFailEvent event) {
-        mResponse = HttpUtil.readFromFile(TAG);
-        onEventMainThread(new FetchCompletedEvent(mResponse));
-        //mBus.post(new FetchCompletedEvent(mResponse));
+        mResponse = HttpUtils.readFromFile(TAG);
+        onEventMainThread(new FetchHomePageRE(mResponse));
     }
 
     /**
      * 获取 [首页] 内容成功时触发，通知 ListView 显示
      * @param event
      */
-    public void onEventMainThread(FetchCompletedEvent event) {
+    public void onEventMainThread(FetchHomePageRE event) {
 
         mResponse = event.response;
-        mFeedList = HttpUtil.getFeedList(event.response);
+        mFeedList = HttpUtils.getFeedList(event.response);
         mAdapter.replace(mFeedList);
     }
 
@@ -130,8 +124,8 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * 向服务器请求 加载Feed流信息成功后触发
      * @param event
      */
-    public void onEventMainThread(LoadingEvent event) {
-        List<ZhiHuFeed> loadFeeds = HttpUtil.getFeedList(event.data);
+    public void onEventMainThread(FetchLoadingRE event) {
+        List<ZhiHuFeed> loadFeeds = HttpUtils.getFeedList(event.data);
         if (mFeedList.addAll(loadFeeds)) {
             mAdapter.addAll(loadFeeds);
         }
@@ -144,7 +138,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * 下拉刷新时触发
      * @param event
      */
-    public void onEvent(RefreshEvent event) {
+    public void onEvent(OnRefreshEvent event) {
         fetchHomePage();
     }
 

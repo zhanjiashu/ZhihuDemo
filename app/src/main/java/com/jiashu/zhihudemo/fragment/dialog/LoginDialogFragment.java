@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -20,11 +19,9 @@ import android.widget.LinearLayout;
 
 import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.activity.LoginActivity;
-import com.jiashu.zhihudemo.cmd.FetchCaptchaNetCmd;
-import com.jiashu.zhihudemo.event.FetchCaptchaEvent;
-import com.jiashu.zhihudemo.event.UserBean;
-import com.jiashu.zhihudemo.utils.HttpUtil;
-import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.event.FetchCaptchaRE;
+import com.jiashu.zhihudemo.event.OnLoginEvent;
+import com.jiashu.zhihudemo.utils.LogUtils;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 
 import butterknife.ButterKnife;
@@ -116,10 +113,10 @@ public class LoginDialogFragment extends DialogFragment implements TextWatcher {
                 String code = mCodeEdit.getText().toString();
 
                 if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pwd)) {
-                    UserBean event = new UserBean();
+                    OnLoginEvent event = new OnLoginEvent();
                     event.setEmail(email);
                     event.setPassword(pwd);
-                    event.setCode(code);
+                    event.setCaptcha(code);
                     EventBus.getDefault().post(event);
                 } else {
                     ToastUtils.show("邮箱或密码不能为空");
@@ -138,7 +135,7 @@ public class LoginDialogFragment extends DialogFragment implements TextWatcher {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LogUtil.d(TAG, "DialogFragment is destroy");
+        LogUtils.d(TAG, "DialogFragment is destroy");
     }
 
     @Override
@@ -158,10 +155,10 @@ public class LoginDialogFragment extends DialogFragment implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        LogUtil.d(TAG, s.toString());
+        LogUtils.d(TAG, s.toString());
     }
 
-    public void onEvent(FetchCaptchaEvent event) {
+    public void onEvent(FetchCaptchaRE event) {
         mCaptchaView.setImageBitmap(event.mCaptcha);
     }
 }

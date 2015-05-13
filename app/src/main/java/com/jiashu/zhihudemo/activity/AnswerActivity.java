@@ -3,9 +3,7 @@ package com.jiashu.zhihudemo.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.view.ViewTreeObserver;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -13,11 +11,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.ZhiHuApp;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
-import com.jiashu.zhihudemo.net.ZhiHuStringRequest;
-import com.jiashu.zhihudemo.other.ZHWebView;
-import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.net.ZHStringRequest;
+import com.jiashu.zhihudemo.other.ZHAnswerContentView;
+import com.jiashu.zhihudemo.utils.LogUtils;
 
-import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.AnswerVu;
 
 import org.jsoup.Jsoup;
@@ -27,6 +24,8 @@ import org.jsoup.nodes.Document;
 public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
     private static final int OFFSET = 120;
+
+    private static final int PX_MARGIN_TOP = 20;
 
     private static final String TAG = "AnswerActivity";
 
@@ -46,7 +45,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
         mBus.register(this);
 
-        mImageLoader = mVolleyUtil.getImageLoader();
+        mImageLoader = mVolleyUtils.getImageLoader();
 
         setSupportActionBar(mVu.getToolbar());
 
@@ -65,15 +64,12 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVu.setQuestion(question);
         mVu.setVoteups(voteups + "");
 
-        //mVu.setContent(HttpConstants.ANSWER_HTML_PRE + content + HttpConstants.ANSWER_HTML_SUF);
-        //mVu.setContent(content);
-
+        // 动态调整 答案内容 的 paddingTop，以期 答案内容 与顶部区域的距离固定
         mVu.initWebContent(new Runnable() {
             @Override
             public void run() {
                 int topHeight = mVu.getTopHeight();
-                topHeight = topHeight / 3 + 20;
-                ToastUtils.show(topHeight + "");
+                topHeight = topHeight / 3 + PX_MARGIN_TOP;
                 String preDiv = "<div style=\"padding-left:4%;padding-right:4%;padding-top:" + topHeight + "px\">";
 
                 mVu.setContent(HttpConstants.ANSWER_HTML_PRE + preDiv + mAnswer + HttpConstants.ANSWER_HTML_SUF);
@@ -83,19 +79,19 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
         fetchAuthorImg(authorUrl);
 
-        mVu.setWebViewScrollListener(new ZHWebView.OnScrollListener() {
+        mVu.setWebViewScrollListener(new ZHAnswerContentView.OnScrollListener() {
             @Override
             public void onScrollChanged(int l, int t, int oldl, int oldt) {
 
                 if (t > dp2px(OFFSET) && !isTopHide) {
                     mVu.hideTop();
-                    LogUtil.d(TAG, "hide");
+                    LogUtils.d(TAG, "hide");
                     isTopHide = true;
                 }
 
                 if (t <= dp2px(OFFSET) && isTopHide) {
                     mVu.showTop();
-                    LogUtil.d(TAG, "show");
+                    LogUtils.d(TAG, "show");
                     isTopHide = false;
                 }
 
@@ -104,7 +100,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     }
 
     private void fetchAuthorImg(String contentUrl) {
-        ZhiHuStringRequest request = new ZhiHuStringRequest(
+        ZHStringRequest request = new ZHStringRequest(
                 contentUrl,
                 new Response.Listener<String>() {
                     @Override
@@ -115,17 +111,17 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        LogUtil.d(TAG, volleyError.toString());
+                        LogUtils.d(TAG, volleyError.toString());
                     }
                 }
         );
-        mVolleyUtil.addRequest(request);
+        mVolleyUtils.addRequest(request);
     }
 
     @Override
     protected void onDestroyVu() {
         mBus.unregister(this);
-        mVolleyUtil.cancelAll();
+        mVolleyUtils.cancelAll();
     }
 
     public static int dp2px(int dp) {
@@ -134,7 +130,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     }
 
     public static void startBy(Context context, ZhiHuFeed feed) {
-        LogUtil.d(TAG, feed.getContentUrl());
+        LogUtils.d(TAG, feed.getContentUrl());
         Intent intent = new Intent(context, AnswerActivity.class);
         intent.putExtra("question", feed.getTitle());
         intent.putExtra("name", feed.getAuthorName());
@@ -156,7 +152,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         }
 
         mVu.setAvatar(avatarUrl, mImageLoader);
-        LogUtil.d(TAG, "avatarUrl = " + avatarUrl);
+        LogUtils.d(TAG, "avatarUrl = " + avatarUrl);
     }
 
 }

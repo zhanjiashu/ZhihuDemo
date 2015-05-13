@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.jiashu.zhihudemo.adapter.MyFragmentPagerAdapter;
-import com.jiashu.zhihudemo.event.RefreshEvent;
+import com.jiashu.zhihudemo.event.OnRefreshEvent;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.ViewPagerVu;
 import com.jiashu.zhihudemo.data.Constants;
@@ -63,7 +63,7 @@ public class DiscoveryFragment extends BasePresenterFragment<ViewPagerVu> {
         mFragments.add(new DiscTodayFragment());
     }
 
-    public void onEvent(RefreshEvent event) {
+    public void onEvent(OnRefreshEvent event) {
         ToastUtils.show("refresh .....", Toast.LENGTH_SHORT);
     }
 }

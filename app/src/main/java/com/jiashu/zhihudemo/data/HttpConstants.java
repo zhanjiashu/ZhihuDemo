@@ -9,6 +9,9 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLa
  * Created by Jiashu on 2015/5/3.
  */
 public class HttpConstants {
+
+    public static final String UA = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
+
     public static final String HOST = "http://www.zhihu.com";
     public static final String LOGIN_URL = HOST + "/login";
     public static final String CAPTCHA_URL = HOST + "/captcha.gif";

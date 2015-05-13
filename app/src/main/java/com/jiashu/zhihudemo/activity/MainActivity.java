@@ -14,17 +14,17 @@ import android.view.View;
 import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.adapter.NavListAdapter;
 import com.jiashu.zhihudemo.data.Constants;
-import com.jiashu.zhihudemo.event.FetchCompletedEvent;
+import com.jiashu.zhihudemo.event.FetchHomePageRE;
 import com.jiashu.zhihudemo.event.FetchFailEvent;
-import com.jiashu.zhihudemo.event.RefreshEvent;
+import com.jiashu.zhihudemo.event.OnRefreshEvent;
 import com.jiashu.zhihudemo.fragment.CollectionFragment;
 import com.jiashu.zhihudemo.fragment.DiscoveryFragment;
 import com.jiashu.zhihudemo.fragment.DraftFragment;
 import com.jiashu.zhihudemo.fragment.FollowFragment;
 import com.jiashu.zhihudemo.fragment.HomeFragment;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
-import com.jiashu.zhihudemo.other.CustomisedHeaderTransformer;
-import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.other.ZHRefreshHeaderTransformer;
+import com.jiashu.zhihudemo.utils.LogUtils;
 import com.jiashu.zhihudemo.vu.MainVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
 
@@ -92,8 +92,8 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
 
     @Override
     public void onRefreshStarted(View view) {
-        LogUtil.d(TAG, "refresh start...");
-        mBus.post(new RefreshEvent());
+        LogUtils.d(TAG, "refresh start...");
+        mBus.post(new OnRefreshEvent());
     }
 
     private void initActionBar() {
@@ -183,7 +183,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
                 .options(Options.create()
                         .scrollDistance(0.5f)
                         .headerLayout(R.layout.refresh_header)
-                        .headerTransformer(new CustomisedHeaderTransformer())
+                        .headerTransformer(new ZHRefreshHeaderTransformer())
                         .build())
                 .allChildrenArePullable()
                 .listener(this)
@@ -195,14 +195,14 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
         context.startActivity(intent);
     }
 
-    public void onEventMainThread(FetchCompletedEvent event) {
-        LogUtil.d(TAG, "refresh success");
+    public void onEventMainThread(FetchHomePageRE event) {
+        LogUtils.d(TAG, "refresh success");
         mVu.getRefreshLayout().setRefreshComplete();
     }
 
     public void onEventMainThread(FetchFailEvent event) {
-        LogUtil.d(TAG, "refresh fail");
+        LogUtils.d(TAG, "refresh fail");
         mVu.getRefreshLayout().setRefreshComplete();
-        LogUtil.d(TAG, "refresh complete");
+        LogUtils.d(TAG, "refresh complete");
     }
 }

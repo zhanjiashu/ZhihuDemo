@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +20,12 @@ import android.widget.ViewSwitcher;
 import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.ZhiHuApp;
 import com.jiashu.zhihudemo.adapter.MyFragmentPagerAdapter;
-import com.jiashu.zhihudemo.cmd.FetchCaptchaNetCmd;
-import com.jiashu.zhihudemo.cmd.FetchXRSFNetCmd;
-import com.jiashu.zhihudemo.cmd.LoginNetCmd;
+import com.jiashu.zhihudemo.cmd.FetchXrsfCmd;
+import com.jiashu.zhihudemo.cmd.LoginCmd;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.data.StringConstants;
-import com.jiashu.zhihudemo.event.FetchCaptchaEvent;
-import com.jiashu.zhihudemo.event.LoginEvent;
-import com.jiashu.zhihudemo.event.UserBean;
+import com.jiashu.zhihudemo.event.LoginRE;
+import com.jiashu.zhihudemo.event.OnLoginEvent;
 import com.jiashu.zhihudemo.fragment.dialog.LoginDialogFragment;
 import com.jiashu.zhihudemo.fragment.guide.FifthGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.FirstGuideFragment;
@@ -37,10 +34,9 @@ import com.jiashu.zhihudemo.fragment.guide.SecondGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.SixthGuideFragment;
 import com.jiashu.zhihudemo.fragment.guide.ThirdGuideFragment;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
-import com.jiashu.zhihudemo.utils.HttpUtil;
-import com.jiashu.zhihudemo.utils.LogUtil;
+import com.jiashu.zhihudemo.utils.HttpUtils;
+import com.jiashu.zhihudemo.utils.LogUtils;
 import com.jiashu.zhihudemo.utils.ToastUtils;
-import com.jiashu.zhihudemo.utils.VolleyUtil;
 import com.jiashu.zhihudemo.vu.GuidePageVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
 
@@ -202,12 +198,12 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
                 dialog.show(mFm, null);
 
                 // 获取 _xrsf 参数
-                FetchXRSFNetCmd netCmd = new FetchXRSFNetCmd();
-                HttpUtil.execNetCmd(netCmd);
+                FetchXrsfCmd netCmd = new FetchXrsfCmd();
+                HttpUtils.execNetCmd(netCmd);
 
                 // 获取 验证码 图片
-                /*FetchCaptchaNetCmd cmd = new FetchCaptchaNetCmd();
-                HttpUtil.execNetCmd(cmd);*/
+                /*FetchCaptchaCmd cmd = new FetchCaptchaCmd();
+                HttpUtils.execNetCmd(cmd);*/
             }
         });
 
@@ -233,7 +229,7 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
      * 执行登录
      * @param event
      */
-    public void onEventMainThread(UserBean event) {
+    public void onEventMainThread(OnLoginEvent event) {
         // 记住email
         mPref.edit()
                 .putString(PREF_KEY_EMAIL, event.getEmail())
@@ -243,16 +239,16 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
 
-        LoginNetCmd netCmd = new LoginNetCmd(event);
-        HttpUtil.execNetCmd(netCmd);
+        LoginCmd netCmd = new LoginCmd(event);
+        HttpUtils.execNetCmd(netCmd);
     }
 
     /**
      * 登录返回 的相关处理
      * @param event
      */
-    public void onEvent(LoginEvent event) {
-        LogUtil.d(TAG, "Login Response");
+    public void onEvent(LoginRE event) {
+        LogUtils.d(TAG, "Login Response");
         mProgressDialog.dismiss();
 
         switch (event.getStateCode()) {
