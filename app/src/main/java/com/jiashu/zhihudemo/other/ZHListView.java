@@ -8,6 +8,8 @@ import android.widget.ListView;
 
 
 /**
+ * Created by Jiashu on 2015/5/5.
+ *
  * 自定义的 ListView ，嵌套于 ScrollView 使用。
  * 当 ListView 不位于顶端时，截断 父控件（ScrollView）对于 触摸 事件的处理；
  * 当 ListView 位于顶端时，恢复 父控件 （ScrollView) 对于 触摸 事件的处理。
@@ -16,7 +18,6 @@ import android.widget.ListView;
  *     在 ScrollView 中的，无论 ListView 如何滚动 ScrollView 始终是位于屏幕顶端的，
  *     所以此时 无论 ListView 是否位于顶端，只要在屏幕向上滑动都会触发 ActionBarPullToRereshLayout 的
  *     刷新事件，同时 ListView 是无法滑动回顶端的。
- * Created by Jiashu on 2015/5/5.
  */
 public class ZHListView extends ListView implements AbsListView.OnScrollListener {
 
@@ -47,7 +48,8 @@ public class ZHListView extends ListView implements AbsListView.OnScrollListener
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (mLastVisibleItem == mTotalItemCount && scrollState == SCROLL_STATE_IDLE) {
+        // 当ListView 达到屏幕底部时，设置 加载状态位 为 正在加载，并执行 加载数据 操作
+        if (mLastVisibleItem == mTotalItemCount) {
             if (!isLoading) {
                 isLoading = true;
                 mListener.onLoading();
@@ -65,7 +67,8 @@ public class ZHListView extends ListView implements AbsListView.OnScrollListener
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
-            // 当手指触摸listview时，让父控件交出ontouch权限,不能滚动
+            // 当 ListView 不位于屏幕顶端时，截断 父控件 对 onTouch的处理，
+            // 当 ListView 位于屏幕顶端时，父控件重新获取对 onTouch 的处理权限
             case MotionEvent.ACTION_DOWN:
                 if (mFirstVisibleItem != 0) {
                     setParentScrollAble(false);
@@ -97,10 +100,16 @@ public class ZHListView extends ListView implements AbsListView.OnScrollListener
         this.mListener = listener;
     }
 
+    /**
+     * 通知 ListView 加载完成，重置 加载状态位
+     */
     public void setLoadCompleted() {
         isLoading = false;
     }
 
+    /**
+     * 底部上拉 加载数据 的回调接口
+     */
     public interface OnLoadingListener {
         void onLoading();
     }

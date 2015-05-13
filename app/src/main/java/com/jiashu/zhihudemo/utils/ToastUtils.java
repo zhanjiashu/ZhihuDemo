@@ -1,7 +1,7 @@
 package com.jiashu.zhihudemo.utils;
 import android.widget.Toast;
 
-import com.jiashu.zhihudemo.ZhiHuApp;
+import com.jiashu.zhihudemo.app.ZHApp;
 
 /**
  * 显示 Toast 的工具类
@@ -10,7 +10,7 @@ import com.jiashu.zhihudemo.ZhiHuApp;
 public class ToastUtils {
 
     public static void show(String msg, int duration) {
-        Toast.makeText(ZhiHuApp.getContext(), msg, duration).show();
+        Toast.makeText(ZHApp.getContext(), msg, duration).show();
     }
     public static void show(String msg) {
         show(msg, Toast.LENGTH_SHORT);

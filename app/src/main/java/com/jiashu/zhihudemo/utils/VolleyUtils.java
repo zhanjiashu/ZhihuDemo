@@ -11,7 +11,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.data.StringConstants;
-import com.jiashu.zhihudemo.event.FetchFailEvent;
+import com.jiashu.zhihudemo.events.FetchFailEvent;
 import com.jiashu.zhihudemo.net.ZhiHuCookieStore;
 import com.jiashu.zhihudemo.other.ZHLruImageCache;
 

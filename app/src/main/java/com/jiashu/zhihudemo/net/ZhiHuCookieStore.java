@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.jiashu.zhihudemo.ZhiHuApp;
+import com.jiashu.zhihudemo.app.ZHApp;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 
 import java.io.ByteArrayInputStream;
@@ -37,7 +36,7 @@ public class ZhiHuCookieStore implements CookieStore {
     private ConcurrentHashMap<String, Cookie> mCookies;
 
     public ZhiHuCookieStore() {
-        mPref = ZhiHuApp.getContext().getSharedPreferences(COOKIE_FILE_NAME, Context.MODE_PRIVATE);
+        mPref = ZHApp.getContext().getSharedPreferences(COOKIE_FILE_NAME, Context.MODE_PRIVATE);
         mCookies = new ConcurrentHashMap<>();
 
         String cookieNamesStr = mPref.getString(COOKIE_NAME_STORE, null);
@@ -111,12 +110,17 @@ public class ZhiHuCookieStore implements CookieStore {
         for (String name : mCookies.keySet()) {
             editor.remove(COOKIE_NAME_PREFIX + name);
         }
-        editor.remove(COOKIE_NAME_STORE);
+        editor.clear();
         editor.commit();
 
         mCookies.clear();
     }
 
+    /**
+     * 序列化 Cookie
+     * @param serializableCookie
+     * @return
+     */
     private String encodeCookie(SerializableCookie serializableCookie) {
         if (serializableCookie == null) {
             return null;
@@ -134,6 +138,11 @@ public class ZhiHuCookieStore implements CookieStore {
         return byteArrayToHexString(os.toByteArray());
     }
 
+    /**
+     * 反序列化 Cookie
+     * @param cookieStr
+     * @return
+     */
     private Cookie decodeCookie(String cookieStr) {
         byte[] bytes = hexStringToByteArray(cookieStr);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);

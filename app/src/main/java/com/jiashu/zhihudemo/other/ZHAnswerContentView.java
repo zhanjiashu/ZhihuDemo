@@ -7,6 +7,7 @@ import android.webkit.WebView;
 
 /**
  * Created by Jiashu on 2015/5/9.
+ * 显示【答案】详细内容的 WebView, 实现了对 滚动 事件的监听
  */
 public class ZHAnswerContentView extends WebView {
 

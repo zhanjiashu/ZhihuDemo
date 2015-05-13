@@ -52,4 +52,6 @@ public class Constants {
     public static final String[] FOLLOW_TAB_TITLES = {
             "关注的问题", "关注的收藏", "关注的话题", "关注的专栏"
     };
+
+    public static final String TOAST_UNTAPPED = "该功能尚未开发，敬请期待";
 }

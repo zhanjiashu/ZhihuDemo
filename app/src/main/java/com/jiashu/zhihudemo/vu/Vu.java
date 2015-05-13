@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 /**
  * Created by Jiashu on 2015/4/23.
  */
-public interface Vu {
+public abstract class Vu {
 
-    void initView(LayoutInflater inflater, ViewGroup container);
+    public abstract void initView(LayoutInflater inflater, ViewGroup container);
 
-    View getView();
+    public abstract View getView();
 
-    void initMenu(MenuInflater inflater, Menu menu);
+    public void initMenu(MenuInflater inflater, Menu menu) {
+
+    }
 }

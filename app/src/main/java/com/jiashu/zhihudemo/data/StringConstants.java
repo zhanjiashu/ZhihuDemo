@@ -1,16 +1,15 @@
 package com.jiashu.zhihudemo.data;
 
-import android.content.Context;
 import android.content.res.Resources;
 
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.ZhiHuApp;
+import com.jiashu.zhihudemo.app.ZHApp;
 
 /**
  * Created by Jiashu on 2015/4/30.
  */
 public class StringConstants {
-    private static Resources mRes = ZhiHuApp.getContext().getResources();
+    private static Resources mRes = ZHApp.getContext().getResources();
 
     public static final int[] TIPS = {
             R.string.guide_tip_first,

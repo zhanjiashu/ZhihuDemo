@@ -16,7 +16,7 @@ import butterknife.InjectView;
 /**
  * Created by Jiashu on 2015/4/24.
  */
-public class NavListItemVu implements Vu {
+public class NavListItemVu extends Vu {
 
     View mView;
 
@@ -44,7 +44,4 @@ public class NavListItemVu implements Vu {
     public void setNavName(CharSequence name) {
         mNavName.setText(name);
     }
-
-    @Override
-    public void initMenu(MenuInflater inflater, Menu menu) {}
 }

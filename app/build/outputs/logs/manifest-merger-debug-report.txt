@@ -57,19 +57,19 @@ MERGED from com.android.support:support-v4:22.0.0:22:5
 		ADDED from AndroidManifest.xml:17:9
 	android:name
 		ADDED from AndroidManifest.xml:13:9
-activity#com.jiashu.zhihudemo.activity.MainActivity
+activity#com.jiashu.zhihudemo.presenter.activity.MainActivity
 ADDED from AndroidManifest.xml:18:9
 	android:label
 		ADDED from AndroidManifest.xml:20:13
 	android:name
 		ADDED from AndroidManifest.xml:19:13
-activity#com.jiashu.zhihudemo.activity.QuizActivity
+activity#com.jiashu.zhihudemo.presenter.activity.QuizActivity
 ADDED from AndroidManifest.xml:22:9
 	android:label
 		ADDED from AndroidManifest.xml:24:13
 	android:name
 		ADDED from AndroidManifest.xml:23:13
-activity#com.jiashu.zhihudemo.activity.LoginActivity
+activity#com.jiashu.zhihudemo.presenter.activity.LoginActivity
 ADDED from AndroidManifest.xml:26:9
 	android:label
 		ADDED from AndroidManifest.xml:28:13
@@ -85,7 +85,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:32:17
 	android:name
 		ADDED from AndroidManifest.xml:32:27
-activity#com.jiashu.zhihudemo.activity.AnswerActivity
+activity#com.jiashu.zhihudemo.presenter.activity.AnswerActivity
 ADDED from AndroidManifest.xml:35:9
 	android:label
 		ADDED from AndroidManifest.xml:37:13

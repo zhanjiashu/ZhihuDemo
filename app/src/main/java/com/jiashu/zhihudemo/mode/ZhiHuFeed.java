@@ -15,8 +15,10 @@ import org.jsoup.select.Elements;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** 封装 知乎内容 的bean
+/**
  * Created by Jiashu on 2015/5/4.
+ *
+ * 封装 【知乎】首页 的一条动态内容：Feed
  */
 public class ZhiHuFeed {
 

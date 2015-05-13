@@ -22,7 +22,7 @@ import butterknife.InjectView;
 /**
  * Created by Jiashu on 2015/5/4.
  */
-public class FeedItemVu implements Vu {
+public class FeedItemVu extends Vu {
 
     View mView;
 
@@ -55,11 +55,6 @@ public class FeedItemVu implements Vu {
     @Override
     public View getView() {
         return mView;
-    }
-
-    @Override
-    public void initMenu(MenuInflater inflater, Menu menu) {
-
     }
 
 

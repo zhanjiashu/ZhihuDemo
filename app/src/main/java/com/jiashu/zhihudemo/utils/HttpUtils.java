@@ -6,8 +6,8 @@ import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import com.jiashu.zhihudemo.ZhiHuApp;
-import com.jiashu.zhihudemo.cmd.Command;
+import com.jiashu.zhihudemo.app.ZHApp;
+import com.jiashu.zhihudemo.command.Command;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 
@@ -29,6 +29,7 @@ import java.util.List;
 
 /**
  * Created by Jiashu on 2015/5/3.
+ * 网络操作 的工具类
  */
 public class HttpUtils {
 
@@ -40,32 +41,49 @@ public class HttpUtils {
 
     private static SharedPreferences mPref;
 
+    /**
+     * 获取 _xsrf 参数：
+     * 首先从 cookie 中获取，若在 cookie 中获取不到， 则从 SharedPreference 中获取
+     * @return
+     */
     public static String getXSRF() {
 
         if (ZhiHuCookieManager.hasCookie(XSRF_KEY)) {
             return ZhiHuCookieManager.getCookieValue(XSRF_KEY);
         }
         mPref = PreferenceManager
-                .getDefaultSharedPreferences(ZhiHuApp.getContext());
+                .getDefaultSharedPreferences(ZHApp.getContext());
         return mPref.getString(XSRF_KEY, null);
     }
 
+    /**
+     * 将 _xsrf 参数 保存到 SharedPreference 中
+     * @param xsrf
+     */
     public static void setXSRF(String xsrf) {
         mPref.edit()
                 .putString(XSRF_KEY, xsrf)
                 .commit();
     }
 
-    public static void execNetCmd(Command netCmd) {
-        netCmd.execute();
-    }
-
-    public static void cancleNetCmd(Command netCmd) {
-        netCmd.cancel();
+    /**
+     * 执行一个 网络数据交互 的命令
+     * @param cmd
+     */
+    public static void exeCmd(Command cmd) {
+        cmd.execute();
     }
 
     /**
-     * 获取 [首页] 的 Feed 信息流，并进行封装
+     * 取消一个 网络数据交互 的命令
+     * @param cmd
+     */
+    public static void cancleCmd(Command cmd) {
+        cmd.cancel();
+    }
+
+    /**
+     * 通过 Jsoup 解析响应的 html,并获取 【知乎】首页的 Feed 信息流
      * @param html
      * @return
      */
@@ -88,6 +106,7 @@ public class HttpUtils {
 
     /**
      * 注意：有个Bug待解决
+     * 保存内容到指定文件
      * @param fileName
      * @param content
      */
@@ -101,7 +120,7 @@ public class HttpUtils {
                 OutputStream out = null;
                 BufferedWriter writer = null;
                 try {
-                    out = ZhiHuApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+                    out = ZHApp.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
                     writer = new BufferedWriter(new OutputStreamWriter(out));
                     writer.write(content);
                 } catch (FileNotFoundException e) {
@@ -121,12 +140,17 @@ public class HttpUtils {
         }).start();
     }
 
+    /**
+     * 从指定文件中读取内容
+     * @param fileName
+     * @return
+     */
     public static String readFromFile(String fileName) {
         FileInputStream is = null;
         BufferedReader reader = null;
         StringBuilder sb = new StringBuilder();
         try {
-            is = ZhiHuApp.getContext().openFileInput(fileName);
+            is = ZHApp.getContext().openFileInput(fileName);
             reader = new BufferedReader(new InputStreamReader(is));
             String line = "";
             while ((line = reader.readLine()) != null) {
@@ -148,8 +172,12 @@ public class HttpUtils {
         return sb.toString();
     }
 
+    /**
+     * 判断当前是否有网络连接
+     * @return
+     */
     public static boolean hasNetwork() {
-        mCM = (ConnectivityManager) ZhiHuApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        mCM = (ConnectivityManager) ZHApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (mCM.getActiveNetworkInfo() == null) {
             return false;
         }

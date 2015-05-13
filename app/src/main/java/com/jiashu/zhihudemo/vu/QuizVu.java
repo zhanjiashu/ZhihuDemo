@@ -1,7 +1,6 @@
 package com.jiashu.zhihudemo.vu;
 
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.adapter.MyFragmentPagerAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,7 +18,7 @@ import butterknife.InjectView;
 /**
  * Created by Jiashu on 2015/4/24.
  */
-public class QuizVu implements Vu {
+public class QuizVu extends Vu {
 
     View mView;
 

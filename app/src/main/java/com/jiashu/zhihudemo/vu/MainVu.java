@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.adapter.SimpleBaseAdapter;
+import com.jiashu.zhihudemo.presenter.adapter.SimpleBaseAdapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -22,7 +22,7 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLa
 /**
  * Created by Jiashu on 2015/4/23.
  */
-public class MainVu implements Vu {
+public class MainVu extends Vu {
 
     View mView;
 

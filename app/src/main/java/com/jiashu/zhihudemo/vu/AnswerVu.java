@@ -23,7 +23,7 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLa
 /**
  * Created by Jiashu on 2015/5/8.
  */
-public class AnswerVu implements Vu {
+public class AnswerVu extends Vu {
 
     View mView;
 
@@ -51,11 +51,6 @@ public class AnswerVu implements Vu {
 
     @InjectView(R.id.ll_author)
     LinearLayout mAuthorLayout;
-
-    @InjectView(R.id.ptr_layout)
-    PullToRefreshLayout mRefreshLayout;
-
-    ViewTreeObserver viewTreeObserver;
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
