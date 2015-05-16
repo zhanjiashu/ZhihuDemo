@@ -64,6 +64,28 @@ public class HttpConstants {
         return ZHApp.getContext().getResources().getString(resId);
     }
 
-    public static final String ANSWER_HTML_PRE = "<!DOCTYPE html><html lang=\"zh-CN\" dropEffect=\"none\" class=\"no-js \"><head><meta charset=\"utf-8\" /><title>首页 - 知乎</title><meta name=\"apple-itunes-app\" content=\"app-id=432274380\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\"/><meta http-equiv=\"mobile-agent\" content=\"format=html5;url=http://www.zhihu.com/\"><meta id=\"znonce\" name=\"znonce\" content=\"778601aae7d84eafabe978b10b96ce94\"><link rel=\"stylesheet\" href=\"http://static.zhihu.com/static/ver/ff9b5bb7dec09eb7dce17116342f4d3b.m.css\"><script src=\"http://static.zhihu.com/static/ver/30ff61b37d19820b83181a78d6ca0d16.instant.min.js\"></script><meta property=\"wb:webmaster\" content=\"8e9c4b702508b902\" /></head><body class=\"zhi\">";
-    public static final String ANSWER_HTML_SUF = "</body></html>";
+    /*public static final String ANSWER_HTML_PRE = "<!DOCTYPE html><html lang=\"zh-CN\" dropEffect=\"none\" class=\"no-js \"><head><meta charset=\"utf-8\" /><title>首页 - 知乎</title><meta name=\"apple-itunes-app\" content=\"app-id=432274380\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\"/><meta http-equiv=\"mobile-agent\" content=\"format=html5;url=http://www.zhihu.com/\"><meta id=\"znonce\" name=\"znonce\" content=\"778601aae7d84eafabe978b10b96ce94\"><link rel=\"stylesheet\" href=\"http://static.zhihu.com/static/ver/ff9b5bb7dec09eb7dce17116342f4d3b.m.css\"><script src=\"http://static.zhihu.com/static/ver/30ff61b37d19820b83181a78d6ca0d16.instant.min.js\"></script><meta property=\"wb:webmaster\" content=\"8e9c4b702508b902\" /></head><body class=\"zhi\">";
+    public static final String ANSWER_HTML_SUF = "</body></html>";*/
+    public static final String ANSWER_HTML_PRE = "<!DOCTYPE html>\n" +
+            "<html lang=\"zh-CN\" dropEffect=\"none\" class=\"no-js\">\n" +
+            "<head>\n" +
+            "\n" +
+            "<link rel=\"stylesheet\" href=\"http://static.zhihu.com/static/ver/d6d1d8af46437d8edc24966ce70eafdd.z.css\">\n" +
+            "\n" +
+            "<link rel=\"canonical\" href=\"http://www.zhihu.com/question/29246053\" />\n" +
+            "\n" +
+            "</head>\n" +
+            "\n" +
+            "<body class=\"zhi\">\n" +
+            "\n" +
+            "<div class=\"zg-wrap zu-main\" id=\"zh-single-answer-page\">\n" +
+            "<div class=\"zu-main-content\">\n" +
+            "<div class=\"zu-main-content-inner with-indention-votebar\">";
+
+    public static final String ANSWER_HTML_SUF = "</div>\n" +
+            "</div>\n" +
+            "\n" +
+            "</div>\n" +
+            "</body>\n" +
+            "</html>";
 }

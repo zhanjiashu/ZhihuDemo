@@ -366,6 +366,12 @@
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">知乎</string>
+    <string name="btn_collect">收藏</string>
+    <string name="btn_comment">评论</string>
+    <string name="btn_nohelp_off">没有帮助</string>
+    <string name="btn_nohelp_on">撤销没有帮助</string>
+    <string name="btn_thank_off">感谢</string>
+    <string name="btn_thank_on">已感谢</string>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text">An application requires an update to the Android Wear app.</string>

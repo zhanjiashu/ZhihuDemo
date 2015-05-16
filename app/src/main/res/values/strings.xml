@@ -41,4 +41,10 @@
     <string name="title_activity_answer">AnswerActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="btn_nohelp_off">没有帮助</string>
+    <string name="btn_nohelp_on">撤销没有帮助</string>
+    <string name="btn_thank_off">感谢</string>
+    <string name="btn_thank_on">已感谢</string>
+    <string name="btn_collect">收藏</string>
+    <string name="btn_comment">评论</string>
 </resources>

@@ -71,7 +71,7 @@
             android:layout_marginRight="@dimen/margin_small"
             android:layout_marginTop="3.5dp"
             android:gravity="center"
-            android:background="@drawable/bg_voteups"
+            android:background="@drawable/bg_tv_voteups"
             android:textSize="12sp"
             tools:text="2.9K"/>
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ToggleButton
+        android:id="@+id/tbtn_vote_up"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/ic_btn_vote_up"
+        android:background="@drawable/bg_btn_vote"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:textOn="赞同"
+        android:textOff="赞同"
+        android:textColor="@android:color/darker_gray"/>
+
+    <ToggleButton
+        android:id="@+id/tbtn_vote_down"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/ic_btn_vote_down"
+        android:background="@drawable/bg_btn_vote"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:textOn="反对"
+        android:textOff="反对"
+        android:textColor="@android:color/darker_gray"/>
+
+</LinearLayout>

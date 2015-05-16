@@ -7,24 +7,27 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.webkit.WebSettings;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.other.ZHAnswerContentView;
+import com.jiashu.zhihudemo.app.ZHApp;
+import com.jiashu.zhihudemo.other.ZHAnswerView;
+import com.jiashu.zhihudemo.utils.LogUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 
 /**
  * Created by Jiashu on 2015/5/8.
  */
 public class AnswerVu extends Vu {
 
+    private final String TAG = getClass().getSimpleName();
     View mView;
 
     @InjectView(R.id.toolbar)
@@ -39,18 +42,25 @@ public class AnswerVu extends Vu {
     @InjectView(R.id.tv_profile)
     TextView mProfileView;
 
-    @InjectView(R.id.tv_voteups)
-    TextView mVoteupsView;
-
+    @InjectView(R.id.tbtn_vote)
+    ToggleButton mVoteBtn;
 
     @InjectView(R.id.iv_avatar)
     NetworkImageView mAvatarView;
 
     @InjectView(R.id.wv_content)
-    ZHAnswerContentView mContentView;
+    ZHAnswerView mAnswerView;
 
     @InjectView(R.id.ll_author)
     LinearLayout mAuthorLayout;
+
+    @InjectView(R.id.ll_bottom)
+    LinearLayout mBottomLayout;
+
+    @InjectView(R.id.tbtn_comment)
+    ToggleButton mCommentBtn;
+
+    WebSettings mWebSettings;
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
@@ -72,44 +82,109 @@ public class AnswerVu extends Vu {
         return mToolbar;
     }
 
+    /**
+     * 显示【问题】
+     * @param question
+     */
     public void setQuestion(String question) {
         mTitleView.setText(question);
     }
 
+    /**
+     * 显示 答案作者的名字
+     * @param name
+     */
     public void setAuthorName(String name) {
         mAuthorView.setText(name);
     }
 
+    /**
+     * 显示 答案作者的签名
+     * @param profile
+     */
     public void setAuthorProfile(String profile) {
         mProfileView.setText(profile);
     }
 
-    public void setVoteups(String voteups) {
-        mVoteupsView.setText(voteups);
+    /**
+     * 显示 赞同数、以及用户的 投票状态
+     * @param voteups
+     */
+
+    public void setVoteBtn(boolean isUpChecked, boolean isDownChecked, int voteups) {
+
+        if (isDownChecked) {
+            mVoteBtn.setButtonDrawable(R.drawable.ic_vote_down_checked);
+        } else if (isUpChecked) {
+            mVoteBtn.setButtonDrawable(R.drawable.ic_vote_checked);
+
+        } else {
+            mVoteBtn.setButtonDrawable(R.drawable.ic_btn_vote);
+        }
+
+        mVoteBtn.setText(voteups + "");
+        mVoteBtn.setTextOff(voteups + "");
+        mVoteBtn.setTextOn(voteups + "");
     }
 
+    /**
+     * 显示 答案作者头像
+     * @param url
+     * @param loader
+     */
     public void setAvatar(String url, ImageLoader loader) {
-        mAvatarView.setDefaultImageResId(R.mipmap.ic_launcher);
-        mAvatarView.setErrorImageResId(R.mipmap.ic_launcher);
+        mAvatarView.setDefaultImageResId(R.drawable.ic_action_person_outline);
+        mAvatarView.setErrorImageResId(R.drawable.ic_action_person_outline);
         mAvatarView.setImageUrl(url, loader);
     }
 
-    public void initWebContent(Runnable callback) {
-        mContentView.post(callback);
-        mContentView.getSettings().setJavaScriptEnabled(true);
-        mContentView.getSettings().setTextZoom(120);
+    /**
+     * 初始化显示答案内容的 WebView，并通过子线程获取 顶部区域的高度
+     * @param callback
+     */
+
+    public void initWebContent(int textZoom, Runnable callback) {
+        mAnswerView.post(callback);
+        mWebSettings = mAnswerView.getSettings();
+        mWebSettings.setTextZoom(textZoom);
     }
 
-
-    public void setContent(final String html) {
-        mContentView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+    /**
+     * 显示 答案
+     * @param html
+     */
+    public void setAnswer(final String html) {
+        mAnswerView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
     }
 
-    public void setWebViewScrollListener(ZHAnswerContentView.OnScrollListener listener) {
-        mContentView.setOnScrollListener(listener);
+    /**
+     * 设置 显示答案的 定制WebView 的滚动事件监听器
+     * @param listener
+     */
+    public void setAnswerViewScrollListener(ZHAnswerView.OnScrollListener listener) {
+        mAnswerView.setOnScrollListener(listener);
     }
 
-    public void hideTop() {
+    /**
+     * 计算顶部区域的高度
+     * @return
+     */
+    public int getTopHeight() {
+        return mToolbar.getHeight() + mTitleView.getHeight() + mAuthorLayout.getHeight();
+    }
+
+    /**
+     * 计算底部区域的高度
+     * @return
+     */
+    public int getBottomHeight() {
+        return mBottomLayout.getHeight();
+    }
+
+    /**
+     * 隐藏顶部区域
+     */
+    public boolean hideTop() {
         ObjectAnimator animToolBar = ObjectAnimator.ofFloat(mToolbar, "translationY", 0, -mToolbar.getHeight());
         animToolBar.setDuration(200);
         animToolBar.start();
@@ -121,9 +196,14 @@ public class AnswerVu extends Vu {
         ObjectAnimator animAuthor = ObjectAnimator.ofFloat(mAuthorLayout, "translationY", 0, -(mToolbar.getHeight() + mTitleView.getHeight()));
         animAuthor.setDuration(300);
         animAuthor.start();
+
+        return true;
     }
 
-    public void showTop() {
+    /**
+     * 显示顶部区域
+     */
+    public boolean showTop() {
 
         ObjectAnimator animToolBar = ObjectAnimator.ofFloat(mToolbar, "translationY", -mToolbar.getHeight(), 0);
         animToolBar.setDuration(200);
@@ -136,10 +216,45 @@ public class AnswerVu extends Vu {
         ObjectAnimator animAuthor = ObjectAnimator.ofFloat(mAuthorLayout, "translationY", -(mToolbar.getHeight() + mTitleView.getHeight()), 0);
         animAuthor.setDuration(350);
         animAuthor.start();
+
+        return false;
     }
 
-    public int getTopHeight() {
-        return mToolbar.getHeight() + mTitleView.getHeight() + mAuthorLayout.getHeight();
+    /**
+     * 隐藏 底部区域
+     */
+    public boolean hideBottom() {
+        ObjectAnimator animBottom = ObjectAnimator.ofFloat(mBottomLayout, "translationY", 0, mBottomLayout.getHeight());
+        animBottom.setDuration(350);
+        animBottom.start();
+
+        return true;
     }
 
+    /**
+     * 显示 底部区域
+     */
+    public boolean showBottom() {
+        ObjectAnimator animBottom = ObjectAnimator.ofFloat(mBottomLayout, "translationY", mBottomLayout.getTranslationY(), 0);
+        animBottom.setDuration(350);
+        animBottom.start();
+
+        return false;
+    }
+
+    /**
+     * 设置 显示答案的 定制WebView 上的手势 监听器
+     * @param listener
+     */
+    public void setContentViewTouchListener(View.OnTouchListener listener) {
+        mAnswerView.setOnTouchListener(listener);
+    }
+
+    public void setComment(String text) {
+        mCommentBtn.setText(text);
+    }
+
+    public void setVoteOnClickListener(View.OnClickListener listener) {
+        mVoteBtn.setOnClickListener(listener);
+    }
 }

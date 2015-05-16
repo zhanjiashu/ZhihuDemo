@@ -3,16 +3,25 @@ package com.jiashu.zhihudemo.presenter.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
+import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.app.ZHApp;
+import com.jiashu.zhihudemo.command.FetchAnswerCmd;
 import com.jiashu.zhihudemo.data.HttpConstants;
+import com.jiashu.zhihudemo.events.VoteEvent;
+import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
+import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
 import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.net.ZHStringRequest;
-import com.jiashu.zhihudemo.other.ZHAnswerContentView;
+import com.jiashu.zhihudemo.other.ZHAnswerView;
+import com.jiashu.zhihudemo.presenter.fragment.dialog.VoteDialogFragment;
+import com.jiashu.zhihudemo.utils.HttpUtils;
 import com.jiashu.zhihudemo.utils.LogUtils;
 
 import com.jiashu.zhihudemo.vu.AnswerVu;
@@ -28,15 +37,33 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
     private static final String TAG = "AnswerActivity";
 
-    private static final int OFFSET = 120;
+    private static final int OFFSET = 220;
 
     private static final int PX_MARGIN_TOP = 20;
 
+    private static final float CURRENT_DENSITY = ZHApp.getContext().getResources().getDisplayMetrics().density;
+
+    private static final String EXTRA_QUEStTION = "question";
+    private static final String EXTRA_AUTHOR_NAME = "name";
+    private static final String EXTRA_AUTHOR_PROFILE = "profile";
+    private static final String EXTRA_AUTHOR_URL = "url";
+    private static final String EXTRA_VOTEUPS = "voteups";
+    private static final String EXTRA_COMMENTS = "comments";
+    private static final String EXTRA_ANSWER_URL = "contentUrl";
+
     private ImageLoader mImageLoader;
+    private GestureDetector mDetector;
 
     private boolean isTopHide;
+    private boolean isBottomHide;
+    private boolean isTouchEnable;
 
     private String mAnswer;
+    private int mVoteups;
+
+    private boolean isVoteUpChecked;
+
+    private boolean isVoteDownChecked;
 
     @Override
     protected Class<AnswerVu> getVuClass() {
@@ -53,53 +80,118 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         setSupportActionBar(mVu.getToolbar());
 
         Intent intent = getIntent();
-        String question = intent.getStringExtra("question");
-        String authorName = intent.getStringExtra("name");
-        String authorProfile = intent.getStringExtra("profile");
-        mAnswer = intent.getStringExtra("content");
-        String authorUrl = intent.getStringExtra("authorUrl");
-        int voteups = intent.getIntExtra("voteups", 0);
+        String question = intent.getStringExtra(EXTRA_QUEStTION);
+        String authorName = intent.getStringExtra(EXTRA_AUTHOR_NAME);
+        String authorProfile = intent.getStringExtra(EXTRA_AUTHOR_PROFILE);
+        String authorUrl = intent.getStringExtra(EXTRA_AUTHOR_URL);
+        mVoteups = intent.getIntExtra(EXTRA_VOTEUPS, 0);
+        int comments = intent.getIntExtra(EXTRA_COMMENTS, 0);
+        String answerUrl = intent.getStringExtra(EXTRA_ANSWER_URL);
 
         getSupportActionBar().setTitle(question);
 
         mVu.setAuthorName(authorName);
         mVu.setAuthorProfile(authorProfile);
         mVu.setQuestion(question);
-        mVu.setVoteups(voteups + "");
+        mVu.setVoteBtn(false, false, mVoteups);
+        mVu.setComment("评论 " + comments);
 
-        // 动态调整 答案内容 的 paddingTop，以期 答案内容 与顶部区域的距离固定
-        mVu.initWebContent(new Runnable() {
-            @Override
-            public void run() {
-                int topHeight = mVu.getTopHeight();
-                topHeight = topHeight / 3 + PX_MARGIN_TOP;
-                String preDiv = "<div style=\"padding-left:4%;padding-right:4%;padding-top:" + topHeight + "px\">";
+        FetchAnswerCmd cmd = new FetchAnswerCmd(answerUrl);
+        HttpUtils.exeCmd(cmd);
 
-                mVu.setContent(HttpConstants.ANSWER_HTML_PRE + preDiv + mAnswer + HttpConstants.ANSWER_HTML_SUF);
-            }
-        });
-        mVu.setContent("");
 
+        // 预先执行一次，以便计算 顶部区域 的高度
+        mVu.setAnswer("");
+
+        // 获取答案作者的头像url
         fetchAuthorImg(authorUrl);
 
-        mVu.setWebViewScrollListener(new ZHAnswerContentView.OnScrollListener() {
+        // 监听 答案区域 的滚动事件
+        mVu.setAnswerViewScrollListener(new ZHAnswerView.OnScrollListener() {
             @Override
-            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+            public void onScrollChanged(int l, int t, int oldl, int oldt, boolean isScrollToBottom) {
 
-                if (t > dp2px(OFFSET) && !isTopHide) {
-                    mVu.hideTop();
-                    LogUtils.d(TAG, "hide");
-                    isTopHide = true;
+                // 往上滑超过预设的位置，则隐藏顶部区域
+                if (t > OFFSET && !isTopHide) {
+                    isTopHide = mVu.hideTop();
+                    isTouchEnable = true;
                 }
 
-                if (t <= dp2px(OFFSET) && isTopHide) {
-                    mVu.showTop();
-                    LogUtils.d(TAG, "show");
-                    isTopHide = false;
+                // 往下滑超过预设的位置，则显示顶部区域
+                if (t <= OFFSET && isTopHide) {
+                    isTopHide = mVu.showTop();
+                    isTouchEnable = false;
                 }
 
+                // 往上滑时，隐藏底部区域
+                if (t > oldt && !isBottomHide) {
+
+                    isBottomHide = mVu.hideBottom();
+                }
+
+                // 往下滑时，显示底部区域
+                if (t < oldt && isBottomHide) {
+
+                    isBottomHide = mVu.showBottom();
+                }
+
+                // 滑动到底部时，显示底部区域
+                if (isScrollToBottom && isBottomHide) {
+                    isBottomHide = mVu.showBottom();
+                }
             }
         });
+
+        // 快速单击内容区域时，显示或隐藏顶部、底部区域
+        mDetector = new GestureDetector(AnswerActivity.this,
+                new GestureDetector.SimpleOnGestureListener(){
+                    @Override
+                    public boolean onSingleTapConfirmed(MotionEvent e) {
+
+                        if (isTouchEnable) {
+                            if (isTopHide) {
+
+                                isTopHide = mVu.showTop();
+                            } else {
+
+                                isTopHide = mVu.hideTop();
+                            }
+                        }
+
+                        if (isBottomHide) {
+
+                            isBottomHide = mVu.showBottom();
+                        } else {
+
+                            isBottomHide = mVu.hideBottom();
+                        }
+
+                        return super.onSingleTapConfirmed(e);
+                    }
+                });
+
+        //监听 内容 区域的手势事件：隐藏或显示顶部、底部区域
+        mVu.setContentViewTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mDetector.onTouchEvent(event);
+                return false;
+            }
+        });
+
+
+        mVu.setVoteOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VoteDialogFragment dialogFragment = new VoteDialogFragment();
+                Bundle args = new Bundle();
+                args.putBoolean("isVoteUpChecked", isVoteUpChecked);
+                args.putBoolean("isVoteDownChecked", isVoteDownChecked);
+                dialogFragment.setArguments(args);
+                dialogFragment.show(mFm, null);
+            }
+        });
+
     }
 
     private void fetchAuthorImg(String contentUrl) {
@@ -127,35 +219,55 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVolleyUtils.cancelAll();
     }
 
-    public static int dp2px(int dp) {
-        float scale = ZHApp.getContext().getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
-
     public static void startBy(Context context, ZhiHuFeed feed) {
         LogUtils.d(TAG, feed.getContentUrl());
         Intent intent = new Intent(context, AnswerActivity.class);
-        intent.putExtra("question", feed.getTitle());
-        intent.putExtra("name", feed.getAuthorName());
-        intent.putExtra("profile", feed.getAuthorProfile());
-        intent.putExtra("voteups", feed.getVoteups());
-        intent.putExtra("content", feed.getContent());
-        intent.putExtra("authorUrl", feed.getAuthorUrl());
+        intent.putExtra(EXTRA_QUEStTION, feed.getTitle());
+        intent.putExtra(EXTRA_AUTHOR_NAME, feed.getAuthorName());
+        intent.putExtra(EXTRA_AUTHOR_PROFILE, feed.getAuthorProfile());
+        intent.putExtra(EXTRA_VOTEUPS, feed.getVoteups());
+        intent.putExtra(EXTRA_AUTHOR_URL, feed.getAuthorUrl());
+        intent.putExtra(EXTRA_COMMENTS, feed.getComments());
+        intent.putExtra(EXTRA_ANSWER_URL, feed.getContentUrl());
         context.startActivity(intent);
     }
 
     public void onEventMainThread(String response) {
         Document doc = Jsoup.parse(response);
-
+        // 获取答题者的头像url
         String avatarUrl = doc.select("div[class=zm-profile-header-avatar-container]>img").attr("src");
-
-        // 如何获取到的头像地址为空，则显示知乎默认的头像
-        if (TextUtils.isEmpty(avatarUrl)) {
-            avatarUrl = "http://pic1.zhimg.com/da8e974dc_l.jpg";
-        }
 
         mVu.setAvatar(avatarUrl, mImageLoader);
         LogUtils.d(TAG, "avatarUrl = " + avatarUrl);
+    }
+
+    public void onEvent(VoteEvent event) {
+        isVoteDownChecked = event.isVoteDown();
+        isVoteUpChecked = event.isVoteUp();
+
+        if (isVoteUpChecked) {
+            mVu.setVoteBtn(event.isVoteUp(), event.isVoteDown(), mVoteups + 1);
+        } else {
+            mVu.setVoteBtn(event.isVoteUp(), event.isVoteDown(), mVoteups);
+        }
+    }
+
+    public void onEvent(HttpResponseEvent event) {
+        if (event instanceof FetchAnswerHRE) {
+            mAnswer = ((FetchAnswerHRE) event).getAnswerContent();
+
+            // 设置答案内容，并动态设置其内容的 padding-top 和 padding-bottom, 使内容不会被顶、底部区域遮盖
+            mVu.initWebContent(160, new Runnable() {
+                @Override
+                public void run() {
+                    int paddingTop = (int) (mVu.getTopHeight() / CURRENT_DENSITY);
+                    int paddingBottom = (int) (mVu.getBottomHeight() / CURRENT_DENSITY);
+                    String preDiv = "<div style=\"padding-bottom:" + paddingBottom + "px;padding-top:" + paddingTop + "px\">";
+
+                    mVu.setAnswer(HttpConstants.ANSWER_HTML_PRE + preDiv + mAnswer + HttpConstants.ANSWER_HTML_SUF);
+                }
+            });
+        }
     }
 
 }

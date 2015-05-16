@@ -319,7 +319,7 @@ public class ZhiHuFeed {
             String titleUrl = contentElts.select("h2>a").attr("href");
 
 
-            String content = contentElts.select("textarea[class=content hidden]").text();
+/*            String content = contentElts.select("textarea[class=content hidden]").text();
 
             Document contentDoc = Jsoup.parse(content);
 
@@ -333,7 +333,7 @@ public class ZhiHuFeed {
             if (cntMatcher.find()) {
                 String lastSpan = cntMatcher.group(cntMatcher.groupCount());
                 content = content.replace(lastSpan, timeHtml).trim();
-            }
+            }*/
 
             //LogUtils.d(TAG, content);
             Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
@@ -373,7 +373,7 @@ public class ZhiHuFeed {
             mFeed.setSuppSide(suppSide);
             mFeed.setTitle(title);
             mFeed.setTitleUrl(fixURL(titleUrl));
-            mFeed.setContent(content);
+
             mFeed.setSummary(summary);
             mFeed.setContentUrl(fixURL(contentUrl));
             //LogUtils.d(TAG, mFeed.toString());

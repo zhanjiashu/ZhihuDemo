@@ -8,12 +8,12 @@
         android:layout_height="match_parent"
         android:id="@+id/ptr_layout">
 
-        <com.jiashu.zhihudemo.other.ZHAnswerContentView
+        <com.jiashu.zhihudemo.other.ZHAnswerView
             android:id="@+id/wv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.jiashu.zhihudemo.other.ZHAnswerContentView>
+        </com.jiashu.zhihudemo.other.ZHAnswerView>
 
     </uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout>
 
@@ -29,8 +29,7 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:padding="@dimen/padding_small"
             android:background="#e0e0e0"
-            android:textSize="18sp"
-            android:text="二十岁的独生女突然当姐姐是什么感觉，父母说都是为了我好但我总有种很心凉的感觉？"/>
+            android:textSize="18sp"/>
 
         <include
             android:id="@+id/toolbar"
@@ -77,8 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="专业造就轮子 https://github.com/jiashu"/>
+                    android:singleLine="true"/>
 
             </LinearLayout>
 
@@ -94,18 +92,11 @@
                     android:layout_marginRight="@dimen/padding_medium"
                     android:background="@android:color/darker_gray"/>
 
-                <ImageView
+                <ToggleButton
+                    android:id="@+id/tbtn_vote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_thumb_up"/>
-
-                <TextView
-                    android:id="@+id/tv_voteups"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="2855"/>
+                    android:background="@android:color/transparent"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -114,6 +105,77 @@
             android:layout_width="match_parent"
             android:layout_height="0.2dp"
             android:background="@android:color/darker_gray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#ffffff"
+            android:paddingTop="@dimen/padding_small">
+
+            <ToggleButton
+                android:id="@+id/tbtn_nohelp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_btn_nohelp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10sp"
+                android:textOff="@string/btn_nohelp_off"
+                android:textOn="@string/btn_nohelp_on"/>
+
+            <ToggleButton
+                android:id="@+id/tbtn_thank"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_btn_thank"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10sp"
+                android:textOff="@string/btn_thank_off"
+                android:textOn="@string/btn_thank_on"/>
+
+            <ToggleButton
+                android:id="@+id/tbtn_collect"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_btn_collect"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10sp"
+                android:textOff="@string/btn_collect"
+                android:textOn="@string/btn_collect"/>
+
+            <ToggleButton
+                android:id="@+id/tbtn_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_btn_comment"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10sp"
+                android:textOff="@string/btn_comment"
+                android:textOn="@string/btn_comment"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

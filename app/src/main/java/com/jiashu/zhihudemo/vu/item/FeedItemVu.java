@@ -96,8 +96,8 @@ public class FeedItemVu extends Vu {
     }
 
     public void setAvatar(String imgUrl, ImageLoader loader) {
-        mAvatarView.setDefaultImageResId(R.mipmap.ic_launcher);
-        mAvatarView.setErrorImageResId(R.mipmap.ic_launcher);
+        mAvatarView.setDefaultImageResId(R.drawable.ic_action_person_outline);
+        mAvatarView.setErrorImageResId(R.drawable.ic_action_person_outline);
         mAvatarView.setImageUrl(imgUrl, loader);
     }
 
