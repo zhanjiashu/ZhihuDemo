@@ -1,16 +1,18 @@
 package com.jiashu.zhihudemo.presenter.fragment.main;
 
 
+import com.jiashu.zhihudemo.data.HttpConstants;
+import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.presenter.activity.AnswerActivity;
-import com.jiashu.zhihudemo.presenter.adapter.FeedListAdapter;
+
 import com.jiashu.zhihudemo.command.FetchHomePageCmd;
 import com.jiashu.zhihudemo.command.FetchLoadingCmd;
 import com.jiashu.zhihudemo.events.FetchHomePageRE;
 import com.jiashu.zhihudemo.events.FetchFailEvent;
 import com.jiashu.zhihudemo.events.FetchLoadingRE;
 import com.jiashu.zhihudemo.events.OnRefreshEvent;
-import com.jiashu.zhihudemo.mode.ZhiHuFeed;
 import com.jiashu.zhihudemo.other.ZHListView;
+import com.jiashu.zhihudemo.presenter.adapter.ZHFeedListAdapter;
 import com.jiashu.zhihudemo.presenter.fragment.BasePresenterFragment;
 import com.jiashu.zhihudemo.utils.HttpUtils;
 import com.jiashu.zhihudemo.utils.LogUtils;
@@ -29,9 +31,11 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     private final String TAG = getClass().getSimpleName();
     public static final int INDEX = 0;
 
-    private List<ZhiHuFeed> mFeedList;
 
-    private FeedListAdapter mAdapter;
+    private List<ZHFeed> mZHFeedList;
+
+
+    private ZHFeedListAdapter mZHAdapter;
 
     private String mResponse;
 
@@ -42,9 +46,14 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         // 设置 ListView 的item 为不可点击
         mVu.setItemClickable(false);
 
-        mFeedList = new ArrayList<>();
-        mAdapter = new FeedListAdapter(mFeedList);
-        mVu.setAdapter(mAdapter);
+
+        mZHFeedList = new ArrayList<>();
+
+
+        mZHAdapter = new ZHFeedListAdapter(mZHFeedList);
+
+
+        mVu.setAdapter(mZHAdapter);
 
         fetchHomePage();
 
@@ -52,31 +61,41 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         mVu.setOnLoadingListener(new ZHListView.OnLoadingListener() {
             @Override
             public void onLoading() {
-                String lastFeedID = mFeedList.get(mFeedList.size() - 1).getFeedID();
-                LogUtils.d(TAG, "The current feedList' size : " + mFeedList.size());
-                LogUtils.d(TAG, "The last feed'id : " + lastFeedID);
 
-                // 向服务器请求加载 Feed 流信息
-                FetchLoadingCmd cmd = new FetchLoadingCmd(lastFeedID);
+
+                ZHFeed lastFeed = mZHFeedList.get(mZHFeedList.size() - 1);
+
+                FetchLoadingCmd cmd = null;
+                String nodeName = HttpUtils.getNodeName();
+                if (nodeName.equals(HttpConstants.NODE_NAME_TOP_STORY)) {
+                    cmd = new FetchLoadingCmd(
+                            HttpConstants.LOADING_URL_TOP_STORY,
+                            lastFeed.getDataBlock(),
+                            lastFeed.getDataOffset()
+                            );
+                } else {
+                    cmd = new FetchLoadingCmd(HttpConstants.LOADING_URL_HOME, lastFeed.getFeedId(), mZHFeedList.size());
+                }
+
                 HttpUtils.exeCmd(cmd);
 
             }
         });
 
-        mAdapter.setZHOnItemClickListener(new FeedListAdapter.ZHOnItemClickListener() {
+        mZHAdapter.setZHOnItemClickListener(new ZHFeedListAdapter.ZHOnItemClickListener() {
             @Override
             public void onSourceClick(int position) {
-                ToastUtils.show(mFeedList.get(position).getSource());
+                ToastUtils.show(mZHFeedList.get(position).getSourceUrl());
             }
 
             @Override
             public void onTitleClick(int position) {
-                ToastUtils.show(mFeedList.get(position).getTitle());
+                ToastUtils.show(mZHFeedList.get(position).getTitle());
             }
 
             @Override
             public void onContentClick(int position) {
-                ZhiHuFeed feed = mFeedList.get(position);
+                ZHFeed feed = mZHFeedList.get(position);
                 AnswerActivity.startBy(getActivity(), feed);
             }
         });
@@ -118,8 +137,12 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     public void onEventMainThread(FetchHomePageRE event) {
 
         mResponse = event.response;
-        mFeedList = HttpUtils.getFeedList(event.response);
-        mAdapter.replace(mFeedList);
+
+        mZHFeedList = HttpUtils.parseHtmlToFeedList(event.response);
+        for (ZHFeed feed : mZHFeedList) {
+            LogUtils.d(TAG, feed.getTitle() + " # " + feed.getContentUrl());
+        }
+        mZHAdapter.replace(mZHFeedList);
     }
 
     /**
@@ -127,10 +150,12 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * @param event
      */
     public void onEventMainThread(FetchLoadingRE event) {
-        List<ZhiHuFeed> loadFeeds = HttpUtils.getFeedList(event.data);
-        if (mFeedList.addAll(loadFeeds)) {
-            mAdapter.addAll(loadFeeds);
+
+        List<ZHFeed> loadFeeds = HttpUtils.parseHtmlToFeedList(event.data);
+        if (mZHFeedList.addAll(loadFeeds)) {
+            mZHAdapter.addAll(loadFeeds);
         }
+
         // 通知ZHListView 数据已加载完毕
         mVu.setLoadCompleted();
     }

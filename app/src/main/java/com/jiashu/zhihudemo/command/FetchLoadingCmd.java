@@ -9,7 +9,9 @@ import com.jiashu.zhihudemo.events.FetchLoadingRE;
 
 import com.jiashu.zhihudemo.net.ZHStringRequest;
 
+import com.jiashu.zhihudemo.utils.HttpUtils;
 import com.jiashu.zhihudemo.utils.LogUtils;
+import com.jiashu.zhihudemo.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,19 +33,32 @@ public class FetchLoadingCmd extends Command {
 
     private String mJSONParams;
     private String mMethod;
+    private String mUrl;
     private ZHStringRequest mRequest;
 
-    public FetchLoadingCmd(String lastFeedID) {
+    public FetchLoadingCmd(String url, long blockId, int offset) {
+        mUrl = url;
 
-        mJSONParams = formatTheParams(lastFeedID);
+        mJSONParams = formatTheParams(blockId, offset);
+
+        mMethod = "next";
+    }
+
+    public FetchLoadingCmd(String url, String feedId, int offset) {
+        mUrl = url;
+
+        mJSONParams = formatTheParams(feedId, offset);
+
         mMethod = "next";
     }
 
     @Override
     public void execute() {
+        LogUtils.d(TAG, "url = " + mUrl);
+        LogUtils.d(TAG, "params = " + mJSONParams);
         mRequest = new ZHStringRequest(
                 Request.Method.POST,
-                HttpConstants.LOADING_URL,
+                mUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -100,15 +115,35 @@ public class FetchLoadingCmd extends Command {
 
     }
 
-    private String formatTheParams(String lastFeedID) {
+    private String formatTheParams(String lastFeedID, int offset) {
         JSONStringer jsonStringer = new JSONStringer();
 
         try {
             jsonStringer.object();
             jsonStringer.key("offset");
-            jsonStringer.value(21);
+            jsonStringer.value(offset);
             jsonStringer.key("start");
             jsonStringer.value(lastFeedID);
+            jsonStringer.endObject();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonStringer.toString();
+    }
+
+    private String formatTheParams(long lastFeedID, int offset) {
+        JSONStringer jsonStringer = new JSONStringer();
+
+        try {
+            jsonStringer.object();
+            jsonStringer.key("action");
+            jsonStringer.value("next");
+            jsonStringer.key("block_id");
+            jsonStringer.value(lastFeedID);
+            jsonStringer.key("offset");
+            jsonStringer.value(offset);
             jsonStringer.endObject();
 
         } catch (JSONException e) {

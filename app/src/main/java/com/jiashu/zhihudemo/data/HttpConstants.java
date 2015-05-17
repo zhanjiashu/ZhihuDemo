@@ -13,7 +13,11 @@ public class HttpConstants {
     public static final String HOST = "http://www.zhihu.com";
     public static final String LOGIN_URL = HOST + "/login";
     public static final String CAPTCHA_URL = HOST + "/captcha.gif";
-    public static final String LOADING_URL = HOST + "/node/HomeFeedListV2";
+    public static final String LOADING_URL_HOME = HOST + "/node/HomeFeedListV2";
+    public static final String LOADING_URL_TOP_STORY = HOST + "/node/TopStory2FeedList";
+
+    public static final String NODE_NAME_HOME = "HomeFeedListV2";
+    public static final String NODE_NAME_TOP_STORY = "TopStory2FeedList";
 
     public static final int LOGIN_SUCCESS = 0;
     public static final int LOGIN_FAIL = 1;
@@ -28,7 +32,7 @@ public class HttpConstants {
     public static final String ERRMSG_PWD_LENGTH_ERROR = getString(R.string.toast_login_error_pwd);
     public static final String ERRMSG__INPUT_CAPTCHA = getString(R.string.toast_login_error_captcha);
 
-    // ZhiHuFeed 类型：  回答、问题、文章
+    // ZHFeed 类型：  回答、问题、文章
 
     // [热门问答]
     public static final String ANSWER_PROMOTION = "promotion_answer";

@@ -8,9 +8,12 @@ import android.text.TextUtils;
 
 import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.command.Command;
-import com.jiashu.zhihudemo.mode.ZhiHuFeed;
+import com.jiashu.zhihudemo.mode.ZHFeed;
+
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,11 +38,14 @@ public class HttpUtils {
 
     private static final String TAG = "HttpUtils";
 
-    private static final String XSRF_KEY = "_xsrf";
+    public static final String KEY_XSRF = "_xsrf";
+
+    public static final String KEY_NODE_NAME = "ZH_HOME_PAGE_TYPE";
 
     private static ConnectivityManager mCM;
 
-    private static SharedPreferences mPref;
+    private static SharedPreferences mPref = PreferenceManager
+            .getDefaultSharedPreferences(ZHApp.getContext());;
 
     /**
      * 获取 _xsrf 参数：
@@ -48,12 +54,11 @@ public class HttpUtils {
      */
     public static String getXSRF() {
 
-        if (ZhiHuCookieManager.hasCookie(XSRF_KEY)) {
-            return ZhiHuCookieManager.getCookieValue(XSRF_KEY);
+        if (ZhiHuCookieManager.hasCookie(KEY_XSRF)) {
+            return ZhiHuCookieManager.getCookieValue(KEY_XSRF);
         }
-        mPref = PreferenceManager
-                .getDefaultSharedPreferences(ZHApp.getContext());
-        return mPref.getString(XSRF_KEY, null);
+
+        return mPref.getString(KEY_XSRF, null);
     }
 
     /**
@@ -62,8 +67,29 @@ public class HttpUtils {
      */
     public static void setXSRF(String xsrf) {
         mPref.edit()
-                .putString(XSRF_KEY, xsrf)
+                .putString(KEY_XSRF, xsrf)
                 .commit();
+    }
+
+    /**
+     * 将【首页】的 nodename 保存至 SharedPreference，该 nodename 用于识别 当前首页 的版本
+     * 【注】 知乎的首页有 新版 与 旧版之分，两者在上拉加载时所需的 url 以及 参数均不相同。
+     * @param nodeName
+     */
+    public static void setNodeName(String nodeName) {
+        if (!TextUtils.isEmpty(nodeName)) {
+            mPref.edit()
+                    .putString(KEY_NODE_NAME, nodeName)
+                    .commit();
+        }
+    }
+
+    /**
+     * 从 SharedPreference 读取知乎首页的 nodename
+     * @return
+     */
+    public static String getNodeName() {
+        return mPref.getString(KEY_NODE_NAME, "");
     }
 
     /**
@@ -82,12 +108,8 @@ public class HttpUtils {
         cmd.cancel();
     }
 
-    /**
-     * 通过 Jsoup 解析响应的 html,并获取 【知乎】首页的 Feed 信息流
-     * @param html
-     * @return
-     */
-    public static List<ZhiHuFeed> getFeedList(String html) {
+
+/*    public static List<ZhiHuFeed> getFeedList(String html) {
         List<ZhiHuFeed> feedList = new ArrayList<>();
         saveToFile("response.html", html);
         Document doc = Jsoup.parse(html);
@@ -98,8 +120,43 @@ public class HttpUtils {
             ZhiHuFeed.Builder builder = new ZhiHuFeed.Builder(element);
             ZhiHuFeed feed = builder.build();
             feedList.add(feed);
-            LogUtils.d(TAG, "feed content url : " + feed.getContentUrl());
-            //LogUtils.d(TAG, "feed'id: " + feed.getFeedID());
+
+        }
+        return feedList;
+    }*/
+
+    /**
+     * 通过 Jsoup 解析响应的 html,并获取 【知乎】首页的 Feed 信息流
+     * @param html
+     * @return
+     */
+    public static List<ZHFeed> parseHtmlToFeedList(String html) {
+        List<ZHFeed> feedList = new ArrayList<>();
+        Document doc = Jsoup.parse(html);
+
+        String homePageDataInit = doc.select("div[id=js-home-feed-list]").attr("data-init");
+
+        String nodeName = "";
+        try {
+            JSONObject homepageJson = new JSONObject(homePageDataInit);
+
+            nodeName = homepageJson.getString("nodename");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        LogUtils.d(TAG, nodeName);
+        setNodeName(nodeName);
+
+        // 遍历返回数据中 包含着 Feed 的 div
+        Elements elements = doc.select("div[id^=feed]");
+        for (Element element : elements) {
+
+            ZHFeed.Builder builder = new ZHFeed.Builder(element);
+            ZHFeed feed = builder.create();
+            feedList.add(feed);
+
         }
         return feedList;
     }

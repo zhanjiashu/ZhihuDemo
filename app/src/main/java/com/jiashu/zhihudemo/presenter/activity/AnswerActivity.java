@@ -17,7 +17,8 @@ import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.events.VoteEvent;
 import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
 import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
-import com.jiashu.zhihudemo.mode.ZhiHuFeed;
+import com.jiashu.zhihudemo.mode.ZHFeed;
+
 import com.jiashu.zhihudemo.net.ZHStringRequest;
 import com.jiashu.zhihudemo.other.ZHAnswerView;
 import com.jiashu.zhihudemo.presenter.fragment.dialog.VoteDialogFragment;
@@ -48,6 +49,8 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     private static final String EXTRA_VOTEUPS = "voteups";
     private static final String EXTRA_COMMENTS = "comments";
     private static final String EXTRA_ANSWER_URL = "contentUrl";
+    private static final String EXTRA_NO_HELP = "isNoHelped";
+    private static final String EXTRA_THANKS = "isThanked";
 
     private ImageLoader mImageLoader;
     private GestureDetector mDetector;
@@ -85,7 +88,11 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVoteups = intent.getIntExtra(EXTRA_VOTEUPS, 0);
         int comments = intent.getIntExtra(EXTRA_COMMENTS, 0);
         String answerUrl = intent.getStringExtra(EXTRA_ANSWER_URL);
+        boolean isThanked = intent.getBooleanExtra(EXTRA_THANKS, false);
+        boolean isNoHelped = intent.getBooleanExtra(EXTRA_NO_HELP, false);
 
+        LogUtils.d(TAG, "isThanked = " + isThanked);
+        LogUtils.d(TAG, "isNoHelped= " + isNoHelped);
         LogUtils.d(TAG, "answerUrl = " + answerUrl);
 
         getSupportActionBar().setTitle(question);
@@ -94,6 +101,9 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVu.setAuthorProfile(authorProfile);
         mVu.setQuestion(question);
         mVu.setVoteBtn(false, false, mVoteups);
+
+        mVu.setNoHelpBtn(isNoHelped);
+        mVu.setThankBtn(isThanked);
         mVu.setComment("评论 " + comments);
 
         FetchAnswerCmd cmd = new FetchAnswerCmd(answerUrl);
@@ -219,15 +229,17 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVolleyUtils.cancelAll();
     }
 
-    public static void startBy(Context context, ZhiHuFeed feed) {
+    public static void startBy(Context context, ZHFeed feed) {
         Intent intent = new Intent(context, AnswerActivity.class);
         intent.putExtra(EXTRA_QUEStTION, feed.getTitle());
         intent.putExtra(EXTRA_AUTHOR_NAME, feed.getAuthorName());
-        intent.putExtra(EXTRA_AUTHOR_PROFILE, feed.getAuthorProfile());
+        intent.putExtra(EXTRA_AUTHOR_PROFILE, feed.getAuthorHeadline());
         intent.putExtra(EXTRA_VOTEUPS, feed.getVoteups());
         intent.putExtra(EXTRA_AUTHOR_URL, feed.getAuthorUrl());
         intent.putExtra(EXTRA_COMMENTS, feed.getComments());
         intent.putExtra(EXTRA_ANSWER_URL, feed.getContentUrl());
+        intent.putExtra(EXTRA_NO_HELP, feed.isNohelped());
+        intent.putExtra(EXTRA_THANKS, feed.isThanked());
         context.startActivity(intent);
     }
 

@@ -57,6 +57,12 @@ public class AnswerVu extends Vu {
     @InjectView(R.id.ll_bottom)
     LinearLayout mBottomLayout;
 
+    @InjectView(R.id.tbtn_nohelp)
+    ToggleButton mNoHelpBtn;
+
+    @InjectView(R.id.tbtn_thank)
+    ToggleButton mThankBtn;
+
     @InjectView(R.id.tbtn_comment)
     ToggleButton mCommentBtn;
 
@@ -256,5 +262,13 @@ public class AnswerVu extends Vu {
 
     public void setVoteOnClickListener(View.OnClickListener listener) {
         mVoteBtn.setOnClickListener(listener);
+    }
+
+    public void setNoHelpBtn(boolean isNoHelped) {
+        mNoHelpBtn.setChecked(isNoHelped);
+    }
+
+    public void setThankBtn(boolean isThanked) {
+        mThankBtn.setChecked(isThanked);
     }
 }
