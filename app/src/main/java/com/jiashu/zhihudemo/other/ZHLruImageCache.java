@@ -11,6 +11,7 @@ import com.android.volley.toolbox.ImageLoader;
  * 为 Volley 的 图片缓存，缓存大小为应用最大占用内存的 1/8
  */
 public class ZHLruImageCache extends LruCache<String, Bitmap> implements ImageLoader.ImageCache {
+
     /**
      * @param maxSize for caches that do not override {@link #sizeOf}, this is
      *                the maximum number of entries in the cache. For all other caches,
@@ -36,11 +37,11 @@ public class ZHLruImageCache extends LruCache<String, Bitmap> implements ImageLo
 
     @Override
     public Bitmap getBitmap(String s) {
-        return null;
+        return this.get(s);
     }
 
     @Override
     public void putBitmap(String s, Bitmap bitmap) {
-
+        this.put(s, bitmap);
     }
 }

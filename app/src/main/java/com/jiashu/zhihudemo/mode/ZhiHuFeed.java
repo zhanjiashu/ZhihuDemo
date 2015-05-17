@@ -277,6 +277,7 @@ public class ZhiHuFeed {
                     break;
                 case HttpConstants.ANSWER_MEMBER:
                     suppMsg = "回答了该问题";
+                    authorUrl = sourceUrl;
                     break;
                 case HttpConstants.QUESTION_MEMBER_ASK:
                     suppMsg = "提了一个问题";
@@ -344,7 +345,7 @@ public class ZhiHuFeed {
                 summary = "[图片]";
             }
 
-            String contentUrl = contentElts.select("div[class=zh-summary summary clearfix]>a").attr("href");
+            String contentUrl = contentElts.select("div[class=zh-summary summary clearfix]>a[class=toggle-expand]").attr("href");
 
             if (TextUtils.isEmpty(contentUrl)) {
                 // Jsoup 无法解析这段 html, 通过 正则表达式去匹配所需要的 内容详情url

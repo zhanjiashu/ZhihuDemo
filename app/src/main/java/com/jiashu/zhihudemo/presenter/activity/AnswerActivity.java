@@ -39,8 +39,6 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
     private static final int OFFSET = 220;
 
-    private static final int PX_MARGIN_TOP = 20;
-
     private static final float CURRENT_DENSITY = ZHApp.getContext().getResources().getDisplayMetrics().density;
 
     private static final String EXTRA_QUEStTION = "question";
@@ -87,6 +85,8 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVoteups = intent.getIntExtra(EXTRA_VOTEUPS, 0);
         int comments = intent.getIntExtra(EXTRA_COMMENTS, 0);
         String answerUrl = intent.getStringExtra(EXTRA_ANSWER_URL);
+
+        LogUtils.d(TAG, "answerUrl = " + answerUrl);
 
         getSupportActionBar().setTitle(question);
 
@@ -194,9 +194,9 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
     }
 
-    private void fetchAuthorImg(String contentUrl) {
+    private void fetchAuthorImg(String url) {
         ZHStringRequest request = new ZHStringRequest(
-                contentUrl,
+                url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -220,7 +220,6 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     }
 
     public static void startBy(Context context, ZhiHuFeed feed) {
-        LogUtils.d(TAG, feed.getContentUrl());
         Intent intent = new Intent(context, AnswerActivity.class);
         intent.putExtra(EXTRA_QUEStTION, feed.getTitle());
         intent.putExtra(EXTRA_AUTHOR_NAME, feed.getAuthorName());
