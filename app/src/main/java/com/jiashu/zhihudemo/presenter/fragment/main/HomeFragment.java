@@ -82,6 +82,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
             }
         });
 
+        // 监听 item 不同区域的点击事件
         mZHAdapter.setZHOnItemClickListener(new ZHFeedListAdapter.ZHOnItemClickListener() {
             @Override
             public void onSourceClick(int position) {
@@ -103,14 +104,19 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
     @Override
     protected void beforePause() {
-        // 持久化 【首页】html
-        HttpUtils.saveToFile(TAG, mResponse);
-        LogUtils.d(TAG, "pause");
+
     }
 
     @Override
     protected void onDestroyVu() {
         mBus.unregister(this);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LogUtils.d(TAG, "Home Fragment Destroy");
     }
 
     /**
@@ -139,9 +145,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         mResponse = event.response;
 
         mZHFeedList = HttpUtils.parseHtmlToFeedList(event.response);
-        for (ZHFeed feed : mZHFeedList) {
-            LogUtils.d(TAG, feed.getTitle() + " # " + feed.getContentUrl());
-        }
+
         mZHAdapter.replace(mZHFeedList);
     }
 

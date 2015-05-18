@@ -7,6 +7,8 @@ import com.jiashu.zhihudemo.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -20,6 +22,8 @@ public class ZHFeed {
     private String mFeedId;
     private long mDataBlock;
     private int mDataOffset;
+
+    private String feedType;
 
     private String mSourceName;
     private String mSourceSupplement;
@@ -68,6 +72,14 @@ public class ZHFeed {
 
     public void setDataOffset(int dataOffset) {
         mDataOffset = dataOffset;
+    }
+
+    public String getFeedType() {
+        return feedType;
+    }
+
+    public void setFeedType(String feedType) {
+        this.feedType = feedType;
     }
 
     public String getSourceName() {
@@ -243,7 +255,11 @@ public class ZHFeed {
 
         }
 
-        public ZHFeed create() {
+        /**
+         * 设置 feedId 、 blockId、 offset
+         * @return
+         */
+        public Builder setFeedId() {
             String feedId = mElt.attr("id").replace("feed-", "");
 
             String dataBlockStr =mElt.attr("data-block");
@@ -262,9 +278,19 @@ public class ZHFeed {
                 dataOffset = Integer.valueOf(dataOffsetStr);
             }
 
+            mFeed.setFeedId(feedId);
+            mFeed.setDataBlock(dataBlock);
+            mFeed.setDataOffset(dataOffset);
 
+            return this;
+        }
+
+        /**
+         * 设置 feedType 、 voteups(赞同数) 以及 comments(评论数)
+         * @return
+         */
+        public Builder setVoteups() {
             String reactorStr = mElt.select("meta[itemprop=ZReactor]").attr("data-meta");
-
 
             int comments = 0;
             int voteups = 0;
@@ -278,51 +304,32 @@ public class ZHFeed {
                 e.printStackTrace();
             }
 
+            mFeed.setFeedType(feedType);
+            mFeed.setVoteups(voteups);
+            mFeed.setComments(comments);
+
+            return this;
+        }
+
+        /**
+         * 设置 来源的头像、名字、主页以及 来源的附加说明
+         * @return
+         */
+        public Builder setSource() {
 
             Elements sourceElts = mElt.select("div[class=avatar]>a");
             String sourceAvatarUrl = mElt.select("img").attr("src");
             String sourceName = sourceElts.attr("title");
             String sourceUrl = sourceElts.attr("href");
 
-
-            Elements contentElts = mElt.select("div[class=content]");
-
-            Elements titleElts = contentElts.select("h2>a");
-            String title = titleElts.text();
-            String titleUrl = titleElts.attr("href");
-
-
-            //String voteups = contentElts.select("div[class=zm-item-vote]>a").text();
-
-            boolean isVoteUp = false;
-            boolean isVoteDown = false;
-            String votebar = contentElts.select("div[class=zm-votebar]").html();
-
-            if (votebar.indexOf("down pressed") != -1) {
-                isVoteDown = true;
-            } else if (votebar.indexOf("up pressed") != -1) {
-                isVoteUp = true;
-            }
-
-            Elements authorElts = contentElts.select("div[class=zm-item-answer-detail]>" +
-                    "div[class=zm-item-answer-author-info]>h3");
-
-            String authorName = authorElts.text().split("，")[0];
-            String authorHeadline = authorElts.select("strong").text();
-
-
-            String authorUrl = authorElts.select("a").attr("href");
-
             String sourceSupplement = null;
 
-            switch (feedType) {
+            switch (mFeed.getFeedType()) {
                 case HttpConstants.ANSWER_MEMBER_VOTEUP:
                     sourceSupplement = "赞同该回答";
                     break;
                 case HttpConstants.ANSWER_MEMBER:
                     sourceSupplement = "回答了该问题";
-                    authorUrl = sourceUrl;
-                    authorName = sourceName;
                     break;
                 case HttpConstants.QUESTION_MEMBER_ASK:
                     sourceSupplement = "提了一个问题";
@@ -352,6 +359,52 @@ public class ZHFeed {
                     sourceSupplement = "来自";
             }
 
+            mFeed.setSourceName(sourceName);
+            mFeed.setSourceSupplement(sourceSupplement);
+            mFeed.setSourceAvatarUrl(sourceAvatarUrl);
+            mFeed.setSourceUrl(fixURL(sourceUrl));
+
+            return this;
+        }
+
+        /**
+         * 设置 问题或文章标题、问题或文章的url、回答或文章的摘要以及查看全部内容的url
+         *     答题者或文章作者的 名字、签名、url
+         *     设置当前用户对 这条 feed信息 的 投票状态：赞同、反对、没有帮助、感谢
+         * @return
+         */
+        public Builder setContent() {
+
+            Elements contentElts = mElt.select("div[class=content]");
+
+            Elements titleElts = contentElts.select("h2>a");
+            String title = titleElts.text();
+            String titleUrl = titleElts.attr("href");
+
+
+            boolean isVoteUp = false;
+            boolean isVoteDown = false;
+            String votebar = contentElts.select("div[class=zm-votebar]").html();
+
+            if (votebar.indexOf("down pressed") != -1) {
+                isVoteDown = true;
+            } else if (votebar.indexOf("up pressed") != -1) {
+                isVoteUp = true;
+            }
+
+            Elements authorElts = contentElts.select("div[class=zm-item-answer-detail]>" +
+                    "div[class=zm-item-answer-author-info]>h3");
+
+            String authorName = authorElts.text().split("，")[0];
+            String authorHeadline = authorElts.select("strong").text();
+
+
+            String authorUrl = authorElts.select("a").attr("href");
+
+            if (mFeed.getFeedType().equals(HttpConstants.ANSWER_MEMBER)) {
+                authorUrl = mFeed.getSourceUrl();
+                authorName = mFeed.getSourceName();
+            }
 
             Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
             String summary = summaryElts.text();
@@ -364,18 +417,14 @@ public class ZHFeed {
 
             String contentUrl = contentElts.select("div[class=zh-summary summary clearfix]>a[class=toggle-expand]").attr("href");
 
-/*            if (TextUtils.isEmpty(contentUrl)) {
-                // Jsoup 无法解析这段 html, 通过 正则表达式去匹配所需要的 内容详情url
-                contentUrl = contentElts.select("textarea[class=content hidden]").text();
-                Pattern pattern = Pattern.compile("href=\".*\"");
-                Matcher matcher = pattern.matcher(contentUrl);
-                if (matcher.find()) {
-                    contentUrl = matcher.group(0);
-                }
-
-                contentUrl = contentUrl.replace("href=\"","").replace("\"","").trim();
-            }*/
             if (TextUtils.isEmpty(contentUrl)) {
+                String contentHidden = contentElts.select("textarea[class=content hidden]").text();
+                // Jsoup 无法遍历 textarea 标签下的子节点，需要获取其内容后再通过 Jsoup 解析
+                Document contentDoc = Jsoup.parse(contentHidden);
+                contentUrl = contentDoc.select("span[class=answer-date-link-wrap]>a").attr("href");
+            }
+
+/*            if (TextUtils.isEmpty(contentUrl)) {
                 // Jsoup 无法解析这段 html, 通过 正则表达式去匹配所需要的 内容详情url
                 contentUrl = contentElts.select("textarea[class=content hidden]").text();
                 Pattern tagPattern = Pattern.compile("<span class=\"answer-date-link-wrap\">.*</span>");
@@ -392,12 +441,13 @@ public class ZHFeed {
                 }
 
                 contentUrl = contentUrl.replace("href=\"","").replace("\"","").trim();
-            }
+            }*/
 
             Elements panelElts = contentElts.select("div[class=feed-meta]");
 
             String thanks = panelElts.select("a[name=thanks]").attr("data-thanked");
-            String nohelp = mElt.select("a[name=nohelp]").text();
+            String nohelp = panelElts.select("a[name=nohelp]").attr("data-revert");
+
 
             boolean isThanked = false;
             boolean isNoHelped = false;
@@ -410,24 +460,8 @@ public class ZHFeed {
                 isNoHelped = true;
             }
 
-            LogUtils.d(TAG, "thanks = " + thanks);
-            LogUtils.d(TAG, "nohelp = " + nohelp);
-            LogUtils.d(TAG, "===============");
-
-            mFeed.setFeedId(feedId);
-            mFeed.setDataBlock(dataBlock);
-            mFeed.setDataOffset(dataOffset);
-
-            mFeed.setSourceName(sourceName);
-            mFeed.setSourceSupplement(sourceSupplement);
-            mFeed.setSourceAvatarUrl(sourceAvatarUrl);
-            mFeed.setSourceUrl(fixURL(sourceUrl));
-
             mFeed.setTitle(title);
             mFeed.setTitleUrl(fixURL(titleUrl));
-
-            mFeed.setVoteups(voteups);
-            mFeed.setComments(comments);
             mFeed.setSummary(summary);
 
             mFeed.setAuthorName(authorName);
@@ -441,6 +475,11 @@ public class ZHFeed {
 
             mFeed.setIsThanked(isThanked);
             mFeed.setIsNohelped(isNoHelped);
+
+            return this;
+        }
+
+        public ZHFeed create() {
 
             return mFeed;
         }

@@ -154,7 +154,13 @@ public class HttpUtils {
         for (Element element : elements) {
 
             ZHFeed.Builder builder = new ZHFeed.Builder(element);
-            ZHFeed feed = builder.create();
+
+            ZHFeed feed = builder.setFeedId()
+                    .setVoteups()
+                    .setSource()
+                    .setContent()
+                    .create();
+
             feedList.add(feed);
 
         }

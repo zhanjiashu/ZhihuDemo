@@ -8,7 +8,7 @@ import com.jiashu.zhihudemo.app.ZHApp;
  */
 public class HttpConstants {
 
-    public static final String UA = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
+    public static final String UA = "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2327.5 Safari/537.36";
 
     public static final String HOST = "http://www.zhihu.com";
     public static final String LOGIN_URL = HOST + "/login";

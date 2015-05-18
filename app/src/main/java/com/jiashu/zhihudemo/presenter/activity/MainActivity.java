@@ -93,7 +93,10 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
     @Override
     protected void onDestroyVu() {
         mBus.unregister(this);
+        LogUtils.d(TAG, "Activity destroy");
     }
+
+
 
     /**
      * 下拉时触发，通知 当前 Fragment 刷新内容
