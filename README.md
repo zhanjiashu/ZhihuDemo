@@ -2,6 +2,8 @@
 
 学习 Android 开发已有一段时日，出于学以致用的目的开始开发此项目，希望能通过一个相对比较完整以及具备一定开发难度的项目进一步熟悉 Android 开发。
 
+[下载 Demo](http://cloud.mail.163.com/dfs/service/zhihu.apk?op=downloadFile&uid=zhanfusu@163.com&file=eyJzIjoiZnM6Y2xvdWRzdG9yYWdlLm1haWwuMTYzOjQ4NDI2OTA1NzA0MyIsInNmIjoiNDg1NTM3NjkzOTI5OjQ4NDI2OTA1NzA0MyIsImkiOjcyNjY2NzIzNDc5ODg0ODUsImNzIjp7InQiOjEsInYiOiJiYjJiMzQ1ZmRlMWI0ZTFkM2E5NmJkNTViZjIzMTI2YyJ9LCJzeiI6MzIyMjIzNCwiY3QiOjE0MzE5NTIxNTI4MTV9&callback=http://wp.163.com:80/filehub/html/downloadCallback.jsp)
+
 ![login_gif](http://7xilr7.com1.z0.glb.clouddn.com/zhihulogin.gif)
 
 
