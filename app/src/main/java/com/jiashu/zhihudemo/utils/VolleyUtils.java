@@ -79,7 +79,6 @@ public class VolleyUtils {
         }
     }
 
-
     public RequestQueue getQueue() {
         if (mQueue == null) {
             DefaultHttpClient client = new DefaultHttpClient();
