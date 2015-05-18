@@ -2,7 +2,7 @@
 
 学习 Android 开发已有一段时日，出于学以致用的目的开始开发此项目，希望能通过一个相对比较完整以及具备一定开发难度的项目进一步熟悉 Android 开发。
 
-![guidePage_gif][http://7xilr7.com1.z0.glb.clouddn.com/zhihuguidePager.gif]
+![guidePage_gif](http://7xilr7.com1.z0.glb.clouddn.com/zhihuguidePager.gif)
 
 ##项目简介
 
