@@ -7,7 +7,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.jiashu.zhihudemo.app.ZHApp;
-import com.jiashu.zhihudemo.command.Command;
+import com.jiashu.zhihudemo.mode.ZFeed;
+import com.jiashu.zhihudemo.task.HttpTask;
 import com.jiashu.zhihudemo.mode.ZHFeed;
 
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
@@ -96,7 +97,7 @@ public class HttpUtils {
      * 执行一个 网络数据交互 的命令
      * @param cmd
      */
-    public static void exeCmd(Command cmd) {
+    public static void executeTask(HttpTask cmd) {
         cmd.execute();
     }
 
@@ -104,26 +105,10 @@ public class HttpUtils {
      * 取消一个 网络数据交互 的命令
      * @param cmd
      */
-    public static void cancleCmd(Command cmd) {
+    public static void cancelTask(HttpTask cmd) {
         cmd.cancel();
     }
 
-
-/*    public static List<ZhiHuFeed> getFeedList(String html) {
-        List<ZhiHuFeed> feedList = new ArrayList<>();
-        saveToFile("response.html", html);
-        Document doc = Jsoup.parse(html);
-
-        // 遍历返回数据中 包含着 Feed 的 div
-        Elements elements = doc.select("div[id^=feed]");
-        for (Element element : elements) {
-            ZhiHuFeed.Builder builder = new ZhiHuFeed.Builder(element);
-            ZhiHuFeed feed = builder.build();
-            feedList.add(feed);
-
-        }
-        return feedList;
-    }*/
 
     /**
      * 通过 Jsoup 解析响应的 html,并获取 【知乎】首页的 Feed 信息流
@@ -162,6 +147,14 @@ public class HttpUtils {
                     .create();
 
             feedList.add(feed);
+
+            ZFeed.Builder zBuilder = new ZFeed.Builder(element);
+            ZFeed zFeed = zBuilder.setFeedParams()
+                    .setSource()
+                    .setHead()
+                    .setContent()
+                    .create();
+
 
         }
         return feedList;

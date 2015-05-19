@@ -12,7 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.app.ZHApp;
-import com.jiashu.zhihudemo.command.FetchAnswerCmd;
+import com.jiashu.zhihudemo.task.FetchAnswerTask;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.events.VoteEvent;
 import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
@@ -106,8 +106,8 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVu.setThankBtn(isThanked);
         mVu.setComment("评论 " + comments);
 
-        FetchAnswerCmd cmd = new FetchAnswerCmd(answerUrl);
-        HttpUtils.exeCmd(cmd);
+        FetchAnswerTask fetchAnswerTask = new FetchAnswerTask(answerUrl);
+        HttpUtils.executeTask(fetchAnswerTask);
 
 
         // 预先执行一次，以便计算 顶部区域 的高度

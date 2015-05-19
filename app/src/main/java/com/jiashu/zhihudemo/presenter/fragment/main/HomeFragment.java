@@ -5,8 +5,8 @@ import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.presenter.activity.AnswerActivity;
 
-import com.jiashu.zhihudemo.command.FetchHomePageCmd;
-import com.jiashu.zhihudemo.command.FetchLoadingCmd;
+import com.jiashu.zhihudemo.task.FetchHomePageTask;
+import com.jiashu.zhihudemo.task.FetchLoadingTask;
 import com.jiashu.zhihudemo.events.FetchHomePageRE;
 import com.jiashu.zhihudemo.events.FetchFailEvent;
 import com.jiashu.zhihudemo.events.FetchLoadingRE;
@@ -65,19 +65,19 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
                 ZHFeed lastFeed = mZHFeedList.get(mZHFeedList.size() - 1);
 
-                FetchLoadingCmd cmd = null;
+                FetchLoadingTask cmd = null;
                 String nodeName = HttpUtils.getNodeName();
                 if (nodeName.equals(HttpConstants.NODE_NAME_TOP_STORY)) {
-                    cmd = new FetchLoadingCmd(
+                    cmd = new FetchLoadingTask(
                             HttpConstants.LOADING_URL_TOP_STORY,
                             lastFeed.getDataBlock(),
                             lastFeed.getDataOffset()
                             );
                 } else {
-                    cmd = new FetchLoadingCmd(HttpConstants.LOADING_URL_HOME, lastFeed.getFeedId(), mZHFeedList.size());
+                    cmd = new FetchLoadingTask(HttpConstants.LOADING_URL_HOME, lastFeed.getFeedId(), mZHFeedList.size());
                 }
 
-                HttpUtils.exeCmd(cmd);
+                HttpUtils.executeTask(cmd);
 
             }
         });
@@ -123,8 +123,8 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      * 获取 [首页] 内容
      */
     private void fetchHomePage() {
-        FetchHomePageCmd netCmd = new FetchHomePageCmd();
-        HttpUtils.exeCmd(netCmd);
+        FetchHomePageTask netCmd = new FetchHomePageTask();
+        HttpUtils.executeTask(netCmd);
     }
 
     /**

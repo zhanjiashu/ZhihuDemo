@@ -384,12 +384,15 @@ public class ZHFeed {
 
             boolean isVoteUp = false;
             boolean isVoteDown = false;
-            String votebar = contentElts.select("div[class=zm-votebar]").html();
 
-            if (votebar.indexOf("down pressed") != -1) {
-                isVoteDown = true;
-            } else if (votebar.indexOf("up pressed") != -1) {
-                isVoteUp = true;
+            Elements votebarElts = contentElts.select("div[class=zm-votebar]>button");
+
+            if (votebarElts.size() >= 2) {
+                if ("up pressed".equals(votebarElts.get(0).attr("class"))) {
+                    isVoteUp = true;
+                } else if ("down pressed".equals(votebarElts.get(1).attr("class"))) {
+                    isVoteDown = true;
+                }
             }
 
             Elements authorElts = contentElts.select("div[class=zm-item-answer-detail]>" +
@@ -423,25 +426,6 @@ public class ZHFeed {
                 Document contentDoc = Jsoup.parse(contentHidden);
                 contentUrl = contentDoc.select("span[class=answer-date-link-wrap]>a").attr("href");
             }
-
-/*            if (TextUtils.isEmpty(contentUrl)) {
-                // Jsoup 无法解析这段 html, 通过 正则表达式去匹配所需要的 内容详情url
-                contentUrl = contentElts.select("textarea[class=content hidden]").text();
-                Pattern tagPattern = Pattern.compile("<span class=\"answer-date-link-wrap\">.*</span>");
-                Matcher tagMatcher = tagPattern.matcher(contentUrl);
-
-                if (tagMatcher.find()) {
-                    contentUrl = tagMatcher.group(0);
-                }
-
-                Pattern pattern = Pattern.compile("href=\".*\"");
-                Matcher matcher = pattern.matcher(contentUrl);
-                if (matcher.find()) {
-                    contentUrl = matcher.group(0);
-                }
-
-                contentUrl = contentUrl.replace("href=\"","").replace("\"","").trim();
-            }*/
 
             Elements panelElts = contentElts.select("div[class=feed-meta]");
 

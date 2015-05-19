@@ -21,8 +21,8 @@ import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.data.Constants;
 import com.jiashu.zhihudemo.presenter.adapter.ZHFragmentPagerAdapter;
-import com.jiashu.zhihudemo.command.FetchXrsfCmd;
-import com.jiashu.zhihudemo.command.LoginCmd;
+import com.jiashu.zhihudemo.task.FetchXrsfTask;
+import com.jiashu.zhihudemo.task.LoginTask;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.data.StringConstants;
 import com.jiashu.zhihudemo.events.LoginRE;
@@ -200,12 +200,12 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
                 dialog.show(mFm, null);
 
                 // 获取 _xrsf 参数
-                FetchXrsfCmd netCmd = new FetchXrsfCmd();
-                HttpUtils.exeCmd(netCmd);
+                FetchXrsfTask netCmd = new FetchXrsfTask();
+                HttpUtils.executeTask(netCmd);
 
                 // 获取 验证码 图片
-                /*FetchCaptchaCmd cmd = new FetchCaptchaCmd();
-                HttpUtils.exeCmd(cmd);*/
+                /*FetchCaptchaTask cmd = new FetchCaptchaTask();
+                HttpUtils.executeTask(cmd);*/
             }
         });
 
@@ -240,8 +240,8 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
 
-        LoginCmd netCmd = new LoginCmd(event);
-        HttpUtils.exeCmd(netCmd);
+        LoginTask netCmd = new LoginTask(event);
+        HttpUtils.executeTask(netCmd);
     }
 
     /**
