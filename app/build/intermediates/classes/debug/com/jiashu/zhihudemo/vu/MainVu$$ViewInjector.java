@@ -10,12 +10,12 @@ public class MainVu$$ViewInjector<T extends com.jiashu.zhihudemo.vu.MainVu> impl
     View view;
     view = finder.findRequiredView(source, 2131296336, "field 'mToolbar'");
     target.mToolbar = finder.castView(view, 2131296336, "field 'mToolbar'");
-    view = finder.findRequiredView(source, 2131296359, "field 'mDrawerLayout'");
-    target.mDrawerLayout = finder.castView(view, 2131296359, "field 'mDrawerLayout'");
-    view = finder.findRequiredView(source, 2131296399, "field 'mNavListView'");
-    target.mNavListView = finder.castView(view, 2131296399, "field 'mNavListView'");
-    view = finder.findRequiredView(source, 2131296360, "field 'mConainerLayout'");
-    target.mConainerLayout = finder.castView(view, 2131296360, "field 'mConainerLayout'");
+    view = finder.findRequiredView(source, 2131296360, "field 'mDrawerLayout'");
+    target.mDrawerLayout = finder.castView(view, 2131296360, "field 'mDrawerLayout'");
+    view = finder.findRequiredView(source, 2131296406, "field 'mNavListView'");
+    target.mNavListView = finder.castView(view, 2131296406, "field 'mNavListView'");
+    view = finder.findRequiredView(source, 2131296361, "field 'mConainerLayout'");
+    target.mConainerLayout = finder.castView(view, 2131296361, "field 'mConainerLayout'");
     view = finder.findRequiredView(source, 2131296332, "field 'mRefreshLayout'");
     target.mRefreshLayout = finder.castView(view, 2131296332, "field 'mRefreshLayout'");
   }

@@ -6,4 +6,7 @@
     <color name="bg_guide_end">#ff0095fe</color>
 
     <color name="bg_voteups">#ff73c5fe</color>
+
+    <color name="transparent">@android:color/transparent</color>
+
 </resources>

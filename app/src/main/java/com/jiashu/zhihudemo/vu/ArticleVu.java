@@ -1,5 +1,6 @@
 package com.jiashu.zhihudemo.vu;
 
+import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -7,13 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.data.HttpConstants;
+import com.jiashu.zhihudemo.other.ZHScrollView;
+import com.manuelpeinado.fadingactionbar.extras.actionbarcompat.FadingActionBarHelper;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,6 +34,9 @@ public class ArticleVu extends Vu {
 
     @InjectView(R.id.niv_title_image)
     NetworkImageView mTitleImageView;
+
+    @InjectView(R.id.sv_content)
+    ZHScrollView mScrollView;
 
     @InjectView(R.id.v_placeholder)
     View mPlaceHolderView;
@@ -80,11 +88,6 @@ public class ArticleVu extends Vu {
 
     public void setTitleImg(String imgUrl, ImageLoader loader) {
 
-        if (TextUtils.isEmpty(imgUrl)) {
-            mTitleImageView.setVisibility(View.GONE);
-            mPlaceHolderView.setVisibility(View.GONE);
-            return;
-        }
         mTitleImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mTitleImageView.setImageUrl(imgUrl, loader);
     }
@@ -109,4 +112,18 @@ public class ArticleVu extends Vu {
         mCommentBtn.setTextOn("   " + commentCount + " 评论");
         mCommentBtn.setTextOff("   " + commentCount + " 评论");
     }
+
+    public void setScrollLisener(ZHScrollView.OnScrollListener lisener) {
+        mScrollView.setOnScrollListener(lisener);
+    }
+
+    public void dimissHead() {
+        mTitleImageView.setVisibility(View.GONE);
+        mPlaceHolderView.setVisibility(View.GONE);
+    }
+
+    public void hideTitleImg(float offset) {
+        mTitleImageView.setTranslationY(offset);
+    }
+
 }

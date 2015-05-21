@@ -126,6 +126,9 @@
     <eat-comment/>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
+    <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="transparent">@android:color/transparent</color>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/build/intermediates/exploded-aar/ZhiHuDemo/viewpagerindicator/unspecified/res/values/values.xml -->
     <eat-comment/>
     <color name="vpi__background_holo_dark">#ff000000</color>

@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"/>
 
-    <ScrollView
+    <com.jiashu.zhihudemo.other.ZHScrollView
+        android:id="@+id/sv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -73,7 +74,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </com.jiashu.zhihudemo.other.ZHScrollView>
 
     <include
         android:id="@+id/toolbar"
