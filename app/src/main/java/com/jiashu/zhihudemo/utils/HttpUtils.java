@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.jiashu.zhihudemo.app.ZHApp;
-import com.jiashu.zhihudemo.mode.ZFeed;
+
 import com.jiashu.zhihudemo.task.HttpTask;
 import com.jiashu.zhihudemo.mode.ZHFeed;
 
@@ -67,9 +67,12 @@ public class HttpUtils {
      * @param xsrf
      */
     public static void setXSRF(String xsrf) {
-        mPref.edit()
-                .putString(KEY_XSRF, xsrf)
-                .commit();
+
+        if (!TextUtils.isEmpty(xsrf)) {
+            mPref.edit()
+                    .putString(KEY_XSRF, xsrf)
+                    .apply();
+        }
     }
 
     /**
@@ -81,7 +84,7 @@ public class HttpUtils {
         if (!TextUtils.isEmpty(nodeName)) {
             mPref.edit()
                     .putString(KEY_NODE_NAME, nodeName)
-                    .commit();
+                    .apply();
         }
     }
 
@@ -139,23 +142,13 @@ public class HttpUtils {
         for (Element element : elements) {
 
             ZHFeed.Builder builder = new ZHFeed.Builder(element);
-
-            ZHFeed feed = builder.setFeedId()
-                    .setVoteups()
-                    .setSource()
-                    .setContent()
-                    .create();
+            builder.setFeedParams();
+            builder.setSource();
+            builder.setHead();
+            builder.setContent();
+            ZHFeed feed = builder.create();
 
             feedList.add(feed);
-
-            ZFeed.Builder zBuilder = new ZFeed.Builder(element);
-            ZFeed zFeed = zBuilder.setFeedParams()
-                    .setSource()
-                    .setHead()
-                    .setContent()
-                    .create();
-
-
         }
         return feedList;
     }

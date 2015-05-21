@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/niv_title_image"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+
+                <View
+                    android:id="@+id/v_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_xlarge"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingRight="@dimen/padding_xxlarge"
+                android:paddingBottom="@dimen/padding_xlarge"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:background="@android:color/white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_xlarge"
+                android:paddingRight="@dimen/padding_xxlarge"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@android:color/white">
+
+                <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/niv_avatar"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
+
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_tiny"/>
+
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/wv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_above="@id/ll_bottom"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_xlarge"
+        android:background="@android:color/white">
+
+        <ToggleButton
+            android:id="@+id/tbtn_vote_up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:drawableLeft="@drawable/ic_btn_voteuped"
+            android:background="@android:color/transparent"/>
+
+        <ToggleButton
+            android:id="@+id/tbtn_vote_down"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_btn_votedowned"
+            android:textOff=" "
+            android:textOn=" "
+            android:background="@android:color/transparent"/>
+
+        <ToggleButton
+            android:id="@+id/tbtn_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:drawableLeft="@drawable/ic_comment"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

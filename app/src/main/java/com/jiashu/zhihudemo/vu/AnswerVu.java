@@ -15,9 +15,7 @@ import android.widget.ToggleButton;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.other.ZHAnswerView;
-import com.jiashu.zhihudemo.utils.LogUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -123,9 +121,9 @@ public class AnswerVu extends Vu {
             mVoteBtn.setButtonDrawable(R.drawable.ic_vote_down_checked);
         } else if (isUpChecked) {
             mVoteBtn.setButtonDrawable(R.drawable.ic_vote_checked);
-
+            voteups = voteups + 1;
         } else {
-            mVoteBtn.setButtonDrawable(R.drawable.ic_btn_vote);
+            mVoteBtn.setButtonDrawable(R.drawable.ic_btn_voteuped);
         }
 
         mVoteBtn.setText(voteups + "");

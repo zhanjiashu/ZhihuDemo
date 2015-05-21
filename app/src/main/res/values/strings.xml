@@ -47,4 +47,5 @@
     <string name="btn_thank_on">已感谢</string>
     <string name="btn_collect">收藏</string>
     <string name="btn_comment">评论</string>
+    <string name="title_activity_article">ArticleActivity</string>
 </resources>

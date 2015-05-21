@@ -8,41 +8,77 @@ import android.os.Parcelable;
  */
 public class ZHArticle extends ZHContent implements Parcelable {
 
-    private String mUrl;
-    private String mTitle;
-    private String mSummary;
-    private int mVoteupCount;
+    private int commentsCount;
+    private int likesCount;
+    private String content;
+    private String publishedTime;
+    private String title;
+    private String titleImage;
+    private ZHAuthor author;
+    private ZHColumn column;
 
-    public String getUrl() {
-        return mUrl;
+    public int getCommentsCount() {
+        return commentsCount;
     }
 
-    public void setUrl(String url) {
-        mUrl = url;
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
+    }
+
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getPublishedTime() {
+        return publishedTime;
+    }
+
+    public void setPublishedTime(String publishedTime) {
+        this.publishedTime = publishedTime;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public void setTitle(String title) {
-        mTitle = title;
+        this.title = title;
     }
 
-    public String getSummary() {
-        return mSummary;
+    public String getTitleImage() {
+        return titleImage;
     }
 
-    public void setSummary(String summary) {
-        mSummary = summary;
+    public void setTitleImage(String titleImage) {
+        this.titleImage = titleImage;
     }
 
-    public int getVoteupCount() {
-        return mVoteupCount;
+    public ZHAuthor getAuthor() {
+        return author;
     }
 
-    public void setVoteupCount(int voteupCount) {
-        mVoteupCount = voteupCount;
+    public void setAuthor(ZHAuthor author) {
+        this.author = author;
+    }
+
+    public ZHColumn getColumn() {
+        return column;
+    }
+
+    public void setColumn(ZHColumn column) {
+        this.column = column;
     }
 
     @Override
@@ -52,21 +88,28 @@ public class ZHArticle extends ZHContent implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mUrl);
-        dest.writeString(mTitle);
-        dest.writeString(mSummary);
-        dest.writeInt(mVoteupCount);
+
+        dest.writeInt(likesCount);
+        dest.writeInt(commentsCount);
+        dest.writeString(title);
+        dest.writeString(titleImage);
+        dest.writeString(content);
+        dest.writeString(publishedTime);
     }
 
     public static final Parcelable.Creator<ZHArticle> CREATOR = new Creator<ZHArticle>() {
         @Override
         public ZHArticle createFromParcel(Parcel source) {
-            ZHArticle zhArticle = new ZHArticle();
-            zhArticle.mUrl = source.readString();
-            zhArticle.mTitle = source.readString();
-            zhArticle.mSummary = source.readString();
-            zhArticle.mVoteupCount = source.readInt();
-            return zhArticle;
+            ZHArticle article = new ZHArticle();
+
+            article.likesCount = source.readInt();
+            article.commentsCount = source.readInt();
+            article.title = source.readString();
+            article.titleImage = source.readString();
+            article.content = source.readString();
+            article.publishedTime = source.readString();
+
+            return article;
         }
 
         @Override

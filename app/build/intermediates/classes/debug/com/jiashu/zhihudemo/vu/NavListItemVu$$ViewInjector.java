@@ -8,10 +8,10 @@ import butterknife.ButterKnife.Injector;
 public class NavListItemVu$$ViewInjector<T extends com.jiashu.zhihudemo.vu.NavListItemVu> implements Injector<T> {
   @Override public void inject(final Finder finder, final T target, Object source) {
     View view;
-    view = finder.findRequiredView(source, 2131361953, "field 'mNavIcon'");
-    target.mNavIcon = finder.castView(view, 2131361953, "field 'mNavIcon'");
-    view = finder.findRequiredView(source, 2131361954, "field 'mNavName'");
-    target.mNavName = finder.castView(view, 2131361954, "field 'mNavName'");
+    view = finder.findRequiredView(source, 2131296400, "field 'mNavIcon'");
+    target.mNavIcon = finder.castView(view, 2131296400, "field 'mNavIcon'");
+    view = finder.findRequiredView(source, 2131296401, "field 'mNavName'");
+    target.mNavName = finder.castView(view, 2131296401, "field 'mNavName'");
   }
 
   @Override public void reset(T target) {

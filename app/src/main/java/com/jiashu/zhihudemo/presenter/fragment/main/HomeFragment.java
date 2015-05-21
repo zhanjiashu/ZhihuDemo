@@ -5,6 +5,7 @@ import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.presenter.activity.AnswerActivity;
 
+import com.jiashu.zhihudemo.presenter.activity.ArticleActivity;
 import com.jiashu.zhihudemo.task.FetchHomePageTask;
 import com.jiashu.zhihudemo.task.FetchLoadingTask;
 import com.jiashu.zhihudemo.events.FetchHomePageRE;
@@ -86,18 +87,27 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         mZHAdapter.setZHOnItemClickListener(new ZHFeedListAdapter.ZHOnItemClickListener() {
             @Override
             public void onSourceClick(int position) {
-                ToastUtils.show(mZHFeedList.get(position).getSourceUrl());
+                ToastUtils.show(mZHFeedList.get(position).getSource().getUrl());
             }
 
             @Override
             public void onTitleClick(int position) {
-                ToastUtils.show(mZHFeedList.get(position).getTitle());
+                ToastUtils.show(mZHFeedList.get(position).getTitleUrl());
             }
 
             @Override
             public void onContentClick(int position) {
                 ZHFeed feed = mZHFeedList.get(position);
-                AnswerActivity.startBy(getActivity(), feed);
+
+                if ("a".equals(feed.getFeedType())) {
+
+                    AnswerActivity.startBy(getActivity(), feed.getZHAnswer());
+
+                } else if ("p".equals(feed.getFeedType())) {
+
+                    ArticleActivity.startBy(getActivity(), feed.getTitleUrl());
+                }
+
             }
         });
     }
@@ -155,9 +165,11 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
      */
     public void onEventMainThread(FetchLoadingRE event) {
 
-        List<ZHFeed> loadFeeds = HttpUtils.parseHtmlToFeedList(event.data);
-        if (mZHFeedList.addAll(loadFeeds)) {
-            mZHAdapter.addAll(loadFeeds);
+        if (event.isSuccess) {
+            List<ZHFeed> loadFeeds = HttpUtils.parseHtmlToFeedList(event.data);
+            if (mZHFeedList.addAll(loadFeeds)) {
+                mZHAdapter.addAll(loadFeeds);
+            }
         }
 
         // 通知ZHListView 数据已加载完毕

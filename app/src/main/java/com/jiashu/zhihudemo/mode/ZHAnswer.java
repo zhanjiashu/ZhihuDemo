@@ -159,7 +159,7 @@ public class ZHAnswer extends ZHContent implements Parcelable {
             zhAnswer.isVoteDown = source.readByte() != 0;
             zhAnswer.isNoHelped = source.readByte() != 0;
             zhAnswer.isThanked = source.readByte() != 0;
-            zhAnswer.mAuthor = source.readParcelable(null);
+            zhAnswer.mAuthor = source.readParcelable(ZHAnswer.class.getClassLoader());
             return zhAnswer;
         }
 

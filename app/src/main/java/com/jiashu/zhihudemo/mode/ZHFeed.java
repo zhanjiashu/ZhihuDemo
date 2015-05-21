@@ -22,33 +22,20 @@ public class ZHFeed {
     private String mFeedId;
     private long mDataBlock;
     private int mDataOffset;
+    private String mFeedType;
 
-    private String feedType;
-
-    private String mSourceName;
+    private ZHMember mSource;
+    private String mSourceType;
     private String mSourceSupplement;
     private String mSourceAvatarUrl;
-    private String mSourceUrl;
 
     private String mTitle;
     private String mTitleUrl;
 
-    private int mVoteups;
+    private int mVoteupCount;
     private String mSummary;
-
-    private String mAuthorUrl;
-    private String mAuthorName;
-    private String mAuthorHeadline;
-
-    private boolean isVoteUp;
-    private boolean isVoteDown;
-
     private String mContentUrl;
-
-    private boolean isNohelped;
-    private boolean isThanked;
-    private int mComments;
-
+    private ZHAnswer mZHAnswer;
 
     public String getFeedId() {
         return mFeedId;
@@ -75,19 +62,27 @@ public class ZHFeed {
     }
 
     public String getFeedType() {
-        return feedType;
+        return mFeedType;
     }
 
     public void setFeedType(String feedType) {
-        this.feedType = feedType;
+        mFeedType = feedType;
     }
 
-    public String getSourceName() {
-        return mSourceName;
+    public ZHMember getSource() {
+        return mSource;
     }
 
-    public void setSourceName(String sourceName) {
-        mSourceName = sourceName;
+    public void setSource(ZHMember source) {
+        mSource = source;
+    }
+
+    public String getSourceType() {
+        return mSourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        mSourceType = sourceType;
     }
 
     public String getSourceSupplement() {
@@ -106,14 +101,6 @@ public class ZHFeed {
         mSourceAvatarUrl = sourceAvatarUrl;
     }
 
-    public String getSourceUrl() {
-        return mSourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        mSourceUrl = sourceUrl;
-    }
-
     public String getTitle() {
         return mTitle;
     }
@@ -130,12 +117,12 @@ public class ZHFeed {
         mTitleUrl = titleUrl;
     }
 
-    public int getVoteups() {
-        return mVoteups;
+    public int getVoteupCount() {
+        return mVoteupCount;
     }
 
-    public void setVoteups(int voteups) {
-        mVoteups = voteups;
+    public void setVoteupCount(int voteupCount) {
+        mVoteupCount = voteupCount;
     }
 
     public String getSummary() {
@@ -146,46 +133,6 @@ public class ZHFeed {
         mSummary = summary;
     }
 
-    public String getAuthorUrl() {
-        return mAuthorUrl;
-    }
-
-    public void setAuthorUrl(String authorUrl) {
-        mAuthorUrl = authorUrl;
-    }
-
-    public String getAuthorName() {
-        return mAuthorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        mAuthorName = authorName;
-    }
-
-    public String getAuthorHeadline() {
-        return mAuthorHeadline;
-    }
-
-    public void setAuthorHeadline(String authorHeadline) {
-        mAuthorHeadline = authorHeadline;
-    }
-
-    public boolean isVoteUp() {
-        return isVoteUp;
-    }
-
-    public void setIsVoteUp(boolean isVoteUp) {
-        this.isVoteUp = isVoteUp;
-    }
-
-    public boolean isVoteDown() {
-        return isVoteDown;
-    }
-
-    public void setIsVoteDown(boolean isVoteDown) {
-        this.isVoteDown = isVoteDown;
-    }
-
     public String getContentUrl() {
         return mContentUrl;
     }
@@ -194,51 +141,30 @@ public class ZHFeed {
         mContentUrl = contentUrl;
     }
 
-    public boolean isNohelped() {
-        return isNohelped;
+    public ZHAnswer getZHAnswer() {
+        return mZHAnswer;
     }
 
-    public void setIsNohelped(boolean isNohelped) {
-        this.isNohelped = isNohelped;
-    }
-
-    public boolean isThanked() {
-        return isThanked;
-    }
-
-    public void setIsThanked(boolean isThanked) {
-        this.isThanked = isThanked;
-    }
-
-    public int getComments() {
-        return mComments;
-    }
-
-    public void setComments(int comments) {
-        mComments = comments;
+    public void setZHAnswer(ZHAnswer ZHAnswer) {
+        mZHAnswer = ZHAnswer;
     }
 
     @Override
     public String toString() {
         return "ZHFeed{" +
                 "mFeedId='" + mFeedId + '\'' +
-                ", mSourceName='" + mSourceName + '\'' +
+                ", mDataBlock=" + mDataBlock +
+                ", mDataOffset=" + mDataOffset +
+                ", mFeedType='" + mFeedType + '\'' +
+                ", mSource=" + mSource +
+                ", mSourceType='" + mSourceType + '\'' +
                 ", mSourceSupplement='" + mSourceSupplement + '\'' +
                 ", mSourceAvatarUrl='" + mSourceAvatarUrl + '\'' +
-                ", mSourceUrl='" + mSourceUrl + '\'' +
                 ", mTitle='" + mTitle + '\'' +
                 ", mTitleUrl='" + mTitleUrl + '\'' +
-                ", mVoteups=" + mVoteups +
                 ", mSummary='" + mSummary + '\'' +
-                ", mAuthorUrl='" + mAuthorUrl + '\'' +
-                ", mAuthorName='" + mAuthorName + '\'' +
-                ", mAuthorHeadline='" + mAuthorHeadline + '\'' +
-                ", isVoteUp=" + isVoteUp +
-                ", isVoteDown=" + isVoteDown +
                 ", mContentUrl='" + mContentUrl + '\'' +
-                ", isNohelped=" + isNohelped +
-                ", isThanked=" + isThanked +
-                ", mComments=" + mComments +
+                ", mZHAnswer=" + mZHAnswer +
                 '}';
     }
 
@@ -248,19 +174,21 @@ public class ZHFeed {
         private ZHFeed mFeed;
         private Element mElt;
 
-        public Builder (Element element) {
+        private int mVoteups;
+        private int mComments;
+
+        public Builder(Element element) {
             mFeed = new ZHFeed();
 
             mElt = element;
 
         }
 
-        /**
-         * 设置 feedId 、 blockId、 offset
-         * @return
-         */
-        public Builder setFeedId() {
+        public Builder setFeedParams() {
+
             String feedId = mElt.attr("id").replace("feed-", "");
+
+            String feedType = mElt.attr("data-type");
 
             String dataBlockStr =mElt.attr("data-block");
 
@@ -279,43 +207,25 @@ public class ZHFeed {
             }
 
             mFeed.setFeedId(feedId);
+            mFeed.setFeedType(feedType);
             mFeed.setDataBlock(dataBlock);
             mFeed.setDataOffset(dataOffset);
 
             return this;
         }
 
-        /**
-         * 设置 feedType 、 voteups(赞同数) 以及 comments(评论数)
-         * @return
-         */
-        public Builder setVoteups() {
+        public Builder setSource() {
             String reactorStr = mElt.select("meta[itemprop=ZReactor]").attr("data-meta");
 
-            int comments = 0;
-            int voteups = 0;
-            String feedType = null;
+            String sourceType = null;
             try {
                 JSONObject reactorJson = new JSONObject(reactorStr);
-                feedType = reactorJson.getString("source_type");
-                voteups = reactorJson.getInt("voteups");
-                comments = reactorJson.getInt("comments");
+                sourceType = reactorJson.getString("source_type");
+                mVoteups = reactorJson.getInt("voteups");
+                mComments = reactorJson.getInt("comments");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            mFeed.setFeedType(feedType);
-            mFeed.setVoteups(voteups);
-            mFeed.setComments(comments);
-
-            return this;
-        }
-
-        /**
-         * 设置 来源的头像、名字、主页以及 来源的附加说明
-         * @return
-         */
-        public Builder setSource() {
 
             Elements sourceElts = mElt.select("div[class=avatar]>a");
             String sourceAvatarUrl = mElt.select("img").attr("src");
@@ -324,7 +234,7 @@ public class ZHFeed {
 
             String sourceSupplement = null;
 
-            switch (mFeed.getFeedType()) {
+            switch (sourceType) {
                 case HttpConstants.ANSWER_MEMBER_VOTEUP:
                     sourceSupplement = "赞同该回答";
                     break;
@@ -359,55 +269,36 @@ public class ZHFeed {
                     sourceSupplement = "来自";
             }
 
-            mFeed.setSourceName(sourceName);
+            ZHMember source = new ZHMember();
+            source.setName(sourceName);
+            source.setUrl(fixURL(sourceUrl));
+
+
+            mFeed.setSourceType(sourceType);
+            mFeed.setSource(source);
             mFeed.setSourceSupplement(sourceSupplement);
             mFeed.setSourceAvatarUrl(sourceAvatarUrl);
-            mFeed.setSourceUrl(fixURL(sourceUrl));
 
             return this;
         }
 
-        /**
-         * 设置 问题或文章标题、问题或文章的url、回答或文章的摘要以及查看全部内容的url
-         *     答题者或文章作者的 名字、签名、url
-         *     设置当前用户对 这条 feed信息 的 投票状态：赞同、反对、没有帮助、感谢
-         * @return
-         */
-        public Builder setContent() {
+        public Builder setHead() {
 
             Elements contentElts = mElt.select("div[class=content]");
-
             Elements titleElts = contentElts.select("h2>a");
+
             String title = titleElts.text();
             String titleUrl = titleElts.attr("href");
 
+            mFeed.setTitle(title);
+            mFeed.setTitleUrl(fixURL(titleUrl));
 
-            boolean isVoteUp = false;
-            boolean isVoteDown = false;
+            return this;
+        }
 
-            Elements votebarElts = contentElts.select("div[class=zm-votebar]>button");
+        public Builder setContent() {
 
-            if (votebarElts.size() >= 2) {
-                if ("up pressed".equals(votebarElts.get(0).attr("class"))) {
-                    isVoteUp = true;
-                } else if ("down pressed".equals(votebarElts.get(1).attr("class"))) {
-                    isVoteDown = true;
-                }
-            }
-
-            Elements authorElts = contentElts.select("div[class=zm-item-answer-detail]>" +
-                    "div[class=zm-item-answer-author-info]>h3");
-
-            String authorName = authorElts.text().split("，")[0];
-            String authorHeadline = authorElts.select("strong").text();
-
-
-            String authorUrl = authorElts.select("a").attr("href");
-
-            if (mFeed.getFeedType().equals(HttpConstants.ANSWER_MEMBER)) {
-                authorUrl = mFeed.getSourceUrl();
-                authorName = mFeed.getSourceName();
-            }
+            Elements contentElts = mElt.select("div[class=content]");
 
             Elements summaryElts = contentElts.select("div[class=zh-summary summary clearfix]");
             String summary = summaryElts.text();
@@ -427,44 +318,86 @@ public class ZHFeed {
                 contentUrl = contentDoc.select("span[class=answer-date-link-wrap]>a").attr("href");
             }
 
-            Elements panelElts = contentElts.select("div[class=feed-meta]");
-
-            String thanks = panelElts.select("a[name=thanks]").attr("data-thanked");
-            String nohelp = panelElts.select("a[name=nohelp]").attr("data-revert");
-
-
-            boolean isThanked = false;
-            boolean isNoHelped = false;
-
-            if (thanks != null && "true".equals(thanks)) {
-                isThanked = true;
-            }
-
-            if (nohelp != null && "true".equals(nohelp)) {
-                isNoHelped = true;
-            }
-
-            mFeed.setTitle(title);
-            mFeed.setTitleUrl(fixURL(titleUrl));
+            mFeed.setVoteupCount(mVoteups);
             mFeed.setSummary(summary);
-
-            mFeed.setAuthorName(authorName);
-            mFeed.setAuthorHeadline(authorHeadline);
-            mFeed.setAuthorUrl(fixURL(authorUrl));
-
             mFeed.setContentUrl(fixURL(contentUrl));
 
-            mFeed.setIsVoteUp(isVoteUp);
-            mFeed.setIsVoteDown(isVoteDown);
 
-            mFeed.setIsThanked(isThanked);
-            mFeed.setIsNohelped(isNoHelped);
+            if ("a".equals(mFeed.getFeedType())) {
+
+                ZHAnswer zhAnswer = new ZHAnswer();
+                ZHMember author = new ZHMember();
+
+                Elements votebarElts = contentElts.select("div[class=zm-votebar]>button");
+
+                boolean isVoteUp = false;
+                boolean isVoteDown = false;
+                if (votebarElts.size() >= 2) {
+                    if ("up pressed".equals(votebarElts.get(0).attr("class"))) {
+                        isVoteUp = true;
+                    } else if ("down pressed".equals(votebarElts.get(1).attr("class"))) {
+                        isVoteDown = true;
+                    }
+                }
+
+                Elements authorElts = contentElts.select("div[class=zm-item-answer-detail]>" +
+                        "div[class=zm-item-answer-author-info]>h3");
+
+                String authorName = authorElts.text().split("，")[0];
+                String authorHeadline = authorElts.select("strong").text();
+
+
+                String authorUrl = authorElts.select("a").attr("href");
+
+                if (mFeed.getSourceType().equals(HttpConstants.ANSWER_MEMBER)) {
+                    authorUrl = mFeed.getSource().getUrl();
+                    authorName = mFeed.getSource().getName();
+                }
+
+
+                Elements panelElts = contentElts.select("div[class=feed-meta]");
+
+                String thanks = panelElts.select("a[name=thanks]").attr("data-thanked");
+                String nohelp = panelElts.select("a[name=nohelp]").attr("data-revert");
+
+
+                boolean isThanked = false;
+                boolean isNoHelped = false;
+
+                if (thanks != null && "true".equals(thanks)) {
+                    isThanked = true;
+                }
+
+                if (nohelp != null && "true".equals(nohelp)) {
+                    isNoHelped = true;
+                }
+
+                author.setName(authorName);
+                author.setUrl(fixURL(authorUrl));
+                author.setHeadline(authorHeadline);
+
+                zhAnswer.setAnswerSummary(summary);
+                zhAnswer.setUrl(fixURL(contentUrl));
+                zhAnswer.setVoteupCount(mVoteups);
+                zhAnswer.setCommentCount(mComments);
+                zhAnswer.setIsVoteUp(isVoteUp);
+                zhAnswer.setIsVoteDown(isVoteDown);
+                zhAnswer.setIsNoHelped(isNoHelped);
+                zhAnswer.setIsThanked(isThanked);
+                zhAnswer.setAuthor(author);
+                zhAnswer.setQuestion(mFeed.getTitle());
+
+                mFeed.setZHAnswer(zhAnswer);
+
+            }
+
 
             return this;
         }
 
         public ZHFeed create() {
-
+            LogUtils.d(TAG, "========");
+            LogUtils.d(TAG, mFeed.toString());
             return mFeed;
         }
 

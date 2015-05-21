@@ -44,11 +44,17 @@ MERGED from com.android.support:appcompat-v7:22.0.0:22:5
 MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.github.chrisbanes.actionbarpulltorefresh:library:0.9.9:3:5
 MERGED from com.github.castorflex.smoothprogressbar:library:0.4.0:5:5
-MERGED from com.google.android.gms:play-services:6.5.87:20:5
+MERGED from com.github.manuelpeinado.fadingactionbar:fadingactionbar-abc:3.1.2:6:5
+MERGED from com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2:6:5
+MERGED from com.android.support:appcompat-v7:22.0.0:22:5
 MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.android.support:support-v4:22.0.0:22:5
 	android:label
 		ADDED from AndroidManifest.xml:16:9
+	xmlns:tools
+		ADDED from com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2:6:18
+	tools:ignore
+		ADDED from com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2:6:65
 	android:allowBackup
 		ADDED from AndroidManifest.xml:14:9
 	android:icon
@@ -91,6 +97,12 @@ ADDED from AndroidManifest.xml:35:9
 		ADDED from AndroidManifest.xml:37:13
 	android:name
 		ADDED from AndroidManifest.xml:36:13
+activity#com.jiashu.zhihudemo.presenter.activity.ArticleActivity
+ADDED from AndroidManifest.xml:39:9
+	android:label
+		ADDED from AndroidManifest.xml:41:13
+	android:name
+		ADDED from AndroidManifest.xml:40:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.0.0:20:5
@@ -102,7 +114,9 @@ MERGED from com.android.support:appcompat-v7:22.0.0:20:5
 MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from com.github.chrisbanes.actionbarpulltorefresh:library:0.9.9:2:5
 MERGED from com.github.castorflex.smoothprogressbar:library:0.4.0:3:5
-MERGED from com.google.android.gms:play-services:6.5.87:18:5
+MERGED from com.github.manuelpeinado.fadingactionbar:fadingactionbar-abc:3.1.2:4:5
+MERGED from com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2:4:5
+MERGED from com.android.support:appcompat-v7:22.0.0:20:5
 MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from ZhiHuDemo:viewpagerindicator:unspecified:7:5
 MERGED from com.android.support:support-v4:22.0.0:20:5
@@ -112,9 +126,3 @@ MERGED from com.android.support:support-v4:22.0.0:20:5
 	android:minSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-meta-data#com.google.android.gms.version
-ADDED from com.google.android.gms:play-services:6.5.87:21:9
-	android:value
-		ADDED from com.google.android.gms:play-services:6.5.87:23:13
-	android:name
-		ADDED from com.google.android.gms:play-services:6.5.87:22:13

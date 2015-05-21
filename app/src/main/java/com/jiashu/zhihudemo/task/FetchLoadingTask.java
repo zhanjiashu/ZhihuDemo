@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.events.FetchLoadingRE;
 
+import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
 import com.jiashu.zhihudemo.net.ZHStringRequest;
 
 import com.jiashu.zhihudemo.utils.LogUtils;
@@ -53,6 +54,7 @@ public class FetchLoadingTask extends HttpTask {
     public void execute() {
         LogUtils.d(TAG, "url = " + mUrl);
         LogUtils.d(TAG, "params = " + mJSONParams);
+        LogUtils.d(TAG, "_xsrf = " + mXSRF);
         mRequest = new ZHStringRequest(
                 Request.Method.POST,
                 mUrl,
@@ -70,7 +72,7 @@ public class FetchLoadingTask extends HttpTask {
                                     sb.append(array.getString(i));
                                 }
 
-                                mBus.post(new FetchLoadingRE(sb.toString()));
+                                mBus.post(new FetchLoadingRE(true, sb.toString()));
                             }
 
                         } catch (JSONException e) {
@@ -82,6 +84,7 @@ public class FetchLoadingTask extends HttpTask {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         LogUtils.d(TAG, "load failed : " + volleyError);
+                        mBus.post(new FetchLoadingRE(false, null));
                     }
                 }
         ) {

@@ -31,12 +31,12 @@ public class ZHFeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZHFeed> {
 
         if ("来自".equals(sourceSupplement)|| "热门回答".equals(sourceSupplement)) {
             mVu.setLeftText(feed.getSourceSupplement());
-            mVu.setRightText(feed.getSourceName());
+            mVu.setRightText(feed.getSource().getName());
 
             mVu.setLeftTextColor(Color.GRAY);
             mVu.setRightTextColor(Color.BLUE);
         } else {
-            mVu.setLeftText(feed.getSourceName());
+            mVu.setLeftText(feed.getSource().getName());
             mVu.setRightText(feed.getSourceSupplement());
 
             mVu.setLeftTextColor(Color.BLUE);
@@ -50,7 +50,7 @@ public class ZHFeedListAdapter extends SimpleBaseAdapter<FeedItemVu, ZHFeed> {
         } else {
             mVu.setContentVisibility(View.VISIBLE);
             mVu.setSummary(summary);
-            mVu.setVoteups(feed.getVoteups());
+            mVu.setVoteups(feed.getVoteupCount());
         }
 
         ImageLoader loader = VolleyUtils.getInstance(ZHApp.getContext()).getImageLoader();

@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.app.ZHApp;
+import com.jiashu.zhihudemo.mode.ZHAnswer;
 import com.jiashu.zhihudemo.task.FetchAnswerTask;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.events.VoteEvent;
@@ -41,6 +42,8 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     private static final int OFFSET = 220;
 
     private static final float CURRENT_DENSITY = ZHApp.getContext().getResources().getDisplayMetrics().density;
+
+    private static final String EXTRA_ANSWER = "answer";
 
     private static final String EXTRA_QUEStTION = "question";
     private static final String EXTRA_AUTHOR_NAME = "name";
@@ -81,32 +84,28 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         setSupportActionBar(mVu.getToolbar());
 
         Intent intent = getIntent();
-        String question = intent.getStringExtra(EXTRA_QUEStTION);
-        String authorName = intent.getStringExtra(EXTRA_AUTHOR_NAME);
-        String authorProfile = intent.getStringExtra(EXTRA_AUTHOR_PROFILE);
-        String authorUrl = intent.getStringExtra(EXTRA_AUTHOR_URL);
-        mVoteups = intent.getIntExtra(EXTRA_VOTEUPS, 0);
-        int comments = intent.getIntExtra(EXTRA_COMMENTS, 0);
-        String answerUrl = intent.getStringExtra(EXTRA_ANSWER_URL);
-        boolean isThanked = intent.getBooleanExtra(EXTRA_THANKS, false);
-        boolean isNoHelped = intent.getBooleanExtra(EXTRA_NO_HELP, false);
+        ZHAnswer answer = intent.getParcelableExtra(EXTRA_ANSWER);
 
-        LogUtils.d(TAG, "isThanked = " + isThanked);
-        LogUtils.d(TAG, "isNoHelped= " + isNoHelped);
-        LogUtils.d(TAG, "answerUrl = " + answerUrl);
+        if (answer == null) {
+            answer = new ZHAnswer();
+        }
 
-        getSupportActionBar().setTitle(question);
+        mVoteups = answer.getVoteupCount();
+        isVoteUpChecked = answer.isVoteUp();
+        isVoteDownChecked = answer.isVoteDown();
 
-        mVu.setAuthorName(authorName);
-        mVu.setAuthorProfile(authorProfile);
-        mVu.setQuestion(question);
-        mVu.setVoteBtn(false, false, mVoteups);
+        getSupportActionBar().setTitle(answer.getQuestion());
 
-        mVu.setNoHelpBtn(isNoHelped);
-        mVu.setThankBtn(isThanked);
-        mVu.setComment("评论 " + comments);
+        mVu.setAuthorName(answer.getAuthor().getName());
+        mVu.setAuthorProfile(answer.getAuthor().getHeadline());
+        mVu.setQuestion(answer.getQuestion());
+        mVu.setVoteBtn(isVoteUpChecked, isVoteDownChecked, mVoteups - 1);
 
-        FetchAnswerTask fetchAnswerTask = new FetchAnswerTask(answerUrl);
+        mVu.setNoHelpBtn(answer.isNoHelped());
+        mVu.setThankBtn(answer.isThanked());
+        mVu.setComment("评论 " + answer.getCommentCount());
+
+        FetchAnswerTask fetchAnswerTask = new FetchAnswerTask(answer.getUrl());
         HttpUtils.executeTask(fetchAnswerTask);
 
 
@@ -114,7 +113,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVu.setAnswer("");
 
         // 获取答案作者的头像url
-        fetchAuthorImg(authorUrl);
+        fetchAuthorImg(answer.getAuthor().getUrl());
 
         // 监听 答案区域 的滚动事件
         mVu.setAnswerViewScrollListener(new ZHAnswerView.OnScrollListener() {
@@ -229,17 +228,9 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVolleyUtils.cancelAll();
     }
 
-    public static void startBy(Context context, ZHFeed feed) {
+    public static void startBy(Context context, ZHAnswer answer) {
         Intent intent = new Intent(context, AnswerActivity.class);
-        intent.putExtra(EXTRA_QUEStTION, feed.getTitle());
-        intent.putExtra(EXTRA_AUTHOR_NAME, feed.getAuthorName());
-        intent.putExtra(EXTRA_AUTHOR_PROFILE, feed.getAuthorHeadline());
-        intent.putExtra(EXTRA_VOTEUPS, feed.getVoteups());
-        intent.putExtra(EXTRA_AUTHOR_URL, feed.getAuthorUrl());
-        intent.putExtra(EXTRA_COMMENTS, feed.getComments());
-        intent.putExtra(EXTRA_ANSWER_URL, feed.getContentUrl());
-        intent.putExtra(EXTRA_NO_HELP, feed.isNohelped());
-        intent.putExtra(EXTRA_THANKS, feed.isThanked());
+        intent.putExtra(EXTRA_ANSWER, answer);
         context.startActivity(intent);
     }
 
@@ -256,11 +247,8 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         isVoteDownChecked = event.isVoteDown();
         isVoteUpChecked = event.isVoteUp();
 
-        if (isVoteUpChecked) {
-            mVu.setVoteBtn(event.isVoteUp(), event.isVoteDown(), mVoteups + 1);
-        } else {
-            mVu.setVoteBtn(event.isVoteUp(), event.isVoteDown(), mVoteups);
-        }
+        mVu.setVoteBtn(event.isVoteUp(), event.isVoteDown(), mVoteups - 1);
+
     }
 
     public void onEvent(HttpResponseEvent event) {

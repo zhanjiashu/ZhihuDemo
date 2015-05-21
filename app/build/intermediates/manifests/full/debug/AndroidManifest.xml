@@ -42,10 +42,10 @@
             android:name="com.jiashu.zhihudemo.presenter.activity.AnswerActivity"
             android:label="@string/title_activity_answer" >
         </activity>
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <activity
+            android:name="com.jiashu.zhihudemo.presenter.activity.ArticleActivity"
+            android:label="@string/title_activity_article" >
+        </activity>
     </application>
 
 </manifest>
