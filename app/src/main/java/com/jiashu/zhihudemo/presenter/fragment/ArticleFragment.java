@@ -1,9 +1,8 @@
-package com.jiashu.zhihudemo.presenter.activity;
+package com.jiashu.zhihudemo.presenter.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.widget.CompoundButton;
 
@@ -13,21 +12,20 @@ import com.jiashu.zhihudemo.events.http.FetchArticleHRE;
 import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
 import com.jiashu.zhihudemo.mode.ZHArticle;
 import com.jiashu.zhihudemo.other.ZHScrollView;
+import com.jiashu.zhihudemo.presenter.activity.FrameActivity;
 import com.jiashu.zhihudemo.task.FetchArticleTask;
 import com.jiashu.zhihudemo.task.FetchXSRFTask;
 import com.jiashu.zhihudemo.task.HttpTask;
 import com.jiashu.zhihudemo.utils.HttpUtils;
-
 import com.jiashu.zhihudemo.vu.ArticleVu;
 
 import java.text.MessageFormat;
 
 /**
- * Created by Jiashu on 2015/5/20.
- * 暂定废弃。以 Fragment 来显示 【文章】，即 ArticleFragment
+ * Created by Jiashu on 2015/5/23.
+ * 【文章】 的 内容详情页面
  */
-
-public class ArticleActivity extends BasePresenterActivity<ArticleVu> {
+public class ArticleFragment extends BasePresenterFragment<ArticleVu> {
 
     private final String TAG = getClass().getName();
 
@@ -44,28 +42,57 @@ public class ArticleActivity extends BasePresenterActivity<ArticleVu> {
 
     private HttpTask mTask;
 
+    @Override
+    protected void onBindVu() {
+
+        mBus.register(this);
+
+        initActionBar();
+
+        ZHArticle article = getArguments().getParcelable(FrameActivity.EXTRA_PARAM);
+        String articleUrl = article.getUrl();
+
+        mTask = new FetchArticleTask(getActivity(), articleUrl);
+        HttpUtils.executeTask(mTask);
+
+        handleScroll();
+
+        handleVote();
+    }
+
+    @Override
+    protected void beforePause() {
+        super.beforePause();
+        HttpUtils.cancelTask(mTask);
+
+        // 获取 Article 的API会引入改变 cookie, 这将导致 底部上拉加载数据失败
+        // 通过重新获取新的 _xsrf，保持持有正确的 cookie 以及 最新的 _xsrf 参数。
+        FetchXSRFTask task = new FetchXSRFTask();
+        HttpUtils.executeTask(task);
+    }
+
+    @Override
+    protected void onDestroyVu() {
+        mBus.unregister(this);
+    }
 
     @Override
     protected Class<ArticleVu> getVuClass() {
         return ArticleVu.class;
     }
 
-    @Override
-    protected void onBindVu() {
-        mBus.register(this);
-
-        initActionBar();
-
-        String articleUrl = getIntent().getStringExtra(EXTRA_ARTICLE_URL);
-        
-        mTask = new FetchArticleTask(ArticleActivity.this, articleUrl);
-        HttpUtils.executeTask(mTask);
-
-        handleScroll();
-
-        handleVote();
-
+    /**
+     * 初始化 ActionBar
+     */
+    private void initActionBar() {
+        mActionBarDrawable = mVu.getToobar().getBackground();
+        ActionBarActivity activity = (ActionBarActivity) getActivity();
+        activity.setSupportActionBar(mVu.getToobar());
+        mActionBar = activity.getSupportActionBar();
+        mActionBar.setBackgroundDrawable(mActionBarDrawable);
+        mActionBar.setTitle("专栏");
     }
+
 
     /**
      * 处理 滚动 事件
@@ -110,40 +137,6 @@ public class ArticleActivity extends BasePresenterActivity<ArticleVu> {
                 mVu.setVoteDownBtn(isChecked);
             }
         });
-    }
-
-    /**
-     * 初始化 ActionBar
-     */
-    private void initActionBar() {
-        mActionBarDrawable = mVu.getToobar().getBackground();
-
-        setSupportActionBar(mVu.getToobar());
-        mActionBar = getSupportActionBar();
-        mActionBar.setBackgroundDrawable(mActionBarDrawable);
-        mActionBar.setTitle("专栏");
-    }
-
-    @Override
-    protected void beforePause() {
-        super.beforePause();
-        HttpUtils.cancelTask(mTask);
-
-        // 获取 Article 的API会引入改变 cookie, 这将导致 底部上拉加载数据失败
-        // 通过重新获取新的 _xsrf，保持持有正确的 cookie 以及 最新的 _xsrf 参数。
-        FetchXSRFTask task = new FetchXSRFTask();
-        HttpUtils.executeTask(task);
-    }
-
-    @Override
-    protected void onDestroyVu() {
-        mBus.unregister(this);
-    }
-
-    public static void startBy(Context context, String articleUrl) {
-        Intent intent = new Intent(context, ArticleActivity.class);
-        intent.putExtra(EXTRA_ARTICLE_URL, articleUrl);
-        context.startActivity(intent);
     }
 
     // 显示文章
@@ -210,6 +203,7 @@ public class ArticleActivity extends BasePresenterActivity<ArticleVu> {
         final float scale = ZHApp.getContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
+
 
     // 获取 文章 成功时触发
     public void onEvent(HttpResponseEvent event) {

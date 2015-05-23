@@ -19,6 +19,7 @@ import com.jiashu.zhihudemo.utils.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -33,7 +34,7 @@ public class FetchArticleTask extends HttpTask {
 
     public FetchArticleTask(Context context, String url) {
         mContext = context;
-        mArticleAPI = url;
+        mArticleAPI = buildArticleAPI(url);
     }
 
     @Override
@@ -50,20 +51,27 @@ public class FetchArticleTask extends HttpTask {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        LogUtils.d(TAG, volleyError.toString());
                     }
                 }
         );
 
-        // 专栏文章的API 不同于获取其他内容的 url, 它们会返回不同 cookie 的。
-        // 如果这里采用全局的消息队列来 处理这个 request, 势必会更改客户端所持有的cookie。
-        // 这样会导致返回首页时，刷新以及加载 Feed流信息失败。
-        // 所以，这里采用一个Volley默认的请求队列来处理这个 request。
-        Volley.newRequestQueue(mContext).add(mRequest);
+        mVolleyUtils.addRequest(mRequest);
     }
 
     @Override
     public void cancel() {
         mRequest.cancel();
+    }
+
+    // 根据传入的 文章 url, 构造 Article API
+    private String buildArticleAPI(String articleUrl) {
+        String[] params = articleUrl.split("/");
+        String columnSlug = params[params.length - 2];
+        String articleId = params[params.length - 1];
+
+        String apiFormat = "http://zhuanlan.zhihu.com/api/columns/{0}/posts/{1}";
+
+        return MessageFormat.format(apiFormat, columnSlug, articleId);
     }
 }

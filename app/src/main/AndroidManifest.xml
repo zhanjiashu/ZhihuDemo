@@ -40,6 +40,10 @@
             android:name=".presenter.activity.ArticleActivity"
             android:label="@string/title_activity_article" >
         </activity>
+        <activity
+            android:name=".presenter.activity.FrameActivity"
+            android:label="@string/title_activity_frame" >
+        </activity>
     </application>
 
 </manifest>

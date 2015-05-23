@@ -46,7 +46,7 @@ public class HttpUtils {
     private static ConnectivityManager mCM;
 
     private static SharedPreferences mPref = PreferenceManager
-            .getDefaultSharedPreferences(ZHApp.getContext());;
+            .getDefaultSharedPreferences(ZHApp.getContext());
 
     /**
      * 获取 _xsrf 参数：

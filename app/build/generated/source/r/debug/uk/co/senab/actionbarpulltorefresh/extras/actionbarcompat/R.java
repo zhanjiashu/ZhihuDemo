@@ -284,7 +284,7 @@ public final class R {
 		public static final int abc_popup_menu_item_layout = 0x7f04000e;
 		public static final int abc_search_dropdown_item_icons_2line = 0x7f040013;
 		public static final int abc_search_view = 0x7f040014;
-		public static final int default_header = 0x7f04001b;
+		public static final int default_header = 0x7f04001c;
 		public static final int support_simple_spinner_dropdown_item = 0x7f04002f;
 	}
 	public static final class string {

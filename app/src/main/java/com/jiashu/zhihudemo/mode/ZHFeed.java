@@ -12,9 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Created by Jiashu on 2015/5/17.
  */
@@ -360,7 +357,6 @@ public class ZHFeed {
                 String thanks = panelElts.select("a[name=thanks]").attr("data-thanked");
                 String nohelp = panelElts.select("a[name=nohelp]").attr("data-revert");
 
-
                 boolean isThanked = false;
                 boolean isNoHelped = false;
 
@@ -376,7 +372,7 @@ public class ZHFeed {
                 author.setUrl(fixURL(authorUrl));
                 author.setHeadline(authorHeadline);
 
-                zhAnswer.setAnswerSummary(summary);
+                zhAnswer.setSummary(summary);
                 zhAnswer.setUrl(fixURL(contentUrl));
                 zhAnswer.setVoteupCount(mVoteups);
                 zhAnswer.setCommentCount(mComments);

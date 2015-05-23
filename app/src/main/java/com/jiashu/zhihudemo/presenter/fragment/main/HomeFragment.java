@@ -2,10 +2,13 @@ package com.jiashu.zhihudemo.presenter.fragment.main;
 
 
 import com.jiashu.zhihudemo.data.HttpConstants;
+import com.jiashu.zhihudemo.mode.ZHArticle;
 import com.jiashu.zhihudemo.mode.ZHFeed;
+import com.jiashu.zhihudemo.mode.ZHQuestion;
 import com.jiashu.zhihudemo.presenter.activity.AnswerActivity;
 
 import com.jiashu.zhihudemo.presenter.activity.ArticleActivity;
+import com.jiashu.zhihudemo.presenter.activity.FrameActivity;
 import com.jiashu.zhihudemo.task.FetchHomePageTask;
 import com.jiashu.zhihudemo.task.FetchLoadingTask;
 import com.jiashu.zhihudemo.events.FetchHomePageRE;
@@ -92,7 +95,16 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
             @Override
             public void onTitleClick(int position) {
-                ToastUtils.show(mZHFeedList.get(position).getTitleUrl());
+                ZHFeed feed = mZHFeedList.get(position);
+                String titleUrl = feed.getTitleUrl();
+                String title = feed.getTitle();
+                if ("p".equals(feed.getFeedType())) {
+
+                    FrameActivity.startBy(getActivity(), new ZHArticle(titleUrl));
+                } else {
+
+                    FrameActivity.startBy(getActivity(), new ZHQuestion(titleUrl, title));
+                }
             }
 
             @Override
@@ -100,14 +112,10 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
                 ZHFeed feed = mZHFeedList.get(position);
 
                 if ("a".equals(feed.getFeedType())) {
-
                     AnswerActivity.startBy(getActivity(), feed.getZHAnswer());
-
                 } else if ("p".equals(feed.getFeedType())) {
-
-                    ArticleActivity.startBy(getActivity(), feed.getTitleUrl());
+                    FrameActivity.startBy(getActivity(), new ZHArticle(feed.getTitleUrl()));
                 }
-
             }
         });
     }

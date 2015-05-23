@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_large">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@id/niv_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+
+    <TextView
+        android:id="@+id/tv_voteups"
+        android:layout_width="30dp"
+        android:layout_height="18dp"
+        android:layout_below="@id/niv_avatar"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginTop="3.5dp"
+        android:gravity="center"
+        android:background="@drawable/bg_tv_voteups"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/tv_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_author"
+        android:layout_alignLeft="@id/tv_author"
+        android:lineSpacingMultiplier="1.2"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@id/tv_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:layout_marginLeft="@dimen/padding_large"
+        android:layout_toRightOf="@id/niv_avatar"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"/>
+</RelativeLayout>

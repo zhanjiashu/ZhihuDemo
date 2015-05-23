@@ -379,6 +379,7 @@
     <eat-comment/>
     <string name="title_activity_answer">AnswerActivity</string>
     <string name="title_activity_article">ArticleActivity</string>
+    <string name="title_activity_frame">FrameActivity</string>
     <string name="title_activity_home">HomeActivity</string>
     <!-- From: file:/C:/Users/Jiashu/OneDrive/Workplace/Android/ForGitHub/ZhiHuDemo/app/src/main/res/values/strings_activity_login.xml -->
     <eat-comment/>

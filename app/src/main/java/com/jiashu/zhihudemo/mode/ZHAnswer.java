@@ -8,9 +8,9 @@ import android.os.Parcelable;
  */
 public class ZHAnswer extends ZHContent implements Parcelable {
     private String mQuestion;
-    private String mAnswer;
+    private String mContent;
     private String mUrl;
-    private String mAnswerSummary;
+    private String mSummary;
     private int mVoteupCount;
     private int mCommentCount;
     private boolean isVoteUp;
@@ -27,12 +27,12 @@ public class ZHAnswer extends ZHContent implements Parcelable {
         mQuestion = question;
     }
 
-    public String getAnswer() {
-        return mAnswer;
+    public String getContent() {
+        return mContent;
     }
 
-    public void setAnswer(String answer) {
-        mAnswer = answer;
+    public void setContent(String content) {
+        mContent = content;
     }
 
     public String getUrl() {
@@ -43,12 +43,12 @@ public class ZHAnswer extends ZHContent implements Parcelable {
         mUrl = url;
     }
 
-    public String getAnswerSummary() {
-        return mAnswerSummary;
+    public String getSummary() {
+        return mSummary;
     }
 
-    public void setAnswerSummary(String answerSummary) {
-        mAnswerSummary = answerSummary;
+    public void setSummary(String summary) {
+        mSummary = summary;
     }
 
     public int getVoteupCount() {
@@ -111,9 +111,9 @@ public class ZHAnswer extends ZHContent implements Parcelable {
     public String toString() {
         return "ZHAnswer{" +
                 "mQuestion='" + mQuestion + '\'' +
-                ", mAnswer='" + mAnswer + '\'' +
+                ", mContent='" + mContent + '\'' +
                 ", mUrl='" + mUrl + '\'' +
-                ", mAnswerSummary='" + mAnswerSummary + '\'' +
+                ", mSummary='" + mSummary + '\'' +
                 ", mVoteupCount=" + mVoteupCount +
                 ", mCommentCount=" + mCommentCount +
                 ", isVoteUp=" + isVoteUp +
@@ -132,9 +132,9 @@ public class ZHAnswer extends ZHContent implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mQuestion);
-        dest.writeString(mAnswer);
+        dest.writeString(mContent);
         dest.writeString(mUrl);
-        dest.writeString(mAnswerSummary);
+        dest.writeString(mSummary);
         dest.writeInt(mVoteupCount);
         dest.writeInt(mCommentCount);
         dest.writeByte((byte) (isVoteUp ? 1 : 0));
@@ -150,9 +150,9 @@ public class ZHAnswer extends ZHContent implements Parcelable {
         public ZHAnswer createFromParcel(Parcel source) {
             ZHAnswer zhAnswer = new ZHAnswer();
             zhAnswer.mQuestion = source.readString();
-            zhAnswer.mAnswer = source.readString();
+            zhAnswer.mContent = source.readString();
             zhAnswer.mUrl = source.readString();
-            zhAnswer.mAnswerSummary = source.readString();
+            zhAnswer.mSummary = source.readString();
             zhAnswer.mVoteupCount = source.readInt();
             zhAnswer.mCommentCount = source.readInt();
             zhAnswer.isVoteUp = source.readByte() != 0;

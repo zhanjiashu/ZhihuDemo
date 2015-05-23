@@ -48,4 +48,5 @@
     <string name="btn_collect">收藏</string>
     <string name="btn_comment">评论</string>
     <string name="title_activity_article">ArticleActivity</string>
+    <string name="title_activity_frame">FrameActivity</string>
 </resources>

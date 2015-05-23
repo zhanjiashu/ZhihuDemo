@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jiashu.zhihudemo.app.ZHApp;
+import com.jiashu.zhihudemo.utils.VolleyUtils;
 import com.jiashu.zhihudemo.vu.Vu;
 
 import de.greenrobot.event.EventBus;
@@ -22,11 +24,13 @@ public abstract class BasePresenterFragment<V extends Vu> extends Fragment {
 
     protected V mVu;
     protected EventBus mBus;
+    protected VolleyUtils mVolleyUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBus = EventBus.getDefault();
+        mVolleyUtils = VolleyUtils.getInstance(ZHApp.getContext());
     }
 
     @Override

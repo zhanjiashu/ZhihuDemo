@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,15 +12,23 @@ import java.util.List;
  */
 public class ZHQuestion implements Parcelable{
     private String mUrl;
-    private String mQuestion;
+    private String mTitle;
     private String mDescription;
     private String[] mTopics;
+    private int mAnswerCount;
     private int mFollows;
     private int mComments;
     private List<ZHAnswer> mAnswers;
 
-    public ZHQuestion() {
+    public ZHQuestion(String url, String title) {
+        mTopics = new String[5];
         mAnswers = new ArrayList<>();
+        mUrl = url;
+        mTitle = title;
+    }
+
+    public ZHQuestion() {
+        this(null, null);
     }
 
     public String getUrl() {
@@ -30,12 +39,12 @@ public class ZHQuestion implements Parcelable{
         mUrl = url;
     }
 
-    public String getQuestion() {
-        return mQuestion;
+    public String getTitle() {
+        return mTitle;
     }
 
-    public void setQuestion(String question) {
-        mQuestion = question;
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public String getDescription() {
@@ -52,6 +61,14 @@ public class ZHQuestion implements Parcelable{
 
     public void setTopics(String[] topics) {
         mTopics = topics;
+    }
+
+    public int getAnswerCount() {
+        return mAnswerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        this.mAnswerCount = answerCount;
     }
 
     public int getFollows() {
@@ -79,6 +96,20 @@ public class ZHQuestion implements Parcelable{
     }
 
     @Override
+    public String toString() {
+        return "ZHQuestion{" +
+                "mUrl='" + mUrl + '\'' +
+                ", mTitle='" + mTitle + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mTopics=" + Arrays.toString(mTopics) +
+                ", mAnswerCount=" + mAnswerCount +
+                ", mFollows=" + mFollows +
+                ", mComments=" + mComments +
+                ", mAnswers=" + mAnswers +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -86,8 +117,9 @@ public class ZHQuestion implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mUrl);
-        dest.writeString(mQuestion);
+        dest.writeString(mTitle);
         dest.writeString(mDescription);
+        dest.writeInt(mAnswerCount);
         dest.writeInt(mFollows);
         dest.writeInt(mComments);
         dest.writeStringArray(mTopics);
@@ -97,16 +129,17 @@ public class ZHQuestion implements Parcelable{
     public static final Parcelable.Creator<ZHQuestion> CREATOR = new Creator<ZHQuestion>() {
         @Override
         public ZHQuestion createFromParcel(Parcel source) {
-            ZHQuestion zhQuestion = new ZHQuestion();
-            zhQuestion.mUrl = source.readString();
-            zhQuestion.mQuestion = source.readString();
-            zhQuestion.mDescription = source.readString();
-            zhQuestion.mFollows = source.readInt();
-            zhQuestion.mComments = source.readInt();
-            source.readStringArray(zhQuestion.mTopics);
-            zhQuestion.mAnswers = source.readArrayList(null);
+            ZHQuestion question = new ZHQuestion();
+            question.mUrl = source.readString();
+            question.mTitle = source.readString();
+            question.mDescription = source.readString();
+            question.mAnswerCount = source.readInt();
+            question.mFollows = source.readInt();
+            question.mComments = source.readInt();
+            source.readStringArray(question.mTopics);
+            question.mAnswers = source.readArrayList(ZHAnswer.class.getClassLoader());
 
-            return zhQuestion;
+            return question;
         }
 
         @Override

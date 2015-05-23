@@ -1,6 +1,7 @@
 # 高仿 知乎 Android客户端
 
 学习 Android 开发已有一段时日，出于学以致用的目的开始开发此项目，希望能通过一个相对比较完整以及具备一定开发难度的项目进一步熟悉 Android 开发。
+目前已经完成主要的几个核心功能。
 
 [下载 Demo](http://cloud.mail.163.com/dfs/service/zhihu.apk?op=downloadFile&uid=zhanfusu@163.com&file=eyJzIjoiZnM6Y2xvdWRzdG9yYWdlLm1haWwuMTYzOjQ4NDI2OTA1NzA0MyIsInNmIjoiNDg1NTM3NjkzOTI5OjQ4NDI2OTA1NzA0MyIsImkiOjcyNjY2NzIzNDc5ODg0ODUsImNzIjp7InQiOjEsInYiOiJiYjJiMzQ1ZmRlMWI0ZTFkM2E5NmJkNTViZjIzMTI2YyJ9LCJzeiI6MzIyMjIzNCwiY3QiOjE0MzE5NTIxNTI4MTV9&callback=http://wp.163.com:80/filehub/html/downloadCallback.jsp)
 
@@ -37,4 +38,6 @@
 + **用户登录；**
 + **首页 Feed 流信息展示，支持顶部下拉刷新、底部上拉加载，同时支持 [新版首页]**
 + **答案展示，并实现了滚动过程中顶部和底部的动画效果**
++ **支持专栏文章阅读**
++ **支持查看问题详情，并列出答案列表**
 

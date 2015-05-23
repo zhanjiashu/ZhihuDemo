@@ -14,7 +14,7 @@ import org.jsoup.nodes.Document;
  * Created by Jiashu on 2015/5/3.
  * 获取 【知乎】的 _xrsf 参数，该参数用于模拟登录、加载数据等网络交互中。
  */
-public class FetchXrsfTask extends HttpTask {
+public class FetchXSRFTask extends HttpTask {
 
     private final String TAG = getClass().getSimpleName();
 

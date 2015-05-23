@@ -21,7 +21,7 @@ import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.data.Constants;
 import com.jiashu.zhihudemo.presenter.adapter.ZHFragmentPagerAdapter;
-import com.jiashu.zhihudemo.task.FetchXrsfTask;
+import com.jiashu.zhihudemo.task.FetchXSRFTask;
 import com.jiashu.zhihudemo.task.LoginTask;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.data.StringConstants;
@@ -200,8 +200,8 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
                 dialog.show(mFm, null);
 
                 // 获取 _xrsf 参数
-                FetchXrsfTask netCmd = new FetchXrsfTask();
-                HttpUtils.executeTask(netCmd);
+                FetchXSRFTask task = new FetchXSRFTask();
+                HttpUtils.executeTask(task);
 
                 // 获取 验证码 图片
                 /*FetchCaptchaTask cmd = new FetchCaptchaTask();

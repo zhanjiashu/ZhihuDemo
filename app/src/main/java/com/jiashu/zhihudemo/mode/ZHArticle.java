@@ -10,12 +10,20 @@ public class ZHArticle extends ZHContent implements Parcelable {
 
     private int commentsCount;
     private int likesCount;
+    private String url;
     private String content;
     private String publishedTime;
     private String title;
     private String titleImage;
+    private String rating;
     private ZHAuthor author;
     private ZHColumn column;
+
+    public ZHArticle(String url) {
+        this.url = url;
+    }
+
+    public ZHArticle() {}
 
     public int getCommentsCount() {
         return commentsCount;
@@ -31,6 +39,14 @@ public class ZHArticle extends ZHContent implements Parcelable {
 
     public void setLikesCount(int likesCount) {
         this.likesCount = likesCount;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getContent() {
@@ -65,6 +81,14 @@ public class ZHArticle extends ZHContent implements Parcelable {
         this.titleImage = titleImage;
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
     public ZHAuthor getAuthor() {
         return author;
     }
@@ -91,6 +115,7 @@ public class ZHArticle extends ZHContent implements Parcelable {
 
         dest.writeInt(likesCount);
         dest.writeInt(commentsCount);
+        dest.writeString(url);
         dest.writeString(title);
         dest.writeString(titleImage);
         dest.writeString(content);
@@ -104,6 +129,7 @@ public class ZHArticle extends ZHContent implements Parcelable {
 
             article.likesCount = source.readInt();
             article.commentsCount = source.readInt();
+            article.url = source.readString();
             article.title = source.readString();
             article.titleImage = source.readString();
             article.content = source.readString();

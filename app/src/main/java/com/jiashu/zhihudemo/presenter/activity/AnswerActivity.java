@@ -4,6 +4,7 @@ package com.jiashu.zhihudemo.presenter.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.jiashu.zhihudemo.presenter.fragment.dialog.VoteDialogFragment;
 import com.jiashu.zhihudemo.utils.HttpUtils;
 import com.jiashu.zhihudemo.utils.LogUtils;
 
+import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.AnswerVu;
 
 import org.jsoup.Jsoup;
@@ -39,21 +41,11 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
     private static final String TAG = "AnswerActivity";
 
-    private static final int OFFSET = 220;
+    private static final int OFFSET = 360;
 
     private static final float CURRENT_DENSITY = ZHApp.getContext().getResources().getDisplayMetrics().density;
 
     private static final String EXTRA_ANSWER = "answer";
-
-    private static final String EXTRA_QUEStTION = "question";
-    private static final String EXTRA_AUTHOR_NAME = "name";
-    private static final String EXTRA_AUTHOR_PROFILE = "profile";
-    private static final String EXTRA_AUTHOR_URL = "url";
-    private static final String EXTRA_VOTEUPS = "voteups";
-    private static final String EXTRA_COMMENTS = "comments";
-    private static final String EXTRA_ANSWER_URL = "contentUrl";
-    private static final String EXTRA_NO_HELP = "isNoHelped";
-    private static final String EXTRA_THANKS = "isThanked";
 
     private ImageLoader mImageLoader;
     private GestureDetector mDetector;
@@ -78,42 +70,53 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     protected void onBindVu() {
 
         mBus.register(this);
-
         mImageLoader = mVolleyUtils.getImageLoader();
 
         setSupportActionBar(mVu.getToolbar());
 
         Intent intent = getIntent();
         ZHAnswer answer = intent.getParcelableExtra(EXTRA_ANSWER);
-
         if (answer == null) {
             answer = new ZHAnswer();
         }
 
+        getSupportActionBar().setTitle(answer.getQuestion());
+
         mVoteups = answer.getVoteupCount();
         isVoteUpChecked = answer.isVoteUp();
         isVoteDownChecked = answer.isVoteDown();
-
-        getSupportActionBar().setTitle(answer.getQuestion());
+        if (isVoteUpChecked) {
+            mVoteups = mVoteups - 1;
+        }
 
         mVu.setAuthorName(answer.getAuthor().getName());
         mVu.setAuthorProfile(answer.getAuthor().getHeadline());
         mVu.setQuestion(answer.getQuestion());
-        mVu.setVoteBtn(isVoteUpChecked, isVoteDownChecked, mVoteups - 1);
+        mVu.setVoteBtn(isVoteUpChecked, isVoteDownChecked, mVoteups);
 
         mVu.setNoHelpBtn(answer.isNoHelped());
         mVu.setThankBtn(answer.isThanked());
         mVu.setComment("评论 " + answer.getCommentCount());
 
-        FetchAnswerTask fetchAnswerTask = new FetchAnswerTask(answer.getUrl());
-        HttpUtils.executeTask(fetchAnswerTask);
-
+        String authorAvatarUrl = answer.getAuthor().getAvatarUrl();
+        if (TextUtils.isEmpty(authorAvatarUrl)) {
+            fetchAuthorImg(answer.getAuthor().getUrl());
+        } else {
+            mVu.setAvatar(authorAvatarUrl, mImageLoader);
+        }
 
         // 预先执行一次，以便计算 顶部区域 的高度
         mVu.setAnswer("");
 
-        // 获取答案作者的头像url
-        fetchAuthorImg(answer.getAuthor().getUrl());
+        String content = answer.getContent();
+        if (TextUtils.isEmpty(content)) {
+            FetchAnswerTask fetchAnswerTask = new FetchAnswerTask(answer.getUrl());
+            HttpUtils.executeTask(fetchAnswerTask);
+        } else {
+            mAnswer = answer.getContent();
+            setAnswerContent();
+        }
+
 
         // 监听 答案区域 的滚动事件
         mVu.setAnswerViewScrollListener(new ZHAnswerView.OnScrollListener() {
@@ -234,6 +237,19 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         context.startActivity(intent);
     }
 
+    private void setAnswerContent() {
+        mVu.initWebContent(160, new Runnable() {
+            @Override
+            public void run() {
+                int paddingTop = (int) (mVu.getTopHeight() / CURRENT_DENSITY);
+                int paddingBottom = (int) (mVu.getBottomHeight() / CURRENT_DENSITY);
+                String preDiv = "<div style=\"padding-bottom:" + paddingBottom + "px;padding-top:" + paddingTop + "px\">";
+
+                mVu.setAnswer(HttpConstants.ANSWER_HTML_PRE + preDiv + mAnswer + HttpConstants.ANSWER_HTML_SUF);
+            }
+        });
+    }
+
     public void onEventMainThread(String response) {
         Document doc = Jsoup.parse(response);
         // 获取答题者的头像url
@@ -256,17 +272,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
             mAnswer = ((FetchAnswerHRE) event).getAnswerContent();
 
             // 设置答案内容，并动态设置其内容的 padding-top 和 padding-bottom, 使内容不会被顶、底部区域遮盖
-            mVu.initWebContent(160, new Runnable() {
-                @Override
-                public void run() {
-                    int paddingTop = (int) (mVu.getTopHeight() / CURRENT_DENSITY);
-                    int paddingBottom = (int) (mVu.getBottomHeight() / CURRENT_DENSITY);
-                    String preDiv = "<div style=\"padding-bottom:" + paddingBottom + "px;padding-top:" + paddingTop + "px\">";
-
-                    mVu.setAnswer(HttpConstants.ANSWER_HTML_PRE + preDiv + mAnswer + HttpConstants.ANSWER_HTML_SUF);
-                }
-            });
+            setAnswerContent();
         }
     }
-
 }

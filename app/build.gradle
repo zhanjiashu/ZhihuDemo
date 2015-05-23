@@ -26,7 +26,7 @@ dependencies {
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:+'
     compile 'de.greenrobot:eventbus:2.2.0'
-    compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar-abc:3.1.2'
+
     compile project(':viewpagerindicator')
     compile files('libs/jsoup-1.8.2.jar')
     compile files('libs/volley.jar')
