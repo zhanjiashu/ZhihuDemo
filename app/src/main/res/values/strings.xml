@@ -20,6 +20,7 @@
     <string name="general_null">""</string>
     <string name="general_confirm">确定</string>
     <string name="general_cancel">取消</string>
+    <string name="general_loading">正在加载...</string>
     
     <string name="guide_tip_first">观而思——知乎漫游指南</string>
     <string name="guide_tip_second">思而动——知乎漫游指南</string>
@@ -49,4 +50,8 @@
     <string name="btn_comment">评论</string>
     <string name="title_activity_article">ArticleActivity</string>
     <string name="title_activity_frame">FrameActivity</string>
+    <string name="btn_follow">关注</string>
+    <string name="btn_invited">邀请回答</string>
+    <string name="btn_add_answer">添加回答</string>
+    <string name="tbtn_cancel_follow">取消关注</string>
 </resources>

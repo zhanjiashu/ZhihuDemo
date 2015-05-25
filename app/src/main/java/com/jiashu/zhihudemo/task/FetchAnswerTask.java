@@ -6,7 +6,11 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
+import com.jiashu.zhihudemo.mode.ZHAnswer;
+import com.jiashu.zhihudemo.mode.ZHMember;
 import com.jiashu.zhihudemo.net.ZHStringRequest;
+import com.jiashu.zhihudemo.utils.ParseUtils;
+import com.jiashu.zhihudemo.utils.ToastUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -56,35 +60,14 @@ public class FetchAnswerTask extends HttpTask {
      * @param response
      */
     private void parseResponse(String response) {
+
         Document doc = Jsoup.parse(response);
-        Elements cAnswer = doc.select("div[class=zm-item-answer ]");
-        String answerTime = cAnswer.attr("data-created").trim();
-        String answerContent = cAnswer.select("div[class= zm-editable-content clearfix]").html();
-        String answerTimePre = cAnswer.select("span[class=answer-date-link-wrap]>a").attr("class");
 
-        if (TextUtils.isEmpty(answerTime)) {
-            answerTime = String.valueOf(System.currentTimeMillis() / 1000);
-        }
+        Elements elements = doc.select("div[class=zm-item-answer ]");
 
-        Date date = new Date(Long.valueOf(answerTime) * 1000);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        answerTime = format.format(date);
+        ZHAnswer answer = ParseUtils.parseHtmlToAnswer(null, null, elements.get(0));
 
-
-
-        if (answerTimePre.equals("answer-date-link last_updated meta-item")) {
-            answerTime = "编辑于 " + answerTime;
-        } else {
-            answerTime = "创建于 " + answerTime;
-        }
-
-        answerTime = "<br>\n" +
-                "<br>\n" +
-                "<span style=\"float:right\" class=\""+ answerTimePre +"\">"+ answerTime +"</span>";
-
-        answerContent = answerContent + answerTime;
-
-        mBus.post(new FetchAnswerHRE(answerContent));
+        mBus.post(new FetchAnswerHRE(answer));
     }
 
 

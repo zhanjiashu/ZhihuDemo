@@ -322,7 +322,7 @@ public class ZHFeed {
 
             if ("a".equals(mFeed.getFeedType())) {
 
-                ZHAnswer zhAnswer = new ZHAnswer();
+                ZHAnswer answer = new ZHAnswer();
                 ZHMember author = new ZHMember();
 
                 Elements votebarElts = contentElts.select("div[class=zm-votebar]>button");
@@ -372,18 +372,19 @@ public class ZHFeed {
                 author.setUrl(fixURL(authorUrl));
                 author.setHeadline(authorHeadline);
 
-                zhAnswer.setSummary(summary);
-                zhAnswer.setUrl(fixURL(contentUrl));
-                zhAnswer.setVoteupCount(mVoteups);
-                zhAnswer.setCommentCount(mComments);
-                zhAnswer.setIsVoteUp(isVoteUp);
-                zhAnswer.setIsVoteDown(isVoteDown);
-                zhAnswer.setIsNoHelped(isNoHelped);
-                zhAnswer.setIsThanked(isThanked);
-                zhAnswer.setAuthor(author);
-                zhAnswer.setQuestion(mFeed.getTitle());
+                answer.setSummary(summary);
+                answer.setUrl(fixURL(contentUrl));
+                answer.setVoteupCount(mVoteups);
+                answer.setCommentCount(mComments);
+                answer.setIsVoteUp(isVoteUp);
+                answer.setIsVoteDown(isVoteDown);
+                answer.setIsNoHelped(isNoHelped);
+                answer.setIsThanked(isThanked);
+                answer.setAuthor(author);
+                answer.setQuestionTitle(mFeed.getTitle());
+                answer.setQUestionUrl(mFeed.getTitleUrl());
 
-                mFeed.setZHAnswer(zhAnswer);
+                mFeed.setZHAnswer(answer);
 
             }
 
@@ -392,8 +393,7 @@ public class ZHFeed {
         }
 
         public ZHFeed create() {
-            LogUtils.d(TAG, "========");
-            LogUtils.d(TAG, mFeed.toString());
+            setFeedParams().setSource().setHead().setContent();
             return mFeed;
         }
 

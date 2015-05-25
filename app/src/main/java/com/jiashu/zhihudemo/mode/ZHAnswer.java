@@ -6,8 +6,9 @@ import android.os.Parcelable;
 /**
  * Created by Jiashu on 2015/5/19.
  */
-public class ZHAnswer extends ZHContent implements Parcelable {
-    private String mQuestion;
+public class ZHAnswer implements Parcelable {
+    private String mQuestionTitle;
+    private String mQUestionUrl;
     private String mContent;
     private String mUrl;
     private String mSummary;
@@ -19,12 +20,20 @@ public class ZHAnswer extends ZHContent implements Parcelable {
     private boolean isThanked;
     private ZHMember mAuthor;
 
-    public String getQuestion() {
-        return mQuestion;
+    public String getQuestionTitle() {
+        return mQuestionTitle;
     }
 
-    public void setQuestion(String question) {
-        mQuestion = question;
+    public void setQuestionTitle(String questionTitle) {
+        mQuestionTitle = questionTitle;
+    }
+
+    public String getQUestionUrl() {
+        return mQUestionUrl;
+    }
+
+    public void setQUestionUrl(String QUestionUrl) {
+        mQUestionUrl = QUestionUrl;
     }
 
     public String getContent() {
@@ -108,30 +117,14 @@ public class ZHAnswer extends ZHContent implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "ZHAnswer{" +
-                "mQuestion='" + mQuestion + '\'' +
-                ", mContent='" + mContent + '\'' +
-                ", mUrl='" + mUrl + '\'' +
-                ", mSummary='" + mSummary + '\'' +
-                ", mVoteupCount=" + mVoteupCount +
-                ", mCommentCount=" + mCommentCount +
-                ", isVoteUp=" + isVoteUp +
-                ", isVoteDown=" + isVoteDown +
-                ", isNoHelped=" + isNoHelped +
-                ", isThanked=" + isThanked +
-                ", mAuthor=" + mAuthor +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mQuestion);
+        dest.writeString(mQuestionTitle);
+        dest.writeString(mQUestionUrl);
         dest.writeString(mContent);
         dest.writeString(mUrl);
         dest.writeString(mSummary);
@@ -148,19 +141,20 @@ public class ZHAnswer extends ZHContent implements Parcelable {
 
         @Override
         public ZHAnswer createFromParcel(Parcel source) {
-            ZHAnswer zhAnswer = new ZHAnswer();
-            zhAnswer.mQuestion = source.readString();
-            zhAnswer.mContent = source.readString();
-            zhAnswer.mUrl = source.readString();
-            zhAnswer.mSummary = source.readString();
-            zhAnswer.mVoteupCount = source.readInt();
-            zhAnswer.mCommentCount = source.readInt();
-            zhAnswer.isVoteUp = source.readByte() != 0;
-            zhAnswer.isVoteDown = source.readByte() != 0;
-            zhAnswer.isNoHelped = source.readByte() != 0;
-            zhAnswer.isThanked = source.readByte() != 0;
-            zhAnswer.mAuthor = source.readParcelable(ZHAnswer.class.getClassLoader());
-            return zhAnswer;
+            ZHAnswer answer = new ZHAnswer();
+            answer.mQuestionTitle = source.readString();
+            answer.mQUestionUrl = source.readString();
+            answer.mContent = source.readString();
+            answer.mUrl = source.readString();
+            answer.mSummary = source.readString();
+            answer.mVoteupCount = source.readInt();
+            answer.mCommentCount = source.readInt();
+            answer.isVoteUp = source.readByte() != 0;
+            answer.isVoteDown = source.readByte() != 0;
+            answer.isNoHelped = source.readByte() != 0;
+            answer.isThanked = source.readByte() != 0;
+            answer.mAuthor = source.readParcelable(ZHAnswer.class.getClassLoader());
+            return answer;
         }
 
         @Override

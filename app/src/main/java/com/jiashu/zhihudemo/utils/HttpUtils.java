@@ -114,47 +114,6 @@ public class HttpUtils {
 
 
     /**
-     * 通过 Jsoup 解析响应的 html,并获取 【知乎】首页的 Feed 信息流
-     * @param html
-     * @return
-     */
-    public static List<ZHFeed> parseHtmlToFeedList(String html) {
-        List<ZHFeed> feedList = new ArrayList<>();
-        Document doc = Jsoup.parse(html);
-
-        String homePageDataInit = doc.select("div[id=js-home-feed-list]").attr("data-init");
-
-        String nodeName = "";
-        try {
-            JSONObject homepageJson = new JSONObject(homePageDataInit);
-
-            nodeName = homepageJson.getString("nodename");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        LogUtils.d(TAG, nodeName);
-        setNodeName(nodeName);
-
-        // 遍历返回数据中 包含着 Feed 的 div
-        Elements elements = doc.select("div[id^=feed]");
-        for (Element element : elements) {
-
-            ZHFeed.Builder builder = new ZHFeed.Builder(element);
-            builder.setFeedParams();
-            builder.setSource();
-            builder.setHead();
-            builder.setContent();
-            ZHFeed feed = builder.create();
-
-            feedList.add(feed);
-        }
-        return feedList;
-    }
-
-    /**
-     * 注意：有个Bug待解决
      * 保存内容到指定文件
      * @param fileName
      * @param content

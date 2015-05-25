@@ -127,8 +127,8 @@ public class AnswerVu extends Vu {
         }
 
         mVoteBtn.setText(voteups + "");
-        mVoteBtn.setTextOff(voteups + "");
-        mVoteBtn.setTextOn(voteups + "");
+        mVoteBtn.setTextOff(null);
+        mVoteBtn.setTextOn(null);
     }
 
     /**
@@ -137,7 +137,6 @@ public class AnswerVu extends Vu {
      * @param loader
      */
     public void setAvatar(String url, ImageLoader loader) {
-        mAvatarView.setDefaultImageResId(R.drawable.ic_action_person_outline);
         mAvatarView.setErrorImageResId(R.drawable.ic_action_person_outline);
         mAvatarView.setImageUrl(url, loader);
     }
@@ -268,5 +267,9 @@ public class AnswerVu extends Vu {
 
     public void setThankBtn(boolean isThanked) {
         mThankBtn.setChecked(isThanked);
+    }
+
+    public void setOnTitleClickListener(View.OnClickListener listener) {
+        mTitleView.setOnClickListener(listener);
     }
 }

@@ -7,7 +7,6 @@ import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.mode.ZHQuestion;
 import com.jiashu.zhihudemo.presenter.activity.AnswerActivity;
 
-import com.jiashu.zhihudemo.presenter.activity.ArticleActivity;
 import com.jiashu.zhihudemo.presenter.activity.FrameActivity;
 import com.jiashu.zhihudemo.task.FetchHomePageTask;
 import com.jiashu.zhihudemo.task.FetchLoadingTask;
@@ -20,6 +19,7 @@ import com.jiashu.zhihudemo.presenter.adapter.ZHFeedListAdapter;
 import com.jiashu.zhihudemo.presenter.fragment.BasePresenterFragment;
 import com.jiashu.zhihudemo.utils.HttpUtils;
 import com.jiashu.zhihudemo.utils.LogUtils;
+import com.jiashu.zhihudemo.utils.ParseUtils;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.general.NormalListVu;
 
@@ -99,10 +99,8 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
                 String titleUrl = feed.getTitleUrl();
                 String title = feed.getTitle();
                 if ("p".equals(feed.getFeedType())) {
-
                     FrameActivity.startBy(getActivity(), new ZHArticle(titleUrl));
                 } else {
-
                     FrameActivity.startBy(getActivity(), new ZHQuestion(titleUrl, title));
                 }
             }
@@ -162,7 +160,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
         mResponse = event.response;
 
-        mZHFeedList = HttpUtils.parseHtmlToFeedList(event.response);
+        mZHFeedList = ParseUtils.parseHtmlToFeedList(event.response);
 
         mZHAdapter.replace(mZHFeedList);
     }
@@ -174,7 +172,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     public void onEventMainThread(FetchLoadingRE event) {
 
         if (event.isSuccess) {
-            List<ZHFeed> loadFeeds = HttpUtils.parseHtmlToFeedList(event.data);
+            List<ZHFeed> loadFeeds = ParseUtils.parseHtmlToFeedList(event.data);
             if (mZHFeedList.addAll(loadFeeds)) {
                 mZHAdapter.addAll(loadFeeds);
             }

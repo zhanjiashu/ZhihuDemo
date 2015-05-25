@@ -25,24 +25,19 @@ public class NormalListVu extends Vu {
     @InjectView(R.id.lv_normal)
     ZHListView mListView;
 
-    @InjectView(R.id.tv_normal)
-    TextView mTextView;
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
         mView = inflater.inflate(R.layout.list_normal, container, false);
         ButterKnife.inject(this, mView);
 
-        mTextView.setVisibility(View.GONE);
+        View footerView = inflater.inflate(R.layout.list_footer_feed, null);
+        mListView.addFooterView(footerView);
     }
 
     @Override
     public View getView() {
         return mView;
-    }
-
-    public void setText(CharSequence msg) {
-        mTextView.setText(msg);
     }
 
     public void setAdapter(BaseAdapter adapter) {

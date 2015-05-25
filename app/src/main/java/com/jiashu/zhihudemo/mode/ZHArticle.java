@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by Jiashu on 2015/5/19.
  */
-public class ZHArticle extends ZHContent implements Parcelable {
+public class ZHArticle implements Parcelable {
 
     private int commentsCount;
     private int likesCount;

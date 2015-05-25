@@ -84,6 +84,7 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:lineSpacingMultiplier="1.2"
+            android:textColor="@color/text_normal"
             android:textSize="15sp"
             tools:text="怒答！没错！堪比龙傲天！位面之子刘秀与穿越者王莽的基情。注:此文转自网络。有人问出处，原作者是某个论坛的，id是——海上钢琴师"/>
 

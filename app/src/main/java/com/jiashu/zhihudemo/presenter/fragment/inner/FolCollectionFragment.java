@@ -13,7 +13,6 @@ public class FolCollectionFragment extends BasePresenterFragment<NormalListVu> {
 
     @Override
     protected void onBindVu() {
-        mVu.setText(Constants.FOLLOW_TAB_TITLES[INDEX]);
     }
 
     @Override

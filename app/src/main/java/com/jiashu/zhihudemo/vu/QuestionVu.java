@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,7 +33,12 @@ public class QuestionVu extends Vu {
     ListView mAnswerListView;
 
     TextView mTitleView;
+
     TextView mDescriptionView;
+
+    Button mFollowCountBtn;
+
+    Button mCommentCountBtn;
 
     @Override
     public void initView(LayoutInflater inflater, ViewGroup container) {
@@ -41,10 +47,15 @@ public class QuestionVu extends Vu {
         ButterKnife.inject(this, mView);
 
         mHeaderView = inflater.inflate(R.layout.list_head_question, null);
+
         mAnswerListView.addHeaderView(mHeaderView);
 
         mTitleView = (TextView) mHeaderView.findViewById(R.id.tv_title);
         mDescriptionView = (TextView) mHeaderView.findViewById(R.id.tv_description);
+
+        mFollowCountBtn = (Button) mHeaderView.findViewById(R.id.btn_follower_count);
+        mCommentCountBtn = (Button) mHeaderView.findViewById(R.id.btn_comment_count);
+
     }
 
     @Override
@@ -75,5 +86,20 @@ public class QuestionVu extends Vu {
 
     public void setOnAnswerItemClickListener(AdapterView.OnItemClickListener listener) {
         mAnswerListView.setOnItemClickListener(listener);
+    }
+
+    public void setFollowCount(int count) {
+        mFollowCountBtn.setText(count + "");
+
+        if (count > 1000) {
+            float countFloat = (float)(count / 100) / 10;
+            mFollowCountBtn.setText(countFloat+"K");
+        } else {
+            mFollowCountBtn.setText(count+"");
+        }
+    }
+
+    public void setCommentCount(int count) {
+        mCommentCountBtn.setText(count+"");
     }
 }

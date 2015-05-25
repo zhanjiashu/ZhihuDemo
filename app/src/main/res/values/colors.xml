@@ -9,4 +9,6 @@
 
     <color name="transparent">@android:color/transparent</color>
 
+    <color name="text_normal">@android:color/tertiary_text_light</color>
+
 </resources>

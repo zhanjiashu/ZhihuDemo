@@ -66,11 +66,6 @@ public class QuestionFragment extends BasePresenterFragment<QuestionVu> {
         HttpUtils.executeTask(task);
     }
 
-    private String formatActionBarTitle(int count) {
-        String format = "共 {0} 回答";
-        return MessageFormat.format(format, count);
-    }
-
     @Override
     protected void onDestroyVu() {
         mBus.unregister(this);
@@ -83,12 +78,21 @@ public class QuestionFragment extends BasePresenterFragment<QuestionVu> {
 
     private void showQuestionDetail(ZHQuestion question) {
         mActionBar.setTitle(formatActionBarTitle(question.getAnswerCount()));
+
         String description = question.getDescription();
         if (!TextUtils.isEmpty(description)) {
             mVu.setDescription(Html.fromHtml(description));
         }
 
+        mVu.setFollowCount(question.getFollows());
+        mVu.setCommentCount(question.getComments());
+
         mAdapter.replace(question.getAnswers());
+    }
+
+    private String formatActionBarTitle(int count) {
+        String format = "共 {0} 回答";
+        return MessageFormat.format(format, count);
     }
 
     public void onEvent(HttpResponseEvent event) {

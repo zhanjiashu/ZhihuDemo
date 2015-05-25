@@ -29,6 +29,7 @@
             android:layout_marginTop="?attr/actionBarSize"
             android:padding="@dimen/padding_small"
             android:background="#e0e0e0"
+            android:textColor="@color/text_normal"
             android:textSize="18sp"/>
 
         <include

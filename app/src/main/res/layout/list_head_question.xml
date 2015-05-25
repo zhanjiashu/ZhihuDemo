@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@id/tv_title"
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_small"
@@ -21,6 +21,83 @@
         android:paddingTop="@dimen/margin_small"
         android:paddingRight="@dimen/padding_xxlarge"
         android:paddingBottom="@dimen/padding_xxlarge"
-        android:lineSpacingMultiplier="1.5"/>
+        android:lineSpacingMultiplier="1.5"
+        android:textColor="@color/text_normal"/>
+
+    <include layout="@layout/divider_horizontal" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_medium"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/btn_follower_count"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_followers"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/darker_gray"/>
+
+        <Button
+            android:id="@+id/btn_comment_count"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btn_follower_count"
+            android:drawableLeft="@drawable/ic_comments"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/darker_gray"/>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:textOff="@string/btn_follow"
+            android:textOn="@string/tbtn_cancel_follow"
+            android:background="#ffff9439"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <include layout="@layout/divider_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/padding_xlarge"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_invited_answer"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:text="@string/btn_invited"/>
+        <View
+            android:layout_width="0.2dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/padding_xlarge"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/ic_add_answer"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:text="@string/btn_add_answer"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/divider_horizontal" />
 
 </LinearLayout>
