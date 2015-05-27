@@ -4,12 +4,13 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.jiashu.zhihudemo.events.FetchLoadingRE;
 
-import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
+import com.jiashu.zhihudemo.events.http.FetchLoadingHRE;
+import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.net.ZHStringRequest;
 
 import com.jiashu.zhihudemo.utils.LogUtils;
+import com.jiashu.zhihudemo.utils.ParseUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,31 +63,15 @@ public class FetchLoadingTask extends HttpTask {
                 mUrl,
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String s) {
-                        try {
-                            JSONObject obj = new JSONObject(s);
-                            LogUtils.d(TAG, "r = " + obj.getInt("r"));
-                            if (obj.getInt("r") == LOAD_SUCCESS) {
-                                JSONArray array = obj.getJSONArray("msg");
-
-                                StringBuilder sb = new StringBuilder();
-                                for (int i = 0; i < array.length(); i++) {
-                                    sb.append(array.getString(i));
-                                }
-
-                                mBus.post(new FetchLoadingRE(true, sb.toString()));
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onResponse(String response) {
+                        List<ZHFeed> feedList = handleResponse(response);
+                        mBus.post(new FetchLoadingHRE(feedList));
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         LogUtils.d(TAG, "load failed : " + volleyError);
-                        mBus.post(new FetchLoadingRE(false, null));
                     }
                 }
         ) {
@@ -108,6 +95,28 @@ public class FetchLoadingTask extends HttpTask {
             }
         };
         mVolleyUtils.addRequest(mRequest);
+    }
+
+    private List<ZHFeed> handleResponse(String response) {
+        List<ZHFeed> feedList = new ArrayList<>();
+
+        try {
+            JSONObject obj = new JSONObject(response);
+            LogUtils.d(TAG, "r = " + obj.getInt("r"));
+            if (obj.getInt("r") == LOAD_SUCCESS) {
+                JSONArray array = obj.getJSONArray("msg");
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < array.length(); i++) {
+                    sb.append(array.getString(i));
+                }
+                feedList = ParseUtils.parseHtmlToFeedList(sb.toString());
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return feedList;
     }
 
     @Override

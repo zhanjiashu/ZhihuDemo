@@ -46,7 +46,10 @@ public class ParseUtils {
         List<ZHAnswer> answerList = new ArrayList<>();
 
         for (Element element : answerElts) {
-            ZHAnswer answer = parseHtmlToAnswer(title, url, element);
+            ZHAnswer answer = parseHtmlToAnswer(element);
+            answer.setQuestionUrl(url);
+            answer.setQuestionTitle(title);
+
             answerList.add(answer);
         }
 
@@ -63,7 +66,7 @@ public class ParseUtils {
         return question;
     }
 
-    public static ZHAnswer parseHtmlToAnswer(String questionTitle, String questionUrl, Element element) {
+    public static ZHAnswer parseHtmlToAnswer(Element element) {
 
         ZHAnswer answer = new ZHAnswer();
         ZHMember author = new ZHMember();
@@ -166,8 +169,6 @@ public class ParseUtils {
             isNoHelped = true;
         }
 
-        answer.setQuestionTitle(questionTitle);
-        answer.setQUestionUrl(questionUrl);
         answer.setIsVoteUp(isVoteUp);
         answer.setIsVoteDown(isVoteDown);
         answer.setVoteupCount(voteupCount);

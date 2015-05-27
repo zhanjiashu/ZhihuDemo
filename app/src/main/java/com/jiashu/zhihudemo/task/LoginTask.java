@@ -7,8 +7,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.HttpConstants;
-import com.jiashu.zhihudemo.events.LoginRE;
+
 import com.jiashu.zhihudemo.events.OnLoginEvent;
+import com.jiashu.zhihudemo.events.http.LoginHRE;
 import com.jiashu.zhihudemo.net.ZHStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtils;
 
@@ -18,7 +19,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Jiashu on 2015/5/3.
@@ -115,13 +115,13 @@ public class LoginTask extends HttpTask {
             int loginStatus = jsonObj.getInt(LOGIN_STATUS_KEY);
             switch (loginStatus) {
                 case HttpConstants.LOGIN_SUCCESS:
-                    EventBus.getDefault().post(new LoginRE(loginStatus));
+                    mBus.post(new LoginHRE(loginStatus));
                     break;
                 case HttpConstants.LOGIN_FAIL:
 
                     JSONObject obj = new JSONObject(response);
                     int errcode = obj.getInt(LOGIN_ERRCODE_KEY);
-                    EventBus.getDefault().post(new LoginRE(errcode));
+                    mBus.post(new LoginHRE(errcode));
                     break;
                 default:
                     break;

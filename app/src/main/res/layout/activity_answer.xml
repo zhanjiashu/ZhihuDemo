@@ -8,12 +8,12 @@
         android:layout_height="match_parent"
         android:id="@+id/ptr_layout">
 
-        <com.jiashu.zhihudemo.other.ZHAnswerView
+        <com.jiashu.zhihudemo.other.ZHWebView
             android:id="@+id/wv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.jiashu.zhihudemo.other.ZHAnswerView>
+        </com.jiashu.zhihudemo.other.ZHWebView>
 
     </uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout>
 

@@ -58,7 +58,7 @@ public class QuestionFragment extends BasePresenterFragment<QuestionVu> {
         mVu.setOnAnswerItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AnswerActivity.startBy(getActivity(), mAnswerList.get(position - 1));
+                AnswerActivity.startBy(QuestionFragment.this, mAnswerList.get(position - 1));
             }
         });
 

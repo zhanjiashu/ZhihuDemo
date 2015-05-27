@@ -1,25 +1,29 @@
 package com.jiashu.zhihudemo.presenter.fragment.main;
 
 
+import android.content.Intent;
+
 import com.jiashu.zhihudemo.data.HttpConstants;
+import com.jiashu.zhihudemo.events.http.FetchFeedListHRE;
+import com.jiashu.zhihudemo.events.http.FetchLoadingHRE;
+import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
+import com.jiashu.zhihudemo.mode.ZHAnswer;
 import com.jiashu.zhihudemo.mode.ZHArticle;
 import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.mode.ZHQuestion;
 import com.jiashu.zhihudemo.presenter.activity.AnswerActivity;
 
 import com.jiashu.zhihudemo.presenter.activity.FrameActivity;
-import com.jiashu.zhihudemo.task.FetchHomePageTask;
+import com.jiashu.zhihudemo.task.FetchFeedListTask;
 import com.jiashu.zhihudemo.task.FetchLoadingTask;
-import com.jiashu.zhihudemo.events.FetchHomePageRE;
-import com.jiashu.zhihudemo.events.FetchFailEvent;
-import com.jiashu.zhihudemo.events.FetchLoadingRE;
+
 import com.jiashu.zhihudemo.events.OnRefreshEvent;
 import com.jiashu.zhihudemo.other.ZHListView;
 import com.jiashu.zhihudemo.presenter.adapter.ZHFeedListAdapter;
 import com.jiashu.zhihudemo.presenter.fragment.BasePresenterFragment;
 import com.jiashu.zhihudemo.utils.HttpUtils;
 import com.jiashu.zhihudemo.utils.LogUtils;
-import com.jiashu.zhihudemo.utils.ParseUtils;
+
 import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.general.NormalListVu;
 
@@ -38,8 +42,9 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
     private List<ZHFeed> mZHFeedList;
 
-
     private ZHFeedListAdapter mZHAdapter;
+
+    private int mCurrentIndex;
 
     private String mResponse;
 
@@ -59,30 +64,33 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
 
         mVu.setAdapter(mZHAdapter);
 
-        fetchHomePage();
+        fetchFeedList();
 
         // 监听 ZHListView 底部上拉加载事件
         mVu.setOnLoadingListener(new ZHListView.OnLoadingListener() {
             @Override
             public void onLoading() {
 
+                int feedsCount = mZHFeedList.size();
+                if (feedsCount > 0) {
 
-                ZHFeed lastFeed = mZHFeedList.get(mZHFeedList.size() - 1);
+                    ZHFeed lastFeed = mZHFeedList.get(feedsCount - 1);
 
-                FetchLoadingTask cmd = null;
-                String nodeName = HttpUtils.getNodeName();
-                if (nodeName.equals(HttpConstants.NODE_NAME_TOP_STORY)) {
-                    cmd = new FetchLoadingTask(
-                            HttpConstants.LOADING_URL_TOP_STORY,
-                            lastFeed.getDataBlock(),
-                            lastFeed.getDataOffset()
-                            );
-                } else {
-                    cmd = new FetchLoadingTask(HttpConstants.LOADING_URL_HOME, lastFeed.getFeedId(), mZHFeedList.size());
+                    FetchLoadingTask task = null;
+                    String nodeName = HttpUtils.getNodeName();
+                    if (nodeName.equals(HttpConstants.NODE_NAME_TOP_STORY)) {
+                        task = new FetchLoadingTask(
+                                HttpConstants.LOADING_URL_TOP_STORY,
+                                lastFeed.getDataBlock(),
+                                lastFeed.getDataOffset()
+                        );
+                    } else {
+                        task = new FetchLoadingTask(HttpConstants.LOADING_URL_HOME, lastFeed.getFeedId(), mZHFeedList.size());
+                    }
+
+                    HttpUtils.executeTask(task);
+
                 }
-
-                HttpUtils.executeTask(cmd);
-
             }
         });
 
@@ -90,7 +98,7 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
         mZHAdapter.setZHOnItemClickListener(new ZHFeedListAdapter.ZHOnItemClickListener() {
             @Override
             public void onSourceClick(int position) {
-                ToastUtils.show(mZHFeedList.get(position).getSource().getUrl());
+                //ToastUtils.show(mZHFeedList.get(position).getSource().getUrl());
             }
 
             @Override
@@ -110,7 +118,8 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
                 ZHFeed feed = mZHFeedList.get(position);
 
                 if ("a".equals(feed.getFeedType())) {
-                    AnswerActivity.startBy(getActivity(), feed.getZHAnswer());
+                    AnswerActivity.startBy(HomeFragment.this, feed.getZHAnswer());
+                    mCurrentIndex = position;
                 } else if ("p".equals(feed.getFeedType())) {
                     FrameActivity.startBy(getActivity(), new ZHArticle(feed.getTitleUrl()));
                 }
@@ -119,9 +128,19 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     }
 
     @Override
-    protected void beforePause() {
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == getActivity().RESULT_OK) {
+                    ZHAnswer answer = data.getParcelableExtra("data_return");
+                    mZHFeedList.get(mCurrentIndex).setZHAnswer(answer);
+                }
+                break;
+            default:
+                break;
+        }
     }
+
 
     @Override
     protected void onDestroyVu() {
@@ -138,58 +157,34 @@ public class HomeFragment extends BasePresenterFragment<NormalListVu> {
     /**
      * 获取 [首页] 内容
      */
-    private void fetchHomePage() {
-        FetchHomePageTask netCmd = new FetchHomePageTask();
-        HttpUtils.executeTask(netCmd);
+    private void fetchFeedList() {
+        FetchFeedListTask task = new FetchFeedListTask();
+        HttpUtils.executeTask(task);
     }
 
-    /**
-     * 当前无网络连接时触发：读取持久化的 Feed 流信息（最新的 【首页】html）
-     * @param event
-     */
-    public void onEventMainThread(FetchFailEvent event) {
-        mResponse = HttpUtils.readFromFile(TAG);
-        onEventMainThread(new FetchHomePageRE(mResponse));
-    }
 
-    /**
-     * 获取 [首页] 内容成功时触发，通知 ListView 显示
-     * @param event
-     */
-    public void onEventMainThread(FetchHomePageRE event) {
+    public void onEvent(HttpResponseEvent event) {
+        if (event instanceof FetchFeedListHRE) {
+            mZHFeedList = (List<ZHFeed>) event.data;
+            mZHAdapter.replace(mZHFeedList);
+        } else if (event instanceof FetchLoadingHRE) {
+            List<ZHFeed> loadFeeds = (List<ZHFeed>) event.data;
 
-        mResponse = event.response;
-
-        mZHFeedList = ParseUtils.parseHtmlToFeedList(event.response);
-
-        mZHAdapter.replace(mZHFeedList);
-    }
-
-    /**
-     * 向服务器请求 加载Feed流信息成功后触发
-     * @param event
-     */
-    public void onEventMainThread(FetchLoadingRE event) {
-
-        if (event.isSuccess) {
-            List<ZHFeed> loadFeeds = ParseUtils.parseHtmlToFeedList(event.data);
             if (mZHFeedList.addAll(loadFeeds)) {
                 mZHAdapter.addAll(loadFeeds);
             }
+            mVu.setLoadCompleted();
         }
-
-        // 通知ZHListView 数据已加载完毕
-        mVu.setLoadCompleted();
     }
-
 
     /**
      * 下拉刷新时触发
      * @param event
      */
     public void onEvent(OnRefreshEvent event) {
-        fetchHomePage();
+        fetchFeedList();
     }
+
 
     /**
      * 关联 通用的 ListView 视图

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -18,8 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.events.http.FetchCaptchaHRE;
+import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
 import com.jiashu.zhihudemo.presenter.activity.LoginActivity;
-import com.jiashu.zhihudemo.events.FetchCaptchaRE;
 import com.jiashu.zhihudemo.events.OnLoginEvent;
 import com.jiashu.zhihudemo.utils.LogUtils;
 import com.jiashu.zhihudemo.utils.ToastUtils;
@@ -159,7 +161,10 @@ public class LoginDialogFragment extends DialogFragment implements TextWatcher {
         LogUtils.d(TAG, s.toString());
     }
 
-    public void onEvent(FetchCaptchaRE event) {
-        mCaptchaView.setImageBitmap(event.mCaptcha);
+    public void onEvent(HttpResponseEvent event) {
+        if (event instanceof FetchCaptchaHRE) {
+            Bitmap captcha = (Bitmap) event.data;
+            mCaptchaView.setImageBitmap(captcha);
+        }
     }
 }

@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class ZHAnswer implements Parcelable {
     private String mQuestionTitle;
-    private String mQUestionUrl;
+    private String mQuestionUrl;
     private String mContent;
     private String mUrl;
     private String mSummary;
@@ -28,12 +28,12 @@ public class ZHAnswer implements Parcelable {
         mQuestionTitle = questionTitle;
     }
 
-    public String getQUestionUrl() {
-        return mQUestionUrl;
+    public String getQuestionUrl() {
+        return mQuestionUrl;
     }
 
-    public void setQUestionUrl(String QUestionUrl) {
-        mQUestionUrl = QUestionUrl;
+    public void setQuestionUrl(String questionUrl) {
+        mQuestionUrl = questionUrl;
     }
 
     public String getContent() {
@@ -124,7 +124,7 @@ public class ZHAnswer implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mQuestionTitle);
-        dest.writeString(mQUestionUrl);
+        dest.writeString(mQuestionUrl);
         dest.writeString(mContent);
         dest.writeString(mUrl);
         dest.writeString(mSummary);
@@ -143,7 +143,7 @@ public class ZHAnswer implements Parcelable {
         public ZHAnswer createFromParcel(Parcel source) {
             ZHAnswer answer = new ZHAnswer();
             answer.mQuestionTitle = source.readString();
-            answer.mQUestionUrl = source.readString();
+            answer.mQuestionUrl = source.readString();
             answer.mContent = source.readString();
             answer.mUrl = source.readString();
             answer.mSummary = source.readString();

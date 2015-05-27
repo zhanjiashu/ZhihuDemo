@@ -4,18 +4,21 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.HttpConstants;
-import com.jiashu.zhihudemo.events.FetchHomePageRE;
 import com.jiashu.zhihudemo.events.FetchFailEvent;
+import com.jiashu.zhihudemo.events.http.FetchFeedListHRE;
+import com.jiashu.zhihudemo.mode.ZHFeed;
 import com.jiashu.zhihudemo.net.ZHStringRequest;
 import com.jiashu.zhihudemo.utils.LogUtils;
+import com.jiashu.zhihudemo.utils.ParseUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Jiashu on 2015/5/3.
  * 获取【知乎】首页的内容
  */
-public class FetchHomePageTask extends HttpTask {
+public class FetchFeedListTask extends HttpTask {
 
     private final String TAG = getClass().getSimpleName();
 
@@ -28,10 +31,10 @@ public class FetchHomePageTask extends HttpTask {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //mListener.callback(response);
-                        LogUtils.d(TAG, response);
-                        // 获取首页数据成功发布事件
-                        mBus.post(new FetchHomePageRE(response));
+
+                        List<ZHFeed> feedList = ParseUtils.parseHtmlToFeedList(response);
+                        mBus.post(new FetchFeedListHRE(feedList));
+
                     }
                 },
                 new Response.ErrorListener() {

@@ -65,7 +65,7 @@ public class FetchAnswerTask extends HttpTask {
 
         Elements elements = doc.select("div[class=zm-item-answer ]");
 
-        ZHAnswer answer = ParseUtils.parseHtmlToAnswer(null, null, elements.get(0));
+        ZHAnswer answer = ParseUtils.parseHtmlToAnswer(elements.get(0));
 
         mBus.post(new FetchAnswerHRE(answer));
     }

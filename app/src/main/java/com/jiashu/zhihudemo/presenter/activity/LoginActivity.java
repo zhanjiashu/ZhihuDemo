@@ -20,12 +20,14 @@ import android.widget.ViewSwitcher;
 import com.jiashu.zhihudemo.R;
 import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.data.Constants;
+import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
+import com.jiashu.zhihudemo.events.http.LoginHRE;
 import com.jiashu.zhihudemo.presenter.adapter.ZHFragmentPagerAdapter;
 import com.jiashu.zhihudemo.task.FetchXSRFTask;
 import com.jiashu.zhihudemo.task.LoginTask;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.data.StringConstants;
-import com.jiashu.zhihudemo.events.LoginRE;
+
 import com.jiashu.zhihudemo.events.OnLoginEvent;
 import com.jiashu.zhihudemo.presenter.fragment.dialog.LoginDialogFragment;
 import com.jiashu.zhihudemo.presenter.fragment.guide.FifthGuideFragment;
@@ -36,7 +38,6 @@ import com.jiashu.zhihudemo.presenter.fragment.guide.SixthGuideFragment;
 import com.jiashu.zhihudemo.presenter.fragment.guide.ThirdGuideFragment;
 import com.jiashu.zhihudemo.net.ZhiHuCookieManager;
 import com.jiashu.zhihudemo.utils.HttpUtils;
-import com.jiashu.zhihudemo.utils.LogUtils;
 import com.jiashu.zhihudemo.utils.ToastUtils;
 import com.jiashu.zhihudemo.vu.guide.GuidePageVu;
 import com.jiashu.zhihudemo.vu.VuCallback;
@@ -248,27 +249,29 @@ public class LoginActivity extends BasePresenterActivity<GuidePageVu>{
      * 登录返回 的相关处理
      * @param event
      */
-    public void onEvent(LoginRE event) {
-        LogUtils.d(TAG, "Login Response");
-        mProgressDialog.dismiss();
+    public void onEvent(HttpResponseEvent event) {
+        if (event instanceof LoginHRE) {
+            mProgressDialog.dismiss();
 
-        switch (event.getStateCode()) {
-            case HttpConstants.LOGIN_SUCCESS:
-                MainActivity.startBy(LoginActivity.this);
-                finish();
-                break;
-            case HttpConstants.ERRCODE_PWD_EMAIL_ERROR:
-                ToastUtils.show(HttpConstants.ERRMSG_PWD_EMAIL_ERROR);
-                break;
-            case HttpConstants.ERRCODE_EMAIL_FORMAT_ERROR:
-                ToastUtils.show(HttpConstants.ERRMSG_EMAIL_FORMAT_ERROR);
-                break;
-            case HttpConstants.ERRCODE_PWD_LENGTH_ERROR:
-                ToastUtils.show(HttpConstants.ERRMSG_PWD_LENGTH_ERROR);
-                break;
-            case HttpConstants.ERRCODE_INPUT_CAPTCHA:
-                ToastUtils.show(HttpConstants.ERRMSG__INPUT_CAPTCHA);
-                break;
+            int stateCode = (int) event.data;
+            switch (stateCode) {
+                case HttpConstants.LOGIN_SUCCESS:
+                    MainActivity.startBy(LoginActivity.this);
+                    finish();
+                    break;
+                case HttpConstants.ERRCODE_PWD_EMAIL_ERROR:
+                    ToastUtils.show(HttpConstants.ERRMSG_PWD_EMAIL_ERROR);
+                    break;
+                case HttpConstants.ERRCODE_EMAIL_FORMAT_ERROR:
+                    ToastUtils.show(HttpConstants.ERRMSG_EMAIL_FORMAT_ERROR);
+                    break;
+                case HttpConstants.ERRCODE_PWD_LENGTH_ERROR:
+                    ToastUtils.show(HttpConstants.ERRMSG_PWD_LENGTH_ERROR);
+                    break;
+                case HttpConstants.ERRCODE_INPUT_CAPTCHA:
+                    ToastUtils.show(HttpConstants.ERRMSG__INPUT_CAPTCHA);
+                    break;
+            }
         }
     }
 

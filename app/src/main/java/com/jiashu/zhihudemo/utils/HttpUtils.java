@@ -3,6 +3,7 @@ package com.jiashu.zhihudemo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -98,18 +99,20 @@ public class HttpUtils {
 
     /**
      * 执行一个 网络数据交互 的命令
-     * @param cmd
+     * @param task
      */
-    public static void executeTask(HttpTask cmd) {
-        cmd.execute();
+    public static void executeTask(HttpTask task) {
+        task.execute();
     }
 
     /**
      * 取消一个 网络数据交互 的命令
-     * @param cmd
+     * @param task
      */
-    public static void cancelTask(HttpTask cmd) {
-        cmd.cancel();
+    public static void cancelTask(HttpTask task) {
+        if (task != null) {
+            task.cancel();
+        }
     }
 
 
@@ -184,11 +187,10 @@ public class HttpUtils {
      * 判断当前是否有网络连接
      * @return
      */
-    public static boolean hasNetwork() {
+    public static boolean isNetworkAvailable() {
         mCM = (ConnectivityManager) ZHApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (mCM.getActiveNetworkInfo() == null) {
-            return false;
-        }
-        return true;
+        NetworkInfo activeNetworkInfo = mCM.getActiveNetworkInfo();
+
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

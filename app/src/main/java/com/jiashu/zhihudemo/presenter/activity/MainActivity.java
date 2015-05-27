@@ -12,9 +12,10 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.jiashu.zhihudemo.R;
+import com.jiashu.zhihudemo.events.http.FetchFeedListHRE;
+import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
 import com.jiashu.zhihudemo.presenter.adapter.NavListAdapter;
 import com.jiashu.zhihudemo.data.Constants;
-import com.jiashu.zhihudemo.events.FetchHomePageRE;
 import com.jiashu.zhihudemo.events.FetchFailEvent;
 import com.jiashu.zhihudemo.events.OnRefreshEvent;
 import com.jiashu.zhihudemo.presenter.fragment.main.CollectionFragment;
@@ -89,6 +90,7 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
             finish();
         }
     }
+
 
     @Override
     protected void onDestroyVu() {
@@ -224,9 +226,10 @@ public class MainActivity extends BasePresenterActivity<MainVu> implements OnRef
      * 下拉刷新 成功时触发，关闭 下拉刷新 的动画
      * @param event
      */
-    public void onEventMainThread(FetchHomePageRE event) {
-        LogUtils.d(TAG, "refresh success");
-        mVu.getRefreshLayout().setRefreshComplete();
+    public void onEvent(HttpResponseEvent event) {
+        if (event instanceof FetchFeedListHRE) {
+            mVu.getRefreshLayout().setRefreshComplete();
+        }
     }
 
     /**

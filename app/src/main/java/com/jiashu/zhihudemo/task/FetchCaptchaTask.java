@@ -5,11 +5,10 @@ import android.graphics.Bitmap;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.jiashu.zhihudemo.data.HttpConstants;
-import com.jiashu.zhihudemo.events.FetchCaptchaRE;
+import com.jiashu.zhihudemo.events.http.FetchCaptchaHRE;
 import com.jiashu.zhihudemo.net.ZHImageRequest;
 import com.jiashu.zhihudemo.utils.LogUtils;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by Jiashu on 2015/5/3.
@@ -34,8 +33,7 @@ public class FetchCaptchaTask extends HttpTask {
         mRequest = new ZHImageRequest(mImgUrl, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap bitmap) {
-                //mListener.callback(bitmap);
-                EventBus.getDefault().post(new FetchCaptchaRE(bitmap));
+                mBus.post(new FetchCaptchaHRE(bitmap));
             }
         }, 0, 0, Bitmap.Config.ARGB_8888, new Response.ErrorListener() {
             @Override

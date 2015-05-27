@@ -1,6 +1,7 @@
 package com.jiashu.zhihudemo.vu;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +16,10 @@ import android.widget.ToggleButton;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jiashu.zhihudemo.R;
-import com.jiashu.zhihudemo.other.ZHAnswerView;
+import com.jiashu.zhihudemo.app.ZHApp;
+import com.jiashu.zhihudemo.data.HttpConstants;
+import com.jiashu.zhihudemo.other.ZHWebView;
+import com.jiashu.zhihudemo.utils.HttpUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,7 +51,7 @@ public class AnswerVu extends Vu {
     NetworkImageView mAvatarView;
 
     @InjectView(R.id.wv_content)
-    ZHAnswerView mAnswerView;
+    ZHWebView mAnswerView;
 
     @InjectView(R.id.ll_author)
     LinearLayout mAuthorLayout;
@@ -147,9 +151,10 @@ public class AnswerVu extends Vu {
      */
 
     public void initWebContent(int textZoom, Runnable callback) {
-        mAnswerView.post(callback);
         mWebSettings = mAnswerView.getSettings();
         mWebSettings.setTextZoom(textZoom);
+
+        mAnswerView.post(callback);
     }
 
     /**
@@ -157,14 +162,14 @@ public class AnswerVu extends Vu {
      * @param html
      */
     public void setAnswer(final String html) {
-        mAnswerView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        mAnswerView.loadDataWithBaseURL(HttpConstants.HOST, html, "text/html", "utf-8", null);
     }
 
     /**
      * 设置 显示答案的 定制WebView 的滚动事件监听器
      * @param listener
      */
-    public void setAnswerViewScrollListener(ZHAnswerView.OnScrollListener listener) {
+    public void setAnswerViewScrollListener(ZHWebView.OnScrollListener listener) {
         mAnswerView.setOnScrollListener(listener);
     }
 

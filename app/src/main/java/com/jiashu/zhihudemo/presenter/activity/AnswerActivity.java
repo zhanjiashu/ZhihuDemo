@@ -1,9 +1,11 @@
 package com.jiashu.zhihudemo.presenter.activity;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -13,14 +15,16 @@ import com.android.volley.toolbox.ImageLoader;
 import com.jiashu.zhihudemo.app.ZHApp;
 import com.jiashu.zhihudemo.mode.ZHAnswer;
 import com.jiashu.zhihudemo.mode.ZHQuestion;
+import com.jiashu.zhihudemo.presenter.fragment.main.HomeFragment;
 import com.jiashu.zhihudemo.task.FetchAnswerTask;
 import com.jiashu.zhihudemo.data.HttpConstants;
 import com.jiashu.zhihudemo.events.VoteEvent;
 import com.jiashu.zhihudemo.events.http.FetchAnswerHRE;
 import com.jiashu.zhihudemo.events.http.HttpResponseEvent;
 
-import com.jiashu.zhihudemo.other.ZHAnswerView;
+import com.jiashu.zhihudemo.other.ZHWebView;
 import com.jiashu.zhihudemo.presenter.fragment.dialog.VoteDialogFragment;
+import com.jiashu.zhihudemo.task.FetchXSRFTask;
 import com.jiashu.zhihudemo.utils.HttpUtils;
 
 import com.jiashu.zhihudemo.vu.AnswerVu;
@@ -38,10 +42,16 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     private static final float CURRENT_DENSITY = ZHApp.getContext().getResources().getDisplayMetrics().density;
 
     private static final String EXTRA_ANSWER = "answer";
+    private static final String EXTRA_INDEX = "index";
 
+    private FetchAnswerTask mTask;
     private ImageLoader mImageLoader;
     private GestureDetector mDetector;
 
+    private ZHAnswer mAnswer;
+
+    private String mQuestionUrl;
+    private String mQuestionTitle;
     private boolean isTopHide;
     private boolean isBottomHide;
     private boolean isTouchEnable;
@@ -65,14 +75,14 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mImageLoader = mVolleyUtils.getImageLoader();
 
         Intent intent = getIntent();
-        ZHAnswer answer = intent.getParcelableExtra(EXTRA_ANSWER);
-        if (answer == null) {
-            answer = new ZHAnswer();
+        mAnswer = intent.getParcelableExtra(EXTRA_ANSWER);
+        if (mAnswer == null) {
+            mAnswer = new ZHAnswer();
         }
 
-        initAnswerView(answer);
+        initAnswerView(mAnswer);
 
-        handleTitleClick(answer);
+        handleTitleClick(mAnswer);
 
         handleAnimation();
 
@@ -88,6 +98,8 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         setSupportActionBar(mVu.getToolbar());
         getSupportActionBar().setTitle(answer.getQuestionTitle());
 
+        mQuestionUrl = mAnswer.getQuestionUrl();
+        mQuestionTitle = mAnswer.getQuestionTitle();
         mVoteups = answer.getVoteupCount();
         isVoteUpChecked = answer.isVoteUp();
         isVoteDownChecked = answer.isVoteDown();
@@ -108,12 +120,12 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVu.setAvatar(authorAvatarUrl, mImageLoader);
 
         // 预先执行一次，以便计算 顶部区域 的高度
-        mVu.setAnswer("");
+        //mVu.setAnswer("");
 
         String content = answer.getContent();
         if (TextUtils.isEmpty(content)) {
-            FetchAnswerTask fetchAnswerTask = new FetchAnswerTask(answer.getUrl());
-            HttpUtils.executeTask(fetchAnswerTask);
+            mTask = new FetchAnswerTask(answer.getUrl());
+            HttpUtils.executeTask(mTask);
         } else {
             mAnswerContent = answer.getContent();
             setAnswerContent();
@@ -128,7 +140,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         mVu.setOnTitleClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String questionUrl = answer.getQUestionUrl();
+                String questionUrl = answer.getQuestionUrl();
                 String questionTitle = answer.getQuestionTitle();
                 FrameActivity.startBy(AnswerActivity.this, new ZHQuestion(questionUrl, questionTitle));
             }
@@ -200,7 +212,7 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
         });
 
         // 监听 答案区域 的滚动事件
-        mVu.setAnswerViewScrollListener(new ZHAnswerView.OnScrollListener() {
+        mVu.setAnswerViewScrollListener(new ZHWebView.OnScrollListener() {
             @Override
             public void onScrollChanged(int l, int t, int oldl, int oldt, boolean isScrollToBottom) {
 
@@ -256,13 +268,14 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
     @Override
     protected void onDestroyVu() {
         mBus.unregister(this);
-        mVolleyUtils.cancelAll();
+        HttpUtils.cancelTask(mTask);
     }
 
-    public static void startBy(Context context, ZHAnswer answer) {
-        Intent intent = new Intent(context, AnswerActivity.class);
+    public static void startBy(Fragment fragment, ZHAnswer answer) {
+        Intent intent = new Intent(fragment.getActivity(), AnswerActivity.class);
         intent.putExtra(EXTRA_ANSWER, answer);
-        context.startActivity(intent);
+
+        fragment.startActivityForResult(intent, 1);
     }
 
     /**
@@ -277,16 +290,27 @@ public class AnswerActivity extends BasePresenterActivity<AnswerVu> {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent();
+        intent.putExtra("data_return", mAnswer);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     /**
      * 通过网络获取 答案详情 成功后触发
      * @param event
      */
     public void onEvent(HttpResponseEvent event) {
         if (event instanceof FetchAnswerHRE) {
-            ZHAnswer answer = ((FetchAnswerHRE) event).getAnswer();
-            mAnswerContent = answer.getContent();
+            mAnswer = ((FetchAnswerHRE) event).getAnswer();
+            mAnswer.setQuestionUrl(mQuestionUrl);
+            mAnswer.setQuestionTitle(mQuestionTitle);
 
-            mVu.setAvatar(answer.getAuthor().getAvatarUrl(), mImageLoader);
+            mAnswerContent = mAnswer.getContent();
+            mVu.setAvatar(mAnswer.getAuthor().getAvatarUrl(), mImageLoader);
             setAnswerContent();
         }
     }

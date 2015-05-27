@@ -3,7 +3,6 @@ package com.jiashu.zhihudemo.mode;
 import android.text.TextUtils;
 
 import com.jiashu.zhihudemo.data.HttpConstants;
-import com.jiashu.zhihudemo.utils.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -382,7 +381,7 @@ public class ZHFeed {
                 answer.setIsThanked(isThanked);
                 answer.setAuthor(author);
                 answer.setQuestionTitle(mFeed.getTitle());
-                answer.setQUestionUrl(mFeed.getTitleUrl());
+                answer.setQuestionUrl(mFeed.getTitleUrl());
 
                 mFeed.setZHAnswer(answer);
 
